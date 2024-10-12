@@ -1,0 +1,18 @@
+version: "3"
+
+services:
+  twitchbot:
+    image: postgres:17.0
+    environment:
+      POSTGRES_USER: twitchbot
+      POSTGRES_PASSWORD: twitchbot
+      POSTGRES_DB: twitchbot
+    ports:
+      - "15432:5432"
+    volumes:
+      - twitchbot:/var/lib/postgresql
+      - twitchbot_data:/var/lib/postgresql/data
+
+volumes:
+  twitchbot:
+  twitchbot_data:
