@@ -58,7 +58,7 @@ public class RaidEventService implements IRaidEventService {
         if (!channelRaidConfiguration.raidMessageEnabled()) {
             return;
         }
-        var message = randomHandler.getRandom(channelRaidConfiguration.raidMessages());
+        var message = randomHandler.getRandom(channelRaidConfiguration.messages());
         var formatted = String.format(message, raidEvent.fromUserName());
         messageRepository.send(toMessage(channelInfo, formatted));
     }

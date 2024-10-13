@@ -31,7 +31,9 @@ public class ChannelRaidConfigurationRepository implements IChannelRaidConfigura
                                        .twitchShoutoutEnabled(configuration.isTwitchShoutoutEnabled())
                                        .wizebotShoutoutEnabled(configuration.isWizebotShoutoutEnabled())
                                        .raidMessageEnabled(configuration.isRaidMessageEnabled())
-                                       .raidMessages(configuration.getRaidMessages())
+                                       .messages(configuration.getMessages()
+                                                              .stream()
+                                                              .toList())
                                        .build();
     }
 

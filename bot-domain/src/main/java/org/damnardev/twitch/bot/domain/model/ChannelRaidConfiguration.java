@@ -6,6 +6,6 @@ import java.util.List;
 
 @Builder
 public record ChannelRaidConfiguration(boolean twitchShoutoutEnabled, boolean wizebotShoutoutEnabled,
-                                       boolean raidMessageEnabled, List<String> raidMessages) {
+                                       boolean raidMessageEnabled, List<String> messages) {
 
 }
