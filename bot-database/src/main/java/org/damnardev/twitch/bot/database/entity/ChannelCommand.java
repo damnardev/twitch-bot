@@ -40,6 +40,6 @@ public class ChannelCommand {
     @CollectionTable(name = "t_channel_command_message",
                      joinColumns = @JoinColumn(name = "channel_command_id"))
     @Column(name = "message")
-    private List<String> raidMessages;
+    private List<String> messages;
 
 }
