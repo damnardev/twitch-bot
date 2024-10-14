@@ -29,6 +29,9 @@ public class ChannelRepository implements IChannelRepository {
     @Transactional
     public void computeStatus() {
         var channels = repository.findAllEnabled();
+        if(channels.isEmpty()) {
+            return;
+        }
         var onLiveMap = getOnLive(channels.stream()
                                           .map(Channel::getName)
                                           .toList());
@@ -71,6 +74,9 @@ public class ChannelRepository implements IChannelRepository {
     @Override
     public void joinAllChannel() {
         var channels = repository.findAllEnabled();
+        if (channels.isEmpty()) {
+            return;
+        }
         joinChannel(channels);
         enableEventListener(channels);
     }
