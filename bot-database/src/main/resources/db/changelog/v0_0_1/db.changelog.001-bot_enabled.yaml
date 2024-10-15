@@ -1,0 +1,16 @@
+databaseChangeLog:
+- changeSet:
+    id: 0-0-1-2
+    author: damnardev
+    changes:
+    - addColumn:
+        tableName: t_channel
+        columns:
+        - column:
+            name: bot_enabled
+            type: BOOLEAN
+            defaultValueBoolean: false
+    - sqlFile:
+        path: db/sql/v0_0_1/db.update.001-channel_bot_enable.sql
+    - dropTable:
+        tableName: t_bot
