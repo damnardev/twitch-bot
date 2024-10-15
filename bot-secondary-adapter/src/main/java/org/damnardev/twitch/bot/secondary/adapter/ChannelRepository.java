@@ -64,8 +64,7 @@ public class ChannelRepository implements IChannelRepository {
         return ChannelInfo.builder()
                           .id(channel.getId())
                           .name(channel.getName())
-                          .enabled(channel.getBot()
-                                          .isEnabled())
+                          .enabled(channel.isBotEnabled())
                           .online(channel.isOnline())
                           .build();
     }

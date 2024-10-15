@@ -26,9 +26,8 @@ public class Channel {
     @Column(name = "online")
     private boolean online;
 
-    @OneToOne(cascade = CascadeType.ALL,
-              mappedBy = "channel")
-    private Bot bot;
+    @Column(name = "bot_enabled")
+    private boolean botEnabled;
 
     @OneToMany(cascade = CascadeType.ALL,
                mappedBy = "channel")

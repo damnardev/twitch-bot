@@ -12,10 +12,10 @@ import java.util.Optional;
 @Repository
 public interface DbChannelRepository extends JpaRepository<Channel, Long> {
 
-    @Query("SELECT c FROM Channel c JOIN FETCH c.bot WHERE LOWER(c.name) = LOWER(:name)")
+    @Query("SELECT c FROM Channel c WHERE LOWER(c.name) = LOWER(:name)")
     Optional<Channel> find(@Param("name") String name);
 
-    @Query("SELECT b.channel FROM Bot b WHERE b.enabled = true")
+    @Query("SELECT c FROM Channel c WHERE c.botEnabled = true")
     List<Channel> findAllEnabled();
 
 }
