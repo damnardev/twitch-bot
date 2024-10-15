@@ -28,3 +28,4 @@ token.json
 saints*.txt
 **/target/*
 **/old/*
+/bot-database/src/main/resources/liquibase.properties
