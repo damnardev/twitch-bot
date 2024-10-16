@@ -12,5 +12,8 @@ public interface IChannelRepository {
 
     void reconnect();
 
+    void setOnline(ChannelInfo channel);
+
+    void setOffline(ChannelInfo channel);
 
 }
