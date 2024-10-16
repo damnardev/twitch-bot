@@ -29,7 +29,7 @@ public class ChannelRepository implements IChannelRepository {
     @Transactional
     public void computeStatus() {
         var channels = repository.findAllEnabled();
-        if(channels.isEmpty()) {
+        if (channels.isEmpty()) {
             return;
         }
         var onLiveMap = getOnLive(channels.stream()
@@ -91,10 +91,10 @@ public class ChannelRepository implements IChannelRepository {
 
     private void registerEventSocket(Channel broadcaster) {
         var eventSocket = twitchClient.getEventSocket();
-        eventSocket.register(SubscriptionTypes.STREAM_ONLINE.prepareSubscription(b -> b.broadcasterUserId(String.valueOf(broadcaster.getId()))
-                                                                                       .build(), null));
-        eventSocket.register(SubscriptionTypes.STREAM_OFFLINE.prepareSubscription(b -> b.broadcasterUserId(String.valueOf(broadcaster.getId()))
-                                                                                        .build(), null));
+        twitchClient.getClientHelper().setThreadDelay(30000);
+        twitchClient.getClientHelper()
+                    .enableStreamEventListener(broadcaster.getId()
+                                                          .toString(), broadcaster.getName());
         eventSocket.register(SubscriptionTypes.CHANNEL_RAID.prepareSubscription(b -> b.toBroadcasterUserId(String.valueOf(broadcaster.getId()))
                                                                                       .build(), null));
     }
@@ -103,6 +103,24 @@ public class ChannelRepository implements IChannelRepository {
     public void reconnect() {
         twitchClient.getChat()
                     .reconnect();
+    }
+
+    @Override
+    public void setOnline(ChannelInfo channel) {
+        repository.findById(channel.id())
+                  .ifPresent(broadcaster -> {
+                      broadcaster.setOnline(true);
+                      repository.saveAndFlush(broadcaster);
+                  });
+    }
+
+    @Override
+    public void setOffline(ChannelInfo channel) {
+        repository.findById(channel.id())
+                  .ifPresent(broadcaster -> {
+                      broadcaster.setOnline(false);
+                      repository.saveAndFlush(broadcaster);
+                  });
     }
 
 }
