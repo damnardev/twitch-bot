@@ -40,8 +40,8 @@ public class MessageService implements IMessageService {
         var channelName = event.toUserName();
         var channel = channelRepository.find(channelName);
 
-        if (channel == null || !channel.canProcess() || !event.message()
-                                                              .startsWith("!")) {
+        if (channel == null || channel.isDisabled() || !event.message()
+                                                             .startsWith("!")) {
             return;
         }
 

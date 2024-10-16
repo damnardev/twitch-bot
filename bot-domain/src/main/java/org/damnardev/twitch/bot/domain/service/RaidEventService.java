@@ -30,7 +30,7 @@ public class RaidEventService implements IRaidEventService {
     @Override
     public void process(RaidEvent raidEvent) {
         var channel = channelRepository.find(raidEvent.toUserName());
-        if (channel == null || !channel.canProcess()) {
+        if (channel == null || channel.isDisabled()) {
             return;
         }
         var channelRaid = channelRaidConfigurationRepository.find(channel);
