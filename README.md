@@ -1,2 +1,3 @@
 # twitch-bot
-bot twitch avec twitch4h
+
+Twitch bot using the Twitch4J dependency.
