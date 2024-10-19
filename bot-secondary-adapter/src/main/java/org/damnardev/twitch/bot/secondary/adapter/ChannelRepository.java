@@ -3,6 +3,7 @@ package org.damnardev.twitch.bot.secondary.adapter;
 import com.github.twitch4j.TwitchClient;
 import com.github.twitch4j.eventsub.subscriptions.SubscriptionTypes;
 import com.github.twitch4j.helix.domain.Stream;
+import com.github.twitch4j.helix.domain.User;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.damnardev.twitch.bot.database.entity.Channel;
@@ -12,6 +13,7 @@ import org.damnardev.twitch.bot.domain.port.secondary.IChannelRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -91,7 +93,8 @@ public class ChannelRepository implements IChannelRepository {
 
     private void registerEventSocket(Channel broadcaster) {
         var eventSocket = twitchClient.getEventSocket();
-        twitchClient.getClientHelper().setThreadDelay(30000);
+        twitchClient.getClientHelper()
+                    .setThreadDelay(30000);
         twitchClient.getClientHelper()
                     .enableStreamEventListener(broadcaster.getId()
                                                           .toString(), broadcaster.getName());
@@ -121,6 +124,34 @@ public class ChannelRepository implements IChannelRepository {
                       broadcaster.setOnline(false);
                       repository.saveAndFlush(broadcaster);
                   });
+    }
+
+    @Override
+    public ChannelInfo addChannel(ChannelInfo channel) {
+        var user = twitchClient.getHelix()
+                               .getUsers(null, null, Collections.singletonList(channel.name()))
+                               .execute()
+                               .getUsers()
+                               .stream()
+                               .findFirst();
+        return user.map(this::addChannel)
+                   .orElse(null);
+    }
+
+    private ChannelInfo addChannel(User user) {
+        long id = Long.parseLong(user.getId());
+        var channel = repository.findById(id)
+                                .orElseGet(() -> repository.saveAndFlush(toEntity(user, id)));
+        return toModel(channel);
+    }
+
+    private static Channel toEntity(User user, long id) {
+        return Channel.builder()
+                      .id(id)
+                      .name(user.getLogin())
+                      .botEnabled(false)
+                      .online(false)
+                      .build();
     }
 
 }

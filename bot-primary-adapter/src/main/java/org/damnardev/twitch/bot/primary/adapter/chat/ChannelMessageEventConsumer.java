@@ -9,7 +9,6 @@ import org.damnardev.twitch.bot.primary.adapter.AbstractChannelEventConsumer;
 import org.springframework.stereotype.Service;
 
 @Service
-@Slf4j
 public class ChannelMessageEventConsumer extends AbstractChannelEventConsumer<ChannelMessageEvent, MessageEvent> {
 
     public ChannelMessageEventConsumer(TwitchClient client, IMessageService handler) {
