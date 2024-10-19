@@ -16,4 +16,6 @@ public interface IChannelRepository {
 
     void setOffline(ChannelInfo channel);
 
+    ChannelInfo addChannel(ChannelInfo channel);
+
 }

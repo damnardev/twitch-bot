@@ -14,6 +14,7 @@
         <module>bot-secondary-adapter</module>
         <module>bot-database</module>
         <module>bot-primary-adapter</module>
+        <module>bot-javajfx-adapter</module>
         <module>bot-runners</module>
     </modules>
 
@@ -40,6 +41,17 @@
             </dependency>
 
             <dependency>
+                <groupId>org.openjfx</groupId>
+                <artifactId>javafx-controls</artifactId>
+                <version>22.0.1</version>
+            </dependency>
+            <dependency>
+                <groupId>org.openjfx</groupId>
+                <artifactId>javafx-fxml</artifactId>
+                <version>22.0.1</version>
+            </dependency>
+
+            <dependency>
                 <groupId>fr.damnardev.twitch</groupId>
                 <artifactId>bot-domain</artifactId>
                 <version>${project.version}</version>
@@ -57,6 +69,11 @@
             <dependency>
                 <groupId>fr.damnardev.twitch</groupId>
                 <artifactId>bot-primary-adapter</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>fr.damnardev.twitch</groupId>
+                <artifactId>bot-javajfx-adapter</artifactId>
                 <version>${project.version}</version>
             </dependency>
         </dependencies>

@@ -10,7 +10,7 @@
         <version>0.0.1-SNAPSHOT</version>
     </parent>
 
-    <artifactId>bot-runners</artifactId>
+    <artifactId>bot-javajfx-adapter</artifactId>
     <packaging>jar</packaging>
 
     <dependencies>
@@ -20,24 +20,17 @@
         </dependency>
 
         <dependency>
+            <groupId>org.openjfx</groupId>
+            <artifactId>javafx-controls</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.openjfx</groupId>
+            <artifactId>javafx-fxml</artifactId>
+        </dependency>
+
+        <dependency>
             <groupId>fr.damnardev.twitch</groupId>
             <artifactId>bot-domain</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>fr.damnardev.twitch</groupId>
-            <artifactId>bot-primary-adapter</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>fr.damnardev.twitch</groupId>
-            <artifactId>bot-database</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>fr.damnardev.twitch</groupId>
-            <artifactId>bot-secondary-adapter</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>fr.damnardev.twitch</groupId>
-            <artifactId>bot-javajfx-adapter</artifactId>
         </dependency>
     </dependencies>
 
