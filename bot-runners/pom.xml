@@ -42,6 +42,7 @@
     </dependencies>
 
     <build>
+        <finalName>twitch-bot</finalName>
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
@@ -52,8 +53,6 @@
                             <goal>repackage</goal>
                         </goals>
                         <configuration>
-                            <finalName>twitch-bot</finalName>
-                            <classifier>spring-boot</classifier>
                             <mainClass>fr.damnardev.twitch.bot.BotRunner</mainClass>
                         </configuration>
                     </execution>
