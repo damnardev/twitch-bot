@@ -4,6 +4,6 @@ import fr.damnardev.twitch.bot.domain.model.ChannelCommandConfiguration;
 
 public interface ISaveCommandConfigurationRepository {
 
-    void updateLastExecution(ChannelCommandConfiguration channelCommandConfiguration);
+	void updateLastExecution(ChannelCommandConfiguration channelCommandConfiguration);
 
 }

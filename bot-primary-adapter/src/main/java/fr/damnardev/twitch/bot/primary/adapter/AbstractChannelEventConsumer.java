@@ -11,24 +11,24 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public abstract class AbstractChannelEventConsumer<E, M> {
 
-    private final TwitchClient twitchClient;
+	private final TwitchClient twitchClient;
 
-    private final IEventService<M> handler;
+	private final IEventService<M> handler;
 
-    private final Class<E> clazz;
+	private final Class<E> clazz;
 
-    protected abstract M toModel(E event);
+	protected abstract M toModel(E event);
 
-    @PostConstruct
-    public void init() {
-        var eventHandler = twitchClient.getEventManager().getEventHandler(SimpleEventHandler.class);
-        eventHandler.onEvent(clazz, this::process);
-    }
+	@PostConstruct
+	public void init() {
+		var eventHandler = this.twitchClient.getEventManager().getEventHandler(SimpleEventHandler.class);
+		eventHandler.onEvent(this.clazz, this::process);
+	}
 
-    protected void process(E event) {
-        var model = toModel(event);
-        log.info("Event: {}", model);
-        handler.process(model);
-    }
+	protected void process(E event) {
+		var model = toModel(event);
+		log.info("Event: {}", model);
+		this.handler.process(model);
+	}
 
 }

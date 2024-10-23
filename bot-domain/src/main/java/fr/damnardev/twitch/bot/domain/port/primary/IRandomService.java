@@ -4,6 +4,6 @@ import java.util.List;
 
 public interface IRandomService {
 
-    <T> T getRandom(List<T> values);
+	<T> T getRandom(List<T> values);
 
 }

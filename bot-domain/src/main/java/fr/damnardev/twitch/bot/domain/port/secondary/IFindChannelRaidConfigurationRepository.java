@@ -5,6 +5,6 @@ import fr.damnardev.twitch.bot.domain.model.User;
 
 public interface IFindChannelRaidConfigurationRepository {
 
-    ChannelRaidConfiguration find(User channel);
+	ChannelRaidConfiguration find(User channel);
 
 }

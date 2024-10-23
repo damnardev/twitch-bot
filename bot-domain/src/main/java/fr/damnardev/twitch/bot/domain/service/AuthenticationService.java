@@ -10,24 +10,24 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class AuthenticationService implements IAuthenticationService {
 
-    private final IAuthenticationRepository authenticationRepository;
+	private final IAuthenticationRepository authenticationRepository;
 
-    private final IChatRepository chatRepository;
+	private final IChatRepository chatRepository;
 
-    @Override
-    public void tryRenew() {
-        if (authenticationRepository.isValid()) {
-            return;
-        }
-        var updated = authenticationRepository.renew();
-        if (updated) {
-            chatRepository.reconnect();
-        }
-    }
+	@Override
+	public void tryRenew() {
+		if (this.authenticationRepository.isValid()) {
+			return;
+		}
+		var updated = this.authenticationRepository.renew();
+		if (updated) {
+			this.chatRepository.reconnect();
+		}
+	}
 
-    @Override
-    public boolean isInitialized() {
-        return authenticationRepository.isInitialized();
-    }
+	@Override
+	public boolean isInitialized() {
+		return this.authenticationRepository.isInitialized();
+	}
 
 }

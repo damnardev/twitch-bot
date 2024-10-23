@@ -4,6 +4,6 @@ import fr.damnardev.twitch.bot.domain.model.Saint;
 
 public interface ISaintRepository {
 
-    Saint find();
+	Saint find();
 
 }

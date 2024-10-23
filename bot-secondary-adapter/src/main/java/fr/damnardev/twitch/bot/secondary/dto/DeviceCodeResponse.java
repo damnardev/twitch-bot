@@ -12,10 +12,10 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class DeviceCodeResponse {
 
-    @JsonProperty("device_code")
-    private String deviceCode;
+	@JsonProperty("device_code")
+	private String deviceCode;
 
-    @JsonProperty("verification_uri")
-    private String verificationUri;
+	@JsonProperty("verification_uri")
+	private String verificationUri;
 
 }

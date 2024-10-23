@@ -2,8 +2,8 @@ package fr.damnardev.twitch.bot.domain.port.primary;
 
 public interface IAuthenticationService {
 
-    boolean isInitialized();
+	boolean isInitialized();
 
-    void tryRenew();
+	void tryRenew();
 
 }

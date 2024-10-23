@@ -4,6 +4,6 @@ import fr.damnardev.twitch.bot.domain.model.Message;
 
 public interface IMessageRepository {
 
-    void send(Message message);
+	void send(Message message);
 
 }

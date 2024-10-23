@@ -11,21 +11,21 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class StartupService implements IStartupService {
 
-    private final IAuthenticationRepository authenticationRepository;
+	private final IAuthenticationRepository authenticationRepository;
 
-    private final IChatRepository chatRepository;
+	private final IChatRepository chatRepository;
 
-    private final IStreamRepository streamRepository;
+	private final IStreamRepository streamRepository;
 
-    @Override
-    public void run() {
-        var generated = authenticationRepository.renew();
-        if (!generated) {
-            System.exit(-1);
-        }
-        chatRepository.joinAllChannel();
-        chatRepository.reconnect();
-        streamRepository.computeStatus();
-    }
+	@Override
+	public void run() {
+		var generated = this.authenticationRepository.renew();
+		if (!generated) {
+			System.exit(-1);
+		}
+		this.chatRepository.joinAllChannel();
+		this.chatRepository.reconnect();
+		this.streamRepository.computeStatus();
+	}
 
 }

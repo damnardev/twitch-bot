@@ -11,18 +11,18 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class StatusEventService implements IStatusEventService {
 
-    private final IFindChannelRepository findChannelRepository;
+	private final IFindChannelRepository findChannelRepository;
 
-    private final ISaveChannelRepository saveChannelRepository;
+	private final ISaveChannelRepository saveChannelRepository;
 
-    @Override
-    public void process(StatusEvent event) {
-        var optional = findChannelRepository.find(event.channel());
-        if (optional.isEmpty()) {
-            return;
-        }
-        var channel = optional.get().toBuilder().online(event.online()).build();
-        saveChannelRepository.save(channel);
-    }
+	@Override
+	public void process(StatusEvent event) {
+		var optional = this.findChannelRepository.find(event.channel());
+		if (optional.isEmpty()) {
+			return;
+		}
+		var channel = optional.get().toBuilder().online(event.online()).build();
+		this.saveChannelRepository.save(channel);
+	}
 
 }

@@ -4,6 +4,6 @@ import fr.damnardev.twitch.bot.domain.model.User;
 
 public interface IShoutoutRepository {
 
-    void send(User channel, User raider);
+	void send(User channel, User raider);
 
 }

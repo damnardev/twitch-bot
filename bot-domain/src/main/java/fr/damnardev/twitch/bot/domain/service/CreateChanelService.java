@@ -11,13 +11,13 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class CreateChanelService implements ICreateChanelService {
 
-    private final IFindChannelRepository findChannelRepository;
+	private final IFindChannelRepository findChannelRepository;
 
-    private final ISaveChannelRepository saveChannelRepository;
+	private final ISaveChannelRepository saveChannelRepository;
 
-    @Override
-    public ChannelInfo create(ChannelInfo channel) {
-        return findChannelRepository.find(channel.user()).orElseGet(() -> saveChannelRepository.save(channel));
-    }
+	@Override
+	public ChannelInfo create(ChannelInfo channel) {
+		return this.findChannelRepository.find(channel.user()).orElseGet(() -> this.saveChannelRepository.save(channel));
+	}
 
 }
