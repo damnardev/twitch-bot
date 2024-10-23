@@ -5,8 +5,8 @@ import lombok.Builder;
 @Builder(toBuilder = true)
 public record ChannelInfo(User user, boolean enabled, boolean online) {
 
-    public boolean isDisabled() {
-        return !enabled || !online;
-    }
+	public boolean isDisabled() {
+		return !this.enabled || !this.online;
+	}
 
 }

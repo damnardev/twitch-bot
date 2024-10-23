@@ -5,6 +5,6 @@ import fr.damnardev.twitch.bot.domain.model.ChannelCommandConfiguration;
 
 public interface IFindCommandConfigurationRepository {
 
-    ChannelCommandConfiguration find(ChannelCommand channelCommand);
+	ChannelCommandConfiguration find(ChannelCommand channelCommand);
 
 }

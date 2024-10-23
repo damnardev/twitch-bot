@@ -9,16 +9,16 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class SaintGenericCommand implements IGenericCommand {
 
-    private final ISaintRepository saintRepository;
+	private final ISaintRepository saintRepository;
 
-    @Override
-    public String name() {
-        return "!saints";
-    }
+	@Override
+	public String name() {
+		return "!saints";
+	}
 
-    @Override
-    public String process(MessageEvent event) {
-        return saintRepository.find().value();
-    }
+	@Override
+	public String process(MessageEvent event) {
+		return this.saintRepository.find().value();
+	}
 
 }

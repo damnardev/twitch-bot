@@ -1,15 +1,15 @@
 package fr.damnardev.twitch.bot.domain.model;
 
-import lombok.Builder;
-
 import java.time.OffsetDateTime;
 
-@Builder
-public record ChannelCommandConfiguration(Long id, String name, boolean enabled, OffsetDateTime lastExecution,
-                                          long cooldown) {
+import lombok.Builder;
 
-    public boolean canProcess() {
-        return OffsetDateTime.now().plusSeconds(cooldown).isAfter(lastExecution);
-    }
+@Builder
+public record ChannelCommandConfiguration(Long id, String name, boolean enabled,
+		OffsetDateTime lastExecution, long cooldown) {
+
+	public boolean canProcess() {
+		return OffsetDateTime.now().plusSeconds(this.cooldown).isAfter(this.lastExecution);
+	}
 
 }

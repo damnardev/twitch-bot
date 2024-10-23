@@ -4,6 +4,6 @@ import fr.damnardev.twitch.bot.domain.model.ChannelInfo;
 
 public interface ICreateChanelService {
 
-    ChannelInfo create(ChannelInfo channelInfo);
+	ChannelInfo create(ChannelInfo channelInfo);
 
 }

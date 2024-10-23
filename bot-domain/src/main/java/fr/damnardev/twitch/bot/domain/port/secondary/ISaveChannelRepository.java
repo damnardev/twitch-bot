@@ -4,6 +4,6 @@ import fr.damnardev.twitch.bot.domain.model.ChannelInfo;
 
 public interface ISaveChannelRepository {
 
-    ChannelInfo save(ChannelInfo channel);
+	ChannelInfo save(ChannelInfo channel);
 
 }

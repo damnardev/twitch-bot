@@ -1,12 +1,12 @@
 package fr.damnardev.twitch.bot.secondary.property;
 
+import java.util.List;
+import java.util.concurrent.TimeUnit;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 @AllArgsConstructor
 @Builder
@@ -14,14 +14,14 @@ import java.util.concurrent.TimeUnit;
 @NoArgsConstructor
 public class TwitchOAuthProperties {
 
-    private String clientId;
+	private String clientId;
 
-    private List<Object> scopes;
+	private List<Object> scopes;
 
-    private int retry;
+	private int retry;
 
-    private int timeout;
+	private int timeout;
 
-    private TimeUnit timeoutUnit;
+	private TimeUnit timeoutUnit;
 
 }
