@@ -2,16 +2,16 @@ package fr.damnardev.twitch.bot.primary.adapter;
 
 import com.github.philippheuer.events4j.simple.SimpleEventHandler;
 import com.github.twitch4j.TwitchClient;
+import fr.damnardev.twitch.bot.domain.port.primary.event.IEventService;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import fr.damnardev.twitch.bot.domain.port.primary.IEventService;
 
 @RequiredArgsConstructor
 @Slf4j
 public abstract class AbstractChannelEventConsumer<E, M> {
 
-    private final TwitchClient client;
+    private final TwitchClient twitchClient;
 
     private final IEventService<M> handler;
 
@@ -21,9 +21,7 @@ public abstract class AbstractChannelEventConsumer<E, M> {
 
     @PostConstruct
     public void init() {
-        var eventHandler = client.getEventManager()
-                                 .getEventHandler(SimpleEventHandler.class);
-
+        var eventHandler = twitchClient.getEventManager().getEventHandler(SimpleEventHandler.class);
         eventHandler.onEvent(clazz, this::process);
     }
 

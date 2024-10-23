@@ -7,10 +7,7 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.FilterType;
 import org.springframework.context.annotation.FullyQualifiedAnnotationBeanNameGenerator;
 
-@ComponentScan(basePackages = "fr.damnardev.twitch.bot",
-               includeFilters = {@ComponentScan.Filter(type = FilterType.ANNOTATION,
-                                                       value = DomainService.class)},
-               nameGenerator = FullyQualifiedAnnotationBeanNameGenerator.class)
+@ComponentScan(basePackages = "fr.damnardev.twitch.bot", includeFilters = {@ComponentScan.Filter(type = FilterType.ANNOTATION, value = DomainService.class)}, nameGenerator = FullyQualifiedAnnotationBeanNameGenerator.class)
 @SpringBootApplication
 public class BotRunner {
 

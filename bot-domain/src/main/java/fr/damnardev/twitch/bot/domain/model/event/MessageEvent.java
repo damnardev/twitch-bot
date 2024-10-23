@@ -1,8 +1,9 @@
 package fr.damnardev.twitch.bot.domain.model.event;
 
+import fr.damnardev.twitch.bot.domain.model.User;
 import lombok.Builder;
 
 @Builder
-public record MessageEvent(String fromUserName, String toUserName, String message) {
+public record MessageEvent(User user, User channel, String message) {
 
 }

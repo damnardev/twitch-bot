@@ -3,12 +3,12 @@ package fr.damnardev.twitch.bot.secondary.adapter;
 import com.github.philippheuer.credentialmanager.domain.DeviceAuthorization;
 import com.github.philippheuer.credentialmanager.domain.OAuth2Credential;
 import com.github.twitch4j.auth.providers.TwitchIdentityProvider;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import fr.damnardev.twitch.bot.domain.exception.FatalException;
 import fr.damnardev.twitch.bot.domain.port.secondary.IAuthenticationRepository;
 import fr.damnardev.twitch.bot.secondary.TokenHandler;
 import fr.damnardev.twitch.bot.secondary.property.TwitchOAuthProperties;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.awt.*;
@@ -31,20 +31,16 @@ public class AuthenticationRepository implements IAuthenticationRepository {
     private boolean initialized = false;
 
     @Override
-    public boolean validateToken() {
-        log.info("Validating token");
-        if (provider.isValid(credential)) {
-            return false;
-        }
-        log.info("Token is invalid");
+    public boolean renew() {
+        log.info("Renewing token");
         if (provider.renew(credential) || generateDeviceToken()) {
-            log.info("Token is valid");
-            credential.setExpiresIn(credential.getExpiresIn() - 1800); // prevent token expiration - 30 minutes
+            log.info("Token renewed");
+            credential.setExpiresIn(credential.getExpiresIn() - 1800);
             tokenHandler.write(credential);
             initialized = true;
             return true;
         }
-        log.error("cannot generate token");
+        log.error("Failed to renew token");
         return false;
     }
 
@@ -58,8 +54,7 @@ public class AuthenticationRepository implements IAuthenticationRepository {
     private void openBrowser(DeviceAuthorization flowRequest) {
         log.info("Opening browser");
         try {
-            Desktop.getDesktop()
-                   .browse(URI.create(flowRequest.getVerificationUri()));
+            Desktop.getDesktop().browse(URI.create(flowRequest.getVerificationUri()));
         } catch (IOException e) {
             throw new FatalException(e);
         }
@@ -90,11 +85,9 @@ public class AuthenticationRepository implements IAuthenticationRepository {
 
     private void sleep() {
         try {
-            properties.getTimeoutUnit()
-                      .sleep(properties.getTimeout());
+            properties.getTimeoutUnit().sleep(properties.getTimeout());
         } catch (InterruptedException ex) {
-            Thread.currentThread()
-                  .interrupt();
+            Thread.currentThread().interrupt();
             throw new FatalException(ex);
         }
     }
@@ -102,6 +95,14 @@ public class AuthenticationRepository implements IAuthenticationRepository {
     @Override
     public boolean isInitialized() {
         return initialized;
+    }
+
+    @Override
+    public boolean isValid() {
+        log.info("Validating token");
+        var valid = provider.isValid(credential);
+        log.info("Token is {}", valid ? "valid" : "invalid");
+        return valid;
     }
 
 }

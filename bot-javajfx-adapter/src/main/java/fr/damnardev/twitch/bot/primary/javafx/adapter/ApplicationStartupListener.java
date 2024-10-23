@@ -1,12 +1,12 @@
 package fr.damnardev.twitch.bot.primary.javafx.adapter;
 
+import fr.damnardev.twitch.bot.domain.exception.FatalException;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import fr.damnardev.twitch.bot.domain.exception.FatalException;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.context.ConfigurableApplicationContext;

@@ -1,10 +1,10 @@
 package fr.damnardev.twitch.bot.domain.service;
 
-import lombok.RequiredArgsConstructor;
 import fr.damnardev.twitch.bot.domain.DomainService;
 import fr.damnardev.twitch.bot.domain.port.primary.IAuthenticationService;
 import fr.damnardev.twitch.bot.domain.port.secondary.IAuthenticationRepository;
-import fr.damnardev.twitch.bot.domain.port.secondary.IChannelRepository;
+import fr.damnardev.twitch.bot.domain.port.secondary.IChatRepository;
+import lombok.RequiredArgsConstructor;
 
 @DomainService
 @RequiredArgsConstructor
@@ -12,24 +12,22 @@ public class AuthenticationService implements IAuthenticationService {
 
     private final IAuthenticationRepository authenticationRepository;
 
-    private final IChannelRepository channelRepository;
+    private final IChatRepository chatRepository;
 
     @Override
-    public void validateToken() {
-        var updated = authenticationRepository.validateToken();
+    public void tryRenew() {
+        if (authenticationRepository.isValid()) {
+            return;
+        }
+        var updated = authenticationRepository.renew();
         if (updated) {
-            channelRepository.reconnect();
+            chatRepository.reconnect();
         }
     }
 
     @Override
     public boolean isInitialized() {
         return authenticationRepository.isInitialized();
-    }
-
-    @Override
-    public void reconnect() {
-        channelRepository.reconnect();
     }
 
 }

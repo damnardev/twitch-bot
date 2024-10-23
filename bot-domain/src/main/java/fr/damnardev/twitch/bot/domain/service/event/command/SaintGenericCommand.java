@@ -1,9 +1,9 @@
-package fr.damnardev.twitch.bot.domain.service.command;
+package fr.damnardev.twitch.bot.domain.service.event.command;
 
-import lombok.RequiredArgsConstructor;
 import fr.damnardev.twitch.bot.domain.DomainService;
 import fr.damnardev.twitch.bot.domain.model.event.MessageEvent;
 import fr.damnardev.twitch.bot.domain.port.secondary.ISaintRepository;
+import lombok.RequiredArgsConstructor;
 
 @DomainService
 @RequiredArgsConstructor
@@ -18,8 +18,7 @@ public class SaintGenericCommand implements IGenericCommand {
 
     @Override
     public String process(MessageEvent event) {
-        return saintRepository.find()
-                              .value();
+        return saintRepository.find().value();
     }
 
 }

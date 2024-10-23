@@ -2,9 +2,8 @@ package fr.damnardev.twitch.bot.domain.model;
 
 import lombok.Builder;
 
-
-@Builder
-public record ChannelInfo(Long id, String name, boolean enabled, boolean online) {
+@Builder(toBuilder = true)
+public record ChannelInfo(User user, boolean enabled, boolean online) {
 
     public boolean isDisabled() {
         return !enabled || !online;
