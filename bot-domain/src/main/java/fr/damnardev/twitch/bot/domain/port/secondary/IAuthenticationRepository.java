@@ -4,6 +4,8 @@ public interface IAuthenticationRepository {
 
     boolean isInitialized();
 
-    boolean validateToken();
+    boolean isValid();
+
+    boolean renew();
 
 }

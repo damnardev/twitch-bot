@@ -29,3 +29,4 @@ saints*.txt
 **/target/*
 **/old/*
 /bot-database/src/main/resources/liquibase.properties
+*.iml

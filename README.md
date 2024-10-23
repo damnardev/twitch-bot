@@ -5,7 +5,7 @@ Twitch bot using the Twitch4J dependency.
 # How to build
 
 1. Clone the repository
-2. Execute the following command:
+2. Execute the following channelCommand:
 
 ```shell
 mvn clean install
@@ -25,7 +25,7 @@ you have to define the following environment variables:
 - TWITCH_OAUTH_TIMEOUT in seconds (default: 6)
 - SAINT_URL
 
-execute the following command:
+execute the following channelCommand:
 
 ```shell
 cd bot-runner

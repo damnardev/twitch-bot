@@ -2,27 +2,24 @@ package fr.damnardev.twitch.bot.primary.adapter.event;
 
 import com.github.twitch4j.TwitchClient;
 import com.github.twitch4j.events.ChannelGoOfflineEvent;
-import fr.damnardev.twitch.bot.domain.model.event.LiveStatusEvent;
-import fr.damnardev.twitch.bot.domain.port.primary.ILiveStatusService;
+import fr.damnardev.twitch.bot.domain.model.User;
+import fr.damnardev.twitch.bot.domain.model.event.StatusEvent;
+import fr.damnardev.twitch.bot.domain.port.primary.event.IStatusEventService;
 import fr.damnardev.twitch.bot.primary.adapter.AbstractChannelEventConsumer;
 import org.springframework.stereotype.Service;
 
 @Service
-public class ChannelGoOfflineEventConsumer extends AbstractChannelEventConsumer<ChannelGoOfflineEvent, LiveStatusEvent> {
+public class ChannelGoOfflineEventConsumer extends AbstractChannelEventConsumer<ChannelGoOfflineEvent, StatusEvent> {
 
-    public ChannelGoOfflineEventConsumer(TwitchClient client, ILiveStatusService handler) {
-        super(client, handler, ChannelGoOfflineEvent.class);
+    public ChannelGoOfflineEventConsumer(TwitchClient twitchClient, IStatusEventService handler) {
+        super(twitchClient, handler, ChannelGoOfflineEvent.class);
     }
 
     @Override
-    protected LiveStatusEvent toModel(ChannelGoOfflineEvent event) {
-        return LiveStatusEvent.builder()
-                              .broadcasterId(event.getChannel()
-                                                  .getId())
-                              .broadcasterIdUserName(event.getChannel()
-                                                          .getName())
-                              .online(false)
-                              .build();
+    protected StatusEvent toModel(ChannelGoOfflineEvent event) {
+        var eventChannel = event.getChannel();
+        var channel = User.builder().name(eventChannel.getName()).id(Long.parseLong(eventChannel.getId())).build();
+        return StatusEvent.builder().channel(channel).online(false).build();
     }
 
 }

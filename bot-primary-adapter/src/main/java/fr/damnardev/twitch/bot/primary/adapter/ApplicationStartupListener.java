@@ -1,8 +1,8 @@
 package fr.damnardev.twitch.bot.primary.adapter;
 
+import fr.damnardev.twitch.bot.domain.port.primary.IStartupService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import fr.damnardev.twitch.bot.domain.port.primary.IStartupService;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.stereotype.Service;
@@ -12,12 +12,12 @@ import org.springframework.stereotype.Service;
 @Slf4j
 public class ApplicationStartupListener implements ApplicationRunner {
 
-    private final IStartupService handler;
+    private final IStartupService startupService;
 
     @Override
     public void run(ApplicationArguments args) {
         log.info("Starting bot");
-        handler.run();
+        startupService.run();
         log.info("Bot started");
     }
 

@@ -29,13 +29,10 @@ public class Channel {
     @Column(name = "bot_enabled")
     private boolean botEnabled;
 
-    @OneToMany(cascade = CascadeType.ALL,
-               mappedBy = "channel")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "channel")
     private List<ChannelCommand> channelCommand;
 
-    @OneToOne(cascade = CascadeType.ALL,
-              mappedBy = "channel")
+    @OneToOne(cascade = CascadeType.ALL, mappedBy = "channel")
     private ChannelRaid channelRaid;
-
 
 }

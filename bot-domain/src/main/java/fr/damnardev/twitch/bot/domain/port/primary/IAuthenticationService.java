@@ -4,8 +4,6 @@ public interface IAuthenticationService {
 
     boolean isInitialized();
 
-    void reconnect();
-
-    void validateToken();
+    void tryRenew();
 
 }

@@ -1,12 +1,13 @@
 package fr.damnardev.twitch.bot.primary.javafx.controller;
 
+import fr.damnardev.twitch.bot.domain.model.ChannelInfo;
+import fr.damnardev.twitch.bot.domain.model.User;
+import fr.damnardev.twitch.bot.domain.port.primary.ICreateChanelService;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import fr.damnardev.twitch.bot.domain.model.ChannelInfo;
-import fr.damnardev.twitch.bot.domain.port.primary.IAddChanelService;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -14,30 +15,30 @@ import org.springframework.stereotype.Component;
 @Slf4j
 public class ApplicationController {
 
+    private final ICreateChanelService service;
+
     @FXML
     private TextField textFieldChannelName;
 
     @FXML
     private Label labelMessage;
 
-    private final IAddChanelService service;
-
     @FXML
     protected void onAddChannelClick() {
-        var channel = textFieldChannelName.getText();
-        var channelInfo = ChannelInfo.builder()
-                                     .name(channel)
-                                     .build();
-        log.info("Trying to add channel {}", channelInfo);
+        var name = textFieldChannelName.getText();
+        var user = User.builder().name(name).build();
+        var channel = ChannelInfo.builder().user(user).build();
+        log.info("Trying to add name {}", user);
         try {
-            channelInfo = service.process(channelInfo);
-            var text = String.format("Channel name[%s], id[%s] added", channelInfo.name(), channelInfo.id());
+            channel = service.create(channel);
+            user = channel.user();
+            var text = String.format("Channel name[%s], id[%s] added", user.name(), user.id());
             labelMessage.setText(text);
-            log.info("Channel added {}", channelInfo);
+            log.info("Channel added {}", user);
         } catch (Exception e) {
-            var text = String.format("Error adding channel %s with error %s", channelInfo, e.getMessage());
+            var text = String.format("Error adding name %s with error %s", user, e.getMessage());
             labelMessage.setText(text);
-            log.error("Error adding channel {}", channelInfo, e);
+            log.error("Error adding name {}", user, e);
         }
     }
 

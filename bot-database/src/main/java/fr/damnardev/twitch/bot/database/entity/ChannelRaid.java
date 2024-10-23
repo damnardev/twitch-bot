@@ -32,8 +32,7 @@ public class ChannelRaid {
     private boolean raidMessageEnabled;
 
     @ElementCollection
-    @CollectionTable(name = "t_channel_raid_message",
-                     joinColumns = @JoinColumn(name = "channel_raid_id"))
+    @CollectionTable(name = "t_channel_raid_message", joinColumns = @JoinColumn(name = "channel_raid_id"))
     @Column(name = "message")
     private List<String> messages;
 

@@ -1,8 +1,8 @@
 package fr.damnardev.twitch.bot.domain.service;
 
-import lombok.RequiredArgsConstructor;
 import fr.damnardev.twitch.bot.domain.DomainService;
 import fr.damnardev.twitch.bot.domain.port.primary.IRandomService;
+import lombok.RequiredArgsConstructor;
 
 import java.util.List;
 import java.util.Random;

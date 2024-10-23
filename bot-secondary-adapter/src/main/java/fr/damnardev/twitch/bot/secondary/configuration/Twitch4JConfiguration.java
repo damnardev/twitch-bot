@@ -31,31 +31,19 @@ public class Twitch4JConfiguration {
 
     @Bean
     public CredentialManager credentialManager() {
-        return CredentialManagerBuilder.builder()
-                                       .build();
+        return CredentialManagerBuilder.builder().build();
     }
 
     @Bean("twitchClient")
     public TwitchClient twitchClient(CredentialManager credentialManager, OAuth2Credential credential, TwitchOAuthProperties twitchOAuthProperties) {
         var clientBuilder = TwitchClientBuilder.builder();
-        return clientBuilder.withCredentialManager(credentialManager)
-                            .withClientId(twitchOAuthProperties.getClientId())
-                            .withClientSecret(null)
-                            .withDefaultAuthToken(credential)
-                            .withEnableHelix(true)
-                            .withChatAccount(credential)
-                            .withEnableChat(true)
-                            .withEnableEventSocket(true)
-                            .build();
+        return clientBuilder.withCredentialManager(credentialManager).withClientId(twitchOAuthProperties.getClientId()).withClientSecret(null).withDefaultAuthToken(credential).withEnableHelix(true).withChatAccount(credential).withEnableChat(true).withEnableEventSocket(true).build();
     }
 
     @Bean
     @DependsOn("twitchClient")
     public TwitchIdentityProvider identityProvider(CredentialManager credentialManager) {
-        return credentialManager.getIdentityProviderByName("twitch")
-                                .filter(TwitchIdentityProvider.class::isInstance)
-                                .map(TwitchIdentityProvider.class::cast)
-                                .orElseThrow();
+        return credentialManager.getIdentityProviderByName("twitch").filter(TwitchIdentityProvider.class::isInstance).map(TwitchIdentityProvider.class::cast).orElseThrow();
     }
 
 }

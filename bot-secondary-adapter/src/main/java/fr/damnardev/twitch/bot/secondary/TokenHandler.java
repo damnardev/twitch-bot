@@ -2,8 +2,8 @@ package fr.damnardev.twitch.bot.secondary;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.philippheuer.credentialmanager.domain.OAuth2Credential;
-import lombok.*;
 import fr.damnardev.twitch.bot.domain.exception.FatalException;
+import lombok.*;
 
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -15,9 +15,7 @@ public class TokenHandler {
     private final ObjectMapper objectMapper;
 
     public void write(OAuth2Credential credential) {
-        var lightToken = LightToken.builder()
-                                   .refreshToken(credential.getRefreshToken())
-                                   .build();
+        var lightToken = LightToken.builder().refreshToken(credential.getRefreshToken()).build();
         try (var file = new FileOutputStream("token.json")) {
             objectMapper.writeValue(file, lightToken);
         } catch (IOException e) {

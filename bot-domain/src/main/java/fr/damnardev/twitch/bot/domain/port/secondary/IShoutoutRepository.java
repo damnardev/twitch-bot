@@ -1,9 +1,9 @@
 package fr.damnardev.twitch.bot.domain.port.secondary;
 
-import fr.damnardev.twitch.bot.domain.model.ChannelInfo;
+import fr.damnardev.twitch.bot.domain.model.User;
 
 public interface IShoutoutRepository {
 
-    void send(ChannelInfo from, ChannelInfo to);
+    void send(User channel, User raider);
 
 }

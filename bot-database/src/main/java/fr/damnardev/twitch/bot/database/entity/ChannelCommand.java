@@ -29,16 +29,14 @@ public class ChannelCommand {
     @Column(name = "name")
     private String name;
 
-    @Column(name = "last_execution",
-            columnDefinition = "TIMESTAMP WITH TIME ZONE")
+    @Column(name = "last_execution", columnDefinition = "TIMESTAMP WITH TIME ZONE")
     private OffsetDateTime lastExecution;
 
     @Column(name = "cooldown")
     private long cooldown;
 
     @ElementCollection
-    @CollectionTable(name = "t_channel_command_message",
-                     joinColumns = @JoinColumn(name = "channel_command_id"))
+    @CollectionTable(name = "t_channel_command_message", joinColumns = @JoinColumn(name = "channel_command_id"))
     @Column(name = "message")
     private List<String> messages;
 
