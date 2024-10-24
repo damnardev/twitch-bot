@@ -1,37 +1,49 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.Pane?>
-<?import javafx.scene.layout.VBox?>
-<VBox xmlns:fx="http://javafx.com/fxml/1" alignment="BOTTOM_CENTER"
-	  maxHeight="1.7976931348623157E308"
-	  maxWidth="1.7976931348623157E308"
-	  spacing="10.0" xmlns="http://javafx.com/javafx/17.0.12"
-	  fx:controller="fr.damnardev.twitch.bot.primary.javafx.controller.ApplicationController">
-	<padding>
-		<Insets bottom="10.0" left="10.0" right="10.0" top="10.0"/>
-	</padding>
-	<Pane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308"
-		  minHeight="200.0" minWidth="200.0"
-		  VBox.vgrow="ALWAYS"/>
-	<HBox maxWidth="1.7976931348623157E308">
-		<Label alignment="BASELINE_RIGHT" contentDisplay="CENTER"
-			   maxHeight="1.7976931348623157E308"
-			   text="Channel Name:">
-			<padding>
-				<Insets right="10.0"/>
-			</padding>
-		</Label>
-		<TextField maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308"
-				   HBox.hgrow="ALWAYS"
-				   fx:id="textFieldChannelName"/>
-	</HBox>
-	<Button maxWidth="1.7976931348623157E308" onAction="#onAddChannelClick"
-			text="Add Channel" textAlignment="CENTER">
-	</Button>
-	<Label fx:id="labelMessage" maxWidth="1.7976931348623157E308"/>
-</VBox>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.RowConstraints?>
+<GridPane xmlns:fx="http://javafx.com/fxml/1" maxHeight="1.7976931348623157E308"
+		  maxWidth="1.7976931348623157E308" prefHeight="600" prefWidth="800"
+		  xmlns="http://javafx.com/javafx/17.0.12"
+		  fx:controller="fr.damnardev.twitch.bot.primary.javafx.controller.ApplicationController">
+	<rowConstraints>
+		<RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="ALWAYS"/>
+		<RowConstraints minHeight="10.0" prefHeight="30.0"/>
+		<RowConstraints minHeight="10.0" prefHeight="30.0"/>
+	</rowConstraints>
+	<columnConstraints>
+		<ColumnConstraints minWidth="10.0" prefWidth="100.0"/>
+		<ColumnConstraints hgrow="ALWAYS" prefWidth="100.0"/>
+		<ColumnConstraints minWidth="10.0" prefWidth="100.0"/>
+	</columnConstraints>
+
+	<TableView GridPane.columnIndex="0" GridPane.columnSpan="3" GridPane.rowIndex="0"
+			   fx:id="tableView">
+		<columns>
+			<TableColumn fx:id="columnId" text="Id" maxWidth="100"/>
+			<TableColumn fx:id="columnName" text="Name" maxWidth="Infinity"/>
+			<TableColumn fx:id="columnEnabled" text="Enables" maxWidth="100"/>
+		</columns>
+	</TableView>
+
+	<Label maxWidth="1.7976931348623157E308"
+		   text="Channel Name:" GridPane.columnIndex="0" GridPane.fillHeight="1"
+		   GridPane.fillWidth="1" GridPane.rowIndex="1"/>
+
+	<TextField fx:id="textFieldChannelName" GridPane.columnIndex="1"
+			   GridPane.rowIndex="1"/>
+
+	<Button alignment="CENTER"
+			maxWidth="1.7976931348623157E308" text="Add" GridPane.columnIndex="2"
+			GridPane.rowIndex="1" onAction="#onAddChannelClick"/>
+
+	<Label fx:id="labelMessage" maxWidth="1.7976931348623157E308"
+		   GridPane.columnIndex="0" GridPane.rowIndex="2" GridPane.columnSpan="3"/>
+
+</GridPane>
