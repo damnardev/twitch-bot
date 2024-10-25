@@ -9,6 +9,7 @@ import com.github.twitch4j.helix.domain.Stream;
 import com.github.twitch4j.helix.domain.StreamList;
 import fr.damnardev.twitch.bot.database.entity.Channel;
 import fr.damnardev.twitch.bot.database.repository.DbChannelRepository;
+import fr.damnardev.twitch.bot.domain.model.ChannelInfo;
 import fr.damnardev.twitch.bot.domain.port.secondary.IStreamRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -38,6 +39,19 @@ public class StreamRepository implements IStreamRepository {
 		computeAllStatus(channels);
 		this.dbChannelRepository.saveAllAndFlush(channels);
 		log.info("Channels status computed");
+	}
+
+	@Override
+	@Transactional
+	public void computeStatus(ChannelInfo channelInfo) {
+		log.info("Computing channel status {}", channelInfo);
+		var channels = this.dbChannelRepository.findById(channelInfo.user().id()).stream().toList();
+		if (channels.isEmpty()) {
+			return;
+		}
+		computeAllStatus(channels);
+		this.dbChannelRepository.saveAllAndFlush(channels);
+		log.info("Channel status computed");
 	}
 
 	private void computeAllStatus(List<Channel> channels) {

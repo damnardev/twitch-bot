@@ -4,12 +4,16 @@ import fr.damnardev.twitch.bot.domain.model.ChannelInfo;
 import fr.damnardev.twitch.bot.domain.model.User;
 import fr.damnardev.twitch.bot.domain.port.primary.ICreateChanelService;
 import fr.damnardev.twitch.bot.domain.port.primary.IFindAllChanelService;
+import fr.damnardev.twitch.bot.domain.port.primary.IUpdateChanelService;
 import fr.damnardev.twitch.bot.primary.javafx.wrapper.ChannelInfoWrapper;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableColumn.CellDataFeatures;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.scene.control.cell.CheckBoxTableCell;
 import javafx.scene.control.cell.PropertyValueFactory;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -22,6 +26,8 @@ import org.springframework.stereotype.Component;
 public class ApplicationController {
 
 	private final ICreateChanelService createChanelService;
+
+	private final IUpdateChanelService updateChanelService;
 
 	private final IFindAllChanelService findAllChanelService;
 
@@ -48,9 +54,26 @@ public class ApplicationController {
 		this.tableView.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY_ALL_COLUMNS);
 		this.columnId.setCellValueFactory(new PropertyValueFactory<>("id"));
 		this.columnName.setCellValueFactory(new PropertyValueFactory<>("name"));
+
 		this.columnEnabled.setCellValueFactory(new PropertyValueFactory<>("enabled"));
+		this.columnEnabled.setCellValueFactory(this::enabledCellValueFactory);
+
+		this.columnEnabled.setCellFactory(CheckBoxTableCell.forTableColumn(this.columnEnabled));
 
 		refreshItems();
+	}
+
+	private SimpleBooleanProperty enabledCellValueFactory(CellDataFeatures<ChannelInfoWrapper, Boolean> data) {
+		var channel = data.getValue();
+		var enabledProperty = new SimpleBooleanProperty(channel.getEnabled());
+
+		enabledProperty.addListener((obs, wasEnabled, enabled) -> updateEnabledCellValue(enabled, channel));
+		return enabledProperty;
+	}
+
+	private void updateEnabledCellValue(Boolean enabled, ChannelInfoWrapper channel) {
+		channel.setEnabled(enabled);
+		this.updateChanelService.update(channel.get());
 	}
 
 	private void refreshItems() {
