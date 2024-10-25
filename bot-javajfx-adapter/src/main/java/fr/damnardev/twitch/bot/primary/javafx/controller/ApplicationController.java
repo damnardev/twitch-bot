@@ -55,9 +55,7 @@ public class ApplicationController {
 		this.columnId.setCellValueFactory(new PropertyValueFactory<>("id"));
 		this.columnName.setCellValueFactory(new PropertyValueFactory<>("name"));
 
-		this.columnEnabled.setCellValueFactory(new PropertyValueFactory<>("enabled"));
 		this.columnEnabled.setCellValueFactory(this::enabledCellValueFactory);
-
 		this.columnEnabled.setCellFactory(CheckBoxTableCell.forTableColumn(this.columnEnabled));
 
 		refreshItems();
