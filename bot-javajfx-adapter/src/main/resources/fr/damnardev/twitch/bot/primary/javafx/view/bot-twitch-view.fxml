@@ -31,7 +31,7 @@
 			<TableColumn fx:id="columnId" maxWidth="100" text="Id" editable="false"/>
 			<TableColumn fx:id="columnName" maxWidth="Infinity" text="Name"
 						 editable="false"/>
-			<TableColumn fx:id="columnEnabled" maxWidth="100" text="Enables"/>
+			<TableColumn fx:id="columnEnabled" maxWidth="100" text="Enabled"/>
 		</columns>
 	</TableView>
 
