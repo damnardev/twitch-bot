@@ -20,4 +20,12 @@ public class ChannelInfoWrapper {
 		return this.channelInfo.enabled();
 	}
 
+	public void setEnabled(Boolean enabled) {
+		this.channelInfo = this.channelInfo.toBuilder().enabled(enabled).build();
+	}
+
+	public ChannelInfo get() {
+		return this.channelInfo;
+	}
+
 }
