@@ -65,10 +65,10 @@ public class ApplicationController {
 
 	private SimpleBooleanProperty enabledCellValueFactory(CellDataFeatures<ChannelInfoWrapper, Boolean> data) {
 		var channel = data.getValue();
-		var activeProp = new SimpleBooleanProperty(channel.getEnabled());
+		var enabledProperty = new SimpleBooleanProperty(channel.getEnabled());
 
-		activeProp.addListener((obs, wasEnabled, enabled) -> updateEnabledCellValue(enabled, channel));
-		return activeProp;
+		enabledProperty.addListener((obs, wasEnabled, enabled) -> updateEnabledCellValue(enabled, channel));
+		return enabledProperty;
 	}
 
 	private void updateEnabledCellValue(Boolean enabled, ChannelInfoWrapper channel) {
