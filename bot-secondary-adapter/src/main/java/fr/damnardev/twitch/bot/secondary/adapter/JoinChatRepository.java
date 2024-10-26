@@ -1,7 +1,6 @@
 package fr.damnardev.twitch.bot.secondary.adapter;
 
 import com.github.twitch4j.TwitchClient;
-import fr.damnardev.twitch.bot.database.entity.Channel;
 import fr.damnardev.twitch.bot.database.repository.DbChannelRepository;
 import fr.damnardev.twitch.bot.domain.model.ChannelInfo;
 import fr.damnardev.twitch.bot.domain.port.secondary.IJoinChatRepository;
@@ -28,17 +27,18 @@ public class JoinChatRepository implements IJoinChatRepository {
 		if (channels.isEmpty()) {
 			return;
 		}
-		channels.stream().map(Channel::getName).forEach(this::joinChannel);
+		channels.forEach((channel) -> joinChannel(channel.getId().toString(), channel.getName()));
 	}
 
 	@Override
 	public void joinChannel(ChannelInfo channelInfo) {
-		joinChannel(channelInfo.user().name());
+		joinChannel(channelInfo.user().idAsString(), channelInfo.user().name());
 	}
 
-	private void joinChannel(String channelName) {
+	private void joinChannel(String channelId, String channelName) {
 		log.info("Joining channel {}", channelName);
 		this.twitchClient.getChat().joinChannel(channelName);
+		this.twitchClient.getClientHelper().enableStreamEventListener(channelId, channelName);
 	}
 
 	@Override

@@ -6,4 +6,6 @@ public interface IUpdateChannelRepository {
 
 	void update(ChannelInfo channel);
 
+	void updateStatus(ChannelInfo channel);
+
 }

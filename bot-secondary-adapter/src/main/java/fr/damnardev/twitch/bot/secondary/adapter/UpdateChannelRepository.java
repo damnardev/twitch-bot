@@ -24,4 +24,13 @@ public class UpdateChannelRepository implements IUpdateChannelRepository {
 		});
 	}
 
+	@Override
+	public void updateStatus(ChannelInfo channel) {
+		log.info("Updating channel {}", channel);
+		this.repository.findById(channel.user().id()).ifPresent((entity) -> {
+			entity.setOnline(channel.online());
+			this.repository.save(entity);
+		});
+	}
+
 }
