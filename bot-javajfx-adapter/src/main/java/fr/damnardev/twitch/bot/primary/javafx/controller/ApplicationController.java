@@ -3,12 +3,15 @@ package fr.damnardev.twitch.bot.primary.javafx.controller;
 import fr.damnardev.twitch.bot.domain.model.ChannelInfo;
 import fr.damnardev.twitch.bot.domain.model.User;
 import fr.damnardev.twitch.bot.domain.port.primary.ICreateChanelService;
+import fr.damnardev.twitch.bot.domain.port.primary.IDeleteChanelService;
 import fr.damnardev.twitch.bot.domain.port.primary.IFindAllChanelService;
 import fr.damnardev.twitch.bot.domain.port.primary.IUpdateChanelService;
 import fr.damnardev.twitch.bot.primary.javafx.wrapper.ChannelInfoWrapper;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableColumn.CellDataFeatures;
 import javafx.scene.control.TableView;
@@ -29,7 +32,12 @@ public class ApplicationController {
 
 	private final IUpdateChanelService updateChanelService;
 
+	private final IDeleteChanelService deleteChanelService;
+
 	private final IFindAllChanelService findAllChanelService;
+
+	@FXML
+	private TableColumn<ChannelInfoWrapper, String> columnDeleted;
 
 	@FXML
 	private TableView<ChannelInfoWrapper> tableView;
@@ -58,6 +66,8 @@ public class ApplicationController {
 		this.columnEnabled.setCellValueFactory(this::enabledCellValueFactory);
 		this.columnEnabled.setCellFactory(CheckBoxTableCell.forTableColumn(this.columnEnabled));
 
+		this.columnDeleted.setCellFactory(this::deletedCellFactory);
+
 		refreshItems();
 	}
 
@@ -72,6 +82,31 @@ public class ApplicationController {
 	private void updateEnabledCellValue(Boolean enabled, ChannelInfoWrapper channel) {
 		channel.setEnabled(enabled);
 		this.updateChanelService.update(channel.get());
+	}
+
+	private TableCell<ChannelInfoWrapper, String> deletedCellFactory(TableColumn<ChannelInfoWrapper, String> channelInfoWrapperStringTableColumn) {
+		return new TableCell<>() {
+
+			final Button button = new Button("Delete");
+
+			@Override
+			protected void updateItem(String item, boolean empty) {
+				super.updateItem(item, empty);
+				if (empty) {
+					setText(null);
+					setGraphic(null);
+				}
+				else {
+					var channel = getTableView().getItems().get(getIndex());
+					this.button.setOnMouseClicked((event) -> {
+						ApplicationController.this.deleteChanelService.delete(channel.get());
+						getTableView().getItems().remove(channel);
+					});
+					this.button.setMaxWidth(Double.MAX_VALUE);
+					setGraphic(this.button);
+				}
+			}
+		};
 	}
 
 	private void refreshItems() {

@@ -9,8 +9,7 @@
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.RowConstraints?>
-<GridPane xmlns:fx="http://javafx.com/fxml/1" hgap="5.0"
-		  maxHeight="1.7976931348623157E308"
+<GridPane xmlns:fx="http://javafx.com/fxml/1" hgap="5.0" maxHeight="1.7976931348623157E308"
 		  maxWidth="1.7976931348623157E308" prefHeight="600" prefWidth="800"
 		  vgap="5.0" xmlns="http://javafx.com/javafx/17.0.12"
 		  fx:controller="fr.damnardev.twitch.bot.primary.javafx.controller.ApplicationController">
@@ -25,13 +24,17 @@
 		<ColumnConstraints minWidth="10.0" prefWidth="100.0"/>
 	</columnConstraints>
 
-	<TableView fx:id="tableView" GridPane.columnIndex="0" GridPane.columnSpan="3"
-			   GridPane.rowIndex="0" editable="true">
+	<TableView fx:id="tableView" editable="true" GridPane.columnIndex="0"
+			   GridPane.columnSpan="3" GridPane.rowIndex="0">
 		<columns>
-			<TableColumn fx:id="columnId" maxWidth="100" text="Id" editable="false"/>
-			<TableColumn fx:id="columnName" maxWidth="Infinity" text="Name"
-						 editable="false"/>
-			<TableColumn fx:id="columnEnabled" maxWidth="100" text="Enabled"/>
+			<TableColumn fx:id="columnId" editable="false" maxWidth="100" minWidth="100"
+						 text="Id"/>
+			<TableColumn fx:id="columnName" editable="false" maxWidth="Infinity"
+						 text="Name"/>
+			<TableColumn fx:id="columnEnabled" maxWidth="100" minWidth="100"
+						 text="Enabled"/>
+			<TableColumn fx:id="columnDeleted" editable="false" maxWidth="100"
+						 minWidth="100" sortable="false"/>
 		</columns>
 	</TableView>
 
