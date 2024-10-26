@@ -4,7 +4,7 @@ import fr.damnardev.twitch.bot.domain.DomainService;
 import fr.damnardev.twitch.bot.domain.model.event.StatusEvent;
 import fr.damnardev.twitch.bot.domain.port.primary.event.IStatusEventService;
 import fr.damnardev.twitch.bot.domain.port.secondary.IFindChannelRepository;
-import fr.damnardev.twitch.bot.domain.port.secondary.ISaveChannelRepository;
+import fr.damnardev.twitch.bot.domain.port.secondary.IUpdateChannelRepository;
 import lombok.RequiredArgsConstructor;
 
 @DomainService
@@ -13,7 +13,7 @@ public class StatusEventService implements IStatusEventService {
 
 	private final IFindChannelRepository findChannelRepository;
 
-	private final ISaveChannelRepository saveChannelRepository;
+	private final IUpdateChannelRepository updateChannelRepository;
 
 	@Override
 	public void process(StatusEvent event) {
@@ -22,7 +22,7 @@ public class StatusEventService implements IStatusEventService {
 			return;
 		}
 		var channel = optional.get().toBuilder().online(event.online()).build();
-		this.saveChannelRepository.save(channel);
+		this.updateChannelRepository.updateStatus(channel);
 	}
 
 }

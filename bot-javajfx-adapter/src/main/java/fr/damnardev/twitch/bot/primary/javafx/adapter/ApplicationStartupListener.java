@@ -46,7 +46,7 @@ public class ApplicationStartupListener implements ApplicationRunner {
 		stage.setScene(scene);
 		stage.setMinWidth(600);
 		stage.setMinHeight(600);
-		stage.setAlwaysOnTop(true);
+		stage.setAlwaysOnTop(false);
 		stage.setOnCloseRequest((event) -> this.springContext.close());
 		stage.show();
 	}
