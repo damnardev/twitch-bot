@@ -32,7 +32,7 @@ public class JoinChatRepository implements IJoinChatRepository {
 
 	@Override
 	public void joinChannel(ChannelInfo channelInfo) {
-		joinChannel(channelInfo.user().idAsString(), channelInfo.user().name());
+		joinChannel(channelInfo.user().id().toString(), channelInfo.user().name());
 	}
 
 	private void joinChannel(String channelId, String channelName) {

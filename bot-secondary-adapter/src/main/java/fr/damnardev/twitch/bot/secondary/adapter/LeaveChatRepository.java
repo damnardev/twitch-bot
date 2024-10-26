@@ -20,7 +20,7 @@ public class LeaveChatRepository implements ILeaveChatRepository {
 		String channelName = channelInfo.user().name();
 		log.info("Leaving channel {}", channelName);
 		this.twitchClient.getChat().leaveChannel(channelName);
-		this.twitchClient.getClientHelper().disableStreamEventListenerForId(channelInfo.user().idAsString());
+		this.twitchClient.getClientHelper().disableStreamEventListenerForId(channelInfo.user().id().toString());
 	}
 
 }
