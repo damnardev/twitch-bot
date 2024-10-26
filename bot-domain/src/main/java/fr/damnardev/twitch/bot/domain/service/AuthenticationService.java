@@ -3,7 +3,7 @@ package fr.damnardev.twitch.bot.domain.service;
 import fr.damnardev.twitch.bot.domain.DomainService;
 import fr.damnardev.twitch.bot.domain.port.primary.IAuthenticationService;
 import fr.damnardev.twitch.bot.domain.port.secondary.IAuthenticationRepository;
-import fr.damnardev.twitch.bot.domain.port.secondary.IChatRepository;
+import fr.damnardev.twitch.bot.domain.port.secondary.IJoinChatRepository;
 import lombok.RequiredArgsConstructor;
 
 @DomainService
@@ -12,7 +12,7 @@ public class AuthenticationService implements IAuthenticationService {
 
 	private final IAuthenticationRepository authenticationRepository;
 
-	private final IChatRepository chatRepository;
+	private final IJoinChatRepository joinChatRepository;
 
 	@Override
 	public void tryRenew() {
@@ -21,7 +21,7 @@ public class AuthenticationService implements IAuthenticationService {
 		}
 		var updated = this.authenticationRepository.renew();
 		if (updated) {
-			this.chatRepository.reconnect();
+			this.joinChatRepository.reconnect();
 		}
 	}
 

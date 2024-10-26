@@ -4,8 +4,9 @@ import fr.damnardev.twitch.bot.domain.DomainService;
 import fr.damnardev.twitch.bot.domain.exception.FatalException;
 import fr.damnardev.twitch.bot.domain.model.ChannelInfo;
 import fr.damnardev.twitch.bot.domain.port.primary.IUpdateChanelService;
-import fr.damnardev.twitch.bot.domain.port.secondary.IChatRepository;
 import fr.damnardev.twitch.bot.domain.port.secondary.IFindChannelRepository;
+import fr.damnardev.twitch.bot.domain.port.secondary.IJoinChatRepository;
+import fr.damnardev.twitch.bot.domain.port.secondary.ILeaveChatRepository;
 import fr.damnardev.twitch.bot.domain.port.secondary.IStreamRepository;
 import fr.damnardev.twitch.bot.domain.port.secondary.IUpdateChannelRepository;
 import lombok.RequiredArgsConstructor;
@@ -18,7 +19,9 @@ public class UpdateChanelService implements IUpdateChanelService {
 
 	private final IUpdateChannelRepository updateChannelRepository;
 
-	private final IChatRepository chatRepository;
+	private final IJoinChatRepository joinChatRepository;
+
+	private final ILeaveChatRepository leaveChatRepository;
 
 	private final IStreamRepository streamRepository;
 
@@ -29,11 +32,11 @@ public class UpdateChanelService implements IUpdateChanelService {
 		}
 		this.updateChannelRepository.update(channel);
 		if (channel.enabled()) {
-			this.chatRepository.joinChannel(channel);
+			this.joinChatRepository.joinChannel(channel);
 			this.streamRepository.computeStatus(channel);
 		}
 		else {
-			this.chatRepository.leaveChannel(channel);
+			this.leaveChatRepository.leaveChannel(channel);
 		}
 	}
 }
