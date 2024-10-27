@@ -29,5 +29,3 @@ twitch:
     retry: ${TWITCH_OAUTH_RETRY:10}
     timeout: ${TWITCH_OAUTH_TIMEOUT:6}
     timeout-unit: SECONDS
-  saint:
-    url: ${SAINT_URL}

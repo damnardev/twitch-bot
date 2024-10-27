@@ -1,14 +1,15 @@
 package fr.damnardev.twitch.bot.secondary.configuration;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.philippheuer.credentialmanager.CredentialManager;
 import com.github.philippheuer.credentialmanager.CredentialManagerBuilder;
 import com.github.philippheuer.credentialmanager.domain.OAuth2Credential;
 import com.github.twitch4j.TwitchClient;
 import com.github.twitch4j.TwitchClientBuilder;
+import com.github.twitch4j.TwitchClientHelper;
 import com.github.twitch4j.auth.providers.TwitchIdentityProvider;
+import com.github.twitch4j.chat.TwitchChat;
+import com.github.twitch4j.helix.TwitchHelix;
 import fr.damnardev.twitch.bot.secondary.PropertiesConfiguration;
-import fr.damnardev.twitch.bot.secondary.TokenHandler;
 import fr.damnardev.twitch.bot.secondary.property.TwitchOAuthProperties;
 
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
@@ -21,13 +22,8 @@ import org.springframework.context.annotation.DependsOn;
 public class Twitch4JConfiguration {
 
 	@Bean
-	public TokenHandler tokenHandler(ObjectMapper objectMapper) {
-		return new TokenHandler(objectMapper);
-	}
-
-	@Bean
-	public OAuth2Credential credential(TokenHandler tokenHandler) {
-		return tokenHandler.read();
+	public OAuth2Credential credential() {
+		return new OAuth2Credential("twitch", "");
 	}
 
 	@Bean
@@ -45,6 +41,24 @@ public class Twitch4JConfiguration {
 	@DependsOn("twitchClient")
 	public TwitchIdentityProvider identityProvider(CredentialManager credentialManager) {
 		return credentialManager.getIdentityProviderByName("twitch").filter(TwitchIdentityProvider.class::isInstance).map(TwitchIdentityProvider.class::cast).orElseThrow();
+	}
+
+	@Bean
+	@DependsOn("twitchClient")
+	public TwitchChat twitchChat(TwitchClient twitchClient) {
+		return twitchClient.getChat();
+	}
+
+	@Bean
+	@DependsOn("twitchClient")
+	public TwitchClientHelper twitchClientHelper(TwitchClient twitchClient) {
+		return twitchClient.getClientHelper();
+	}
+
+	@Bean
+	@DependsOn("twitchClient")
+	public TwitchHelix twitchHelix(TwitchClient twitchClient) {
+		return twitchClient.getHelix();
 	}
 
 }
