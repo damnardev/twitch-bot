@@ -7,24 +7,29 @@
 	<parent>
 		<groupId>fr.damnardev.twitch</groupId>
 		<artifactId>bot-parent</artifactId>
-		<version>0.0.1-SNAPSHOT</version>
+		<version>0.0.2-SNAPSHOT</version>
 	</parent>
 
 	<artifactId>bot-secondary-adapter</artifactId>
 	<packaging>jar</packaging>
 
+	<properties>
+		<sonar.coverage.jacoco.xmlReportPaths>${basedir}/../${aggregate.report.dir}</sonar.coverage.jacoco.xmlReportPaths>
+	</properties>
+
 	<dependencies>
 		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-web</artifactId>
+			<groupId>fr.damnardev.twitch</groupId>
+			<artifactId>bot-domain</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-data-jpa</artifactId>
+			<groupId>fr.damnardev.twitch</groupId>
+			<artifactId>bot-database</artifactId>
 		</dependency>
+
 		<dependency>
-			<groupId>com.h2database</groupId>
-			<artifactId>h2</artifactId>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter</artifactId>
 		</dependency>
 
 		<dependency>
@@ -33,12 +38,9 @@
 		</dependency>
 
 		<dependency>
-			<groupId>fr.damnardev.twitch</groupId>
-			<artifactId>bot-domain</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>fr.damnardev.twitch</groupId>
-			<artifactId>bot-database</artifactId>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-test</artifactId>
+			<scope>test</scope>
 		</dependency>
 	</dependencies>
 

@@ -6,7 +6,7 @@
 
 	<groupId>fr.damnardev.twitch</groupId>
 	<artifactId>bot-parent</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>0.0.2-SNAPSHOT</version>
 	<packaging>pom</packaging>
 
 	<modules>
@@ -16,12 +16,27 @@
 		<module>bot-primary-adapter</module>
 		<module>bot-javajfx-adapter</module>
 		<module>bot-runners</module>
+		<module>bot-tests</module>
 	</modules>
 
 	<properties>
 		<maven.compiler.source>22</maven.compiler.source>
 		<maven.compiler.target>22</maven.compiler.target>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+
+		<!-- exclude file from sonar coverage -->
+		<sonar.coverage.exclusions>
+			**/javafx/**,
+			**/*Configuration.java,
+			**/BotRunner.java,
+			**/entity/Db*.java,
+			**/property/*Properties.java,
+		</sonar.coverage.exclusions>
+
+		<sonar.language>java</sonar.language>
+		<sonar.projectName>Twitch Bot</sonar.projectName>
+		<aggregate.report.dir>bot-tests/target/site/jacoco-aggregate/jacoco.xml</aggregate.report.dir>
+		<jacoco.version>0.8.12</jacoco.version>
 	</properties>
 
 	<dependencyManagement>
@@ -118,6 +133,18 @@
 						</configuration>
 						<goals>
 							<goal>check</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.jacoco</groupId>
+				<artifactId>jacoco-maven-plugin</artifactId>
+				<version>${jacoco.version}</version>
+				<executions>
+					<execution>
+						<goals>
+							<goal>prepare-agent</goal>
 						</goals>
 					</execution>
 				</executions>

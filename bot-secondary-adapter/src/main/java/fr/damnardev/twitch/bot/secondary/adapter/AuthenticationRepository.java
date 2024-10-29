@@ -1,20 +1,19 @@
 package fr.damnardev.twitch.bot.secondary.adapter;
 
-import java.awt.Desktop;
-import java.io.IOException;
-import java.net.URI;
-
 import com.github.philippheuer.credentialmanager.domain.DeviceAuthorization;
 import com.github.philippheuer.credentialmanager.domain.OAuth2Credential;
 import com.github.twitch4j.auth.providers.TwitchIdentityProvider;
+import fr.damnardev.twitch.bot.database.entity.DbCredential;
+import fr.damnardev.twitch.bot.database.repository.DbCredentialRepository;
 import fr.damnardev.twitch.bot.domain.exception.FatalException;
 import fr.damnardev.twitch.bot.domain.port.secondary.IAuthenticationRepository;
-import fr.damnardev.twitch.bot.secondary.TokenHandler;
 import fr.damnardev.twitch.bot.secondary.property.TwitchOAuthProperties;
+import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @RequiredArgsConstructor
 @Service
@@ -27,17 +26,24 @@ public class AuthenticationRepository implements IAuthenticationRepository {
 
 	private final OAuth2Credential credential;
 
-	private final TokenHandler tokenHandler;
+	private final DbCredentialRepository dbCredentialRepository;
 
 	private boolean initialized = false;
 
+	@PostConstruct
+	public void init() {
+		this.dbCredentialRepository.findLast().ifPresent((dbCredential) -> this.credential.setRefreshToken(dbCredential.getRefreshToken()));
+	}
+
 	@Override
+	@Transactional
 	public boolean renew() {
 		log.info("Renewing token");
 		if (this.provider.renew(this.credential) || generateDeviceToken()) {
 			log.info("Token renewed");
 			this.credential.setExpiresIn(this.credential.getExpiresIn() - 1800);
-			this.tokenHandler.write(this.credential);
+			var refreshToken = DbCredential.builder().refreshToken(this.credential.getRefreshToken()).build();
+			this.dbCredentialRepository.save(refreshToken);
 			this.initialized = true;
 			return true;
 		}
@@ -48,18 +54,12 @@ public class AuthenticationRepository implements IAuthenticationRepository {
 	private boolean generateDeviceToken() {
 		log.info("Generating device token");
 		var flowRequest = this.provider.createDeviceFlowRequest(this.properties.getScopes());
-		openBrowser(flowRequest);
+		displayBrowserLink(flowRequest);
 		return attemptTokenGeneration(flowRequest);
 	}
 
-	private void openBrowser(DeviceAuthorization flowRequest) {
-		log.info("Opening browser");
-		try {
-			Desktop.getDesktop().browse(URI.create(flowRequest.getVerificationUri()));
-		}
-		catch (IOException ex) {
-			throw new FatalException(ex);
-		}
+	private void displayBrowserLink(DeviceAuthorization flowRequest) {
+		log.info("Please go to {}", flowRequest.getVerificationUri());
 	}
 
 	private boolean attemptTokenGeneration(DeviceAuthorization flowRequest) {

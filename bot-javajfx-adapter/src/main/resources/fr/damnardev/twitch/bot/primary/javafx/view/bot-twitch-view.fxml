@@ -9,10 +9,15 @@
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.RowConstraints?>
-<GridPane xmlns:fx="http://javafx.com/fxml/1" hgap="5.0" maxHeight="1.7976931348623157E308"
+<GridPane xmlns:fx="http://javafx.com/fxml/1" hgap="5.0"
+		  maxHeight="1.7976931348623157E308"
 		  maxWidth="1.7976931348623157E308" prefHeight="600" prefWidth="800"
 		  vgap="5.0" xmlns="http://javafx.com/javafx/17.0.12"
 		  fx:controller="fr.damnardev.twitch.bot.primary.javafx.controller.ApplicationController">
+	<padding>
+		<Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
+	</padding>
+
 	<rowConstraints>
 		<RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="ALWAYS"/>
 		<RowConstraints minHeight="10.0" prefHeight="30.0"/>
@@ -24,34 +29,30 @@
 		<ColumnConstraints minWidth="10.0" prefWidth="100.0"/>
 	</columnConstraints>
 
-	<TableView fx:id="tableView" editable="true" GridPane.columnIndex="0"
+	<TableView editable="true" GridPane.columnIndex="0"
 			   GridPane.columnSpan="3" GridPane.rowIndex="0">
 		<columns>
-			<TableColumn fx:id="columnId" editable="false" maxWidth="100" minWidth="100"
+			<TableColumn editable="false" maxWidth="100" minWidth="100"
 						 text="Id"/>
-			<TableColumn fx:id="columnName" editable="false" maxWidth="Infinity"
+			<TableColumn editable="false" maxWidth="Infinity"
 						 text="Name"/>
-			<TableColumn fx:id="columnEnabled" maxWidth="100" minWidth="100"
+			<TableColumn maxWidth="100" minWidth="100"
 						 text="Enabled"/>
-			<TableColumn fx:id="columnDeleted" editable="false" maxWidth="100"
+			<TableColumn editable="false" maxWidth="100"
 						 minWidth="100" sortable="false"/>
 		</columns>
 	</TableView>
 
-	<Label maxWidth="1.7976931348623157E308" text="Channel Name:" GridPane.columnIndex="0"
+	<Label maxWidth="Infinity" text="Channel Name:" GridPane.columnIndex="0"
 		   GridPane.fillHeight="1" GridPane.fillWidth="1" GridPane.rowIndex="1"/>
 
-	<TextField fx:id="textFieldChannelName" GridPane.columnIndex="1"
+	<TextField GridPane.columnIndex="1"
 			   GridPane.rowIndex="1"/>
 
-	<Button alignment="CENTER" maxWidth="1.7976931348623157E308"
-			onAction="#onAddChannelClick" text="Add" GridPane.columnIndex="2"
+	<Button alignment="CENTER" maxWidth="Infinity"
+			text="Add" GridPane.columnIndex="2"
 			GridPane.rowIndex="1"/>
 
-	<Label fx:id="labelMessage" maxWidth="1.7976931348623157E308" GridPane.columnIndex="0"
+	<Label maxWidth="Infinity" GridPane.columnIndex="0"
 		   GridPane.columnSpan="3" GridPane.rowIndex="2"/>
-	<padding>
-		<Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
-	</padding>
-
 </GridPane>

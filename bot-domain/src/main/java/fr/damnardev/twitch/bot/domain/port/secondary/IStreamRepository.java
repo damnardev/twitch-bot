@@ -1,11 +1,11 @@
 package fr.damnardev.twitch.bot.domain.port.secondary;
 
-import fr.damnardev.twitch.bot.domain.model.ChannelInfo;
+import java.util.List;
+
+import fr.damnardev.twitch.bot.domain.model.Channel;
 
 public interface IStreamRepository {
 
-	void computeStatus();
-
-	void computeStatus(ChannelInfo channelInfo);
+	List<Channel> computeAll(List<Channel> channels);
 
 }
