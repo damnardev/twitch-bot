@@ -1,6 +1,7 @@
 package fr.damnardev.twitch.bot.database.repository;
 
 import java.util.List;
+import java.util.Optional;
 
 import fr.damnardev.twitch.bot.database.entity.DbChannel;
 
@@ -13,5 +14,7 @@ public interface DbChannelRepository extends JpaRepository<DbChannel, Long> {
 
 	@Query("SELECT c FROM DbChannel c WHERE c.enabled = true")
 	List<DbChannel> findAllEnabled();
+
+	Optional<DbChannel> findByName(String name);
 
 }

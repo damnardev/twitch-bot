@@ -4,8 +4,8 @@ import java.util.Collections;
 
 import fr.damnardev.twitch.bot.domain.model.Channel;
 import fr.damnardev.twitch.bot.domain.port.secondary.IAuthenticationRepository;
-import fr.damnardev.twitch.bot.domain.port.secondary.IChannelRepository;
 import fr.damnardev.twitch.bot.domain.port.secondary.IChatRepository;
+import fr.damnardev.twitch.bot.domain.port.secondary.IFindChannelRepository;
 import fr.damnardev.twitch.bot.domain.port.secondary.IStreamRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -31,7 +31,7 @@ class StartupServiceTests {
 	private IAuthenticationRepository authenticationRepository;
 
 	@Mock
-	private IChannelRepository channelRepository;
+	private IFindChannelRepository findChannelRepository;
 
 	@Mock
 	private IChatRepository chatRepository;
@@ -42,14 +42,14 @@ class StartupServiceTests {
 	@Test
 	void run_shouldRenewAuthenticationAndInitializeStreams() {
 		// Given
-		var channel = Channel.builder().id(1L).name("channel").enabled(true).online(false).build();
+		var channel = Channel.builder().id(1L).name("name").enabled(true).online(false).build();
 		var channels = Collections.singletonList(channel);
 
 		var channelAfterCompute = channel.toBuilder().online(true).build();
 		var channelsAfterCompute = Collections.singletonList(channelAfterCompute);
 
 		given(this.authenticationRepository.renew()).willReturn(true);
-		given(this.channelRepository.findAllEnabled()).willReturn(channels);
+		given(this.findChannelRepository.findAllEnabled()).willReturn(channels);
 		doNothing().when(this.chatRepository).joinAll(channels);
 		doNothing().when(this.chatRepository).reconnect();
 
@@ -60,12 +60,12 @@ class StartupServiceTests {
 
 		// Then
 		then(this.authenticationRepository).should().renew();
-		then(this.channelRepository).should().findAllEnabled();
+		then(this.findChannelRepository).should().findAllEnabled();
 		then(this.chatRepository).should().joinAll(channels);
 		then(this.chatRepository).should().reconnect();
 		then(this.streamRepository).should().computeAll(channels);
 
-		verifyNoMoreInteractions(this.authenticationRepository, this.channelRepository, this.chatRepository, this.streamRepository);
+		verifyNoMoreInteractions(this.authenticationRepository, this.findChannelRepository, this.chatRepository, this.streamRepository);
 	}
 
 }
