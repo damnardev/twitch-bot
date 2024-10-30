@@ -13,7 +13,6 @@ import org.springframework.context.annotation.FullyQualifiedAnnotationBeanNameGe
 public class BotRunner {
 
 	public static void main(String[] args) {
-		System.setProperty("java.awt.headless", "false");
 		SpringApplication.run(BotRunner.class, args);
 	}
 
