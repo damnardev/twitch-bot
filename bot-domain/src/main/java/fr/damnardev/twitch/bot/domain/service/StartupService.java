@@ -3,8 +3,8 @@ package fr.damnardev.twitch.bot.domain.service;
 import fr.damnardev.twitch.bot.domain.DomainService;
 import fr.damnardev.twitch.bot.domain.port.primary.IStartupService;
 import fr.damnardev.twitch.bot.domain.port.secondary.IAuthenticationRepository;
-import fr.damnardev.twitch.bot.domain.port.secondary.IChannelRepository;
 import fr.damnardev.twitch.bot.domain.port.secondary.IChatRepository;
+import fr.damnardev.twitch.bot.domain.port.secondary.IFindChannelRepository;
 import fr.damnardev.twitch.bot.domain.port.secondary.IStreamRepository;
 import lombok.RequiredArgsConstructor;
 
@@ -14,7 +14,7 @@ public class StartupService implements IStartupService {
 
 	private final IAuthenticationRepository authenticationRepository;
 
-	private final IChannelRepository channelRepository;
+	private final IFindChannelRepository findChannelRepository;
 
 	private final IChatRepository chatRepository;
 
@@ -26,7 +26,7 @@ public class StartupService implements IStartupService {
 		if (!generated) {
 			System.exit(-1);
 		}
-		var channels = this.channelRepository.findAllEnabled();
+		var channels = this.findChannelRepository.findAllEnabled();
 		this.chatRepository.joinAll(channels);
 		this.chatRepository.reconnect();
 		this.streamRepository.computeAll(channels);

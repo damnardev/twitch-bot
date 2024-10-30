@@ -2,11 +2,12 @@ package fr.damnardev.twitch.bot.secondary;
 
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Optional;
 
 import fr.damnardev.twitch.bot.database.entity.DbChannel;
 import fr.damnardev.twitch.bot.database.repository.DbChannelRepository;
 import fr.damnardev.twitch.bot.domain.model.Channel;
-import fr.damnardev.twitch.bot.secondary.adapter.ChannelRepository;
+import fr.damnardev.twitch.bot.secondary.adapter.FindChannelRepository;
 import fr.damnardev.twitch.bot.secondary.mapper.ChannelMapper;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -24,10 +25,10 @@ import static org.mockito.BDDMockito.verifyNoMoreInteractions;
 
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.WARN)
-class ChannelRepositoryTests {
+class FindChannelRepositoryTests {
 
 	@InjectMocks
-	private ChannelRepository channelRepository;
+	private FindChannelRepository findChannelRepository;
 
 	@Spy
 	private ChannelMapper channelMapper;
@@ -41,7 +42,7 @@ class ChannelRepositoryTests {
 		given(this.dbChannelRepository.findAllEnabled()).willReturn(Collections.emptyList());
 
 		// When
-		var result = this.channelRepository.findAllEnabled();
+		var result = this.findChannelRepository.findAllEnabled();
 
 		// Then
 		then(this.dbChannelRepository).should().findAllEnabled();
@@ -59,7 +60,7 @@ class ChannelRepositoryTests {
 		given(this.dbChannelRepository.findAllEnabled()).willReturn(Arrays.asList(dbChannel_01, dbChannel_02));
 
 		// When
-		var channels = this.channelRepository.findAllEnabled();
+		var result = this.findChannelRepository.findAllEnabled();
 
 		// Then
 		then(this.dbChannelRepository).should().findAllEnabled();
@@ -71,7 +72,44 @@ class ChannelRepositoryTests {
 		var channel_01 = Channel.builder().id(1L).name("channel_01").enabled(true).online(true).build();
 		var channel_02 = Channel.builder().id(2L).name("channel_02").enabled(false).online(false).build();
 
-		assertThat(channels).isNotNull().hasSize(2).contains(channel_01, channel_02);
+		assertThat(result).isNotNull().hasSize(2).contains(channel_01, channel_02);
+	}
+
+	@Test
+	void findByName_shouldReturnEmpty() {
+		// Given
+		var name = "name";
+		given(this.dbChannelRepository.findByName(name)).willReturn(Optional.empty());
+
+		// When
+		var result = this.findChannelRepository.findByName(name);
+
+		// Then
+		then(this.dbChannelRepository).should().findByName(name);
+
+		verifyNoMoreInteractions(this.dbChannelRepository, this.channelMapper);
+
+		assertThat(result).isEmpty();
+	}
+
+	@Test
+	void findByName_shouldReturnChannel() {
+		// Given
+		var name = "name";
+		var dbChannel = DbChannel.builder().id(1L).name(name).enabled(true).online(true).build();
+		given(this.dbChannelRepository.findByName(name)).willReturn(Optional.of(dbChannel));
+
+		// When
+		var result = this.findChannelRepository.findByName(name);
+
+		// Then
+		then(this.dbChannelRepository).should().findByName(name);
+		then(this.channelMapper).should().toModel(dbChannel);
+
+		verifyNoMoreInteractions(this.dbChannelRepository, this.channelMapper);
+
+		var expected = Channel.builder().id(1L).name(name).enabled(true).online(true).build();
+		assertThat(result).isPresent().get().isEqualTo(expected);
 	}
 
 }
