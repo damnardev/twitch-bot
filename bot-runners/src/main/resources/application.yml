@@ -29,3 +29,5 @@ twitch:
     retry: ${TWITCH_OAUTH_RETRY:10}
     timeout: ${TWITCH_OAUTH_TIMEOUT:6}
     timeout-unit: SECONDS
+  scheduled:
+    cron: ${TWITCH_SCHEDULED_CRON}
