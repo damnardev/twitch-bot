@@ -112,4 +112,40 @@ class FindChannelRepositoryTests {
 		assertThat(result).isPresent().get().isEqualTo(expected);
 	}
 
+	@Test
+	void findAll_shouldReturnEmptyList() {
+		// Given
+		given(this.dbChannelRepository.findAll()).willReturn(Collections.emptyList());
+
+		// When
+		var result = this.findChannelRepository.findAll();
+
+		// Then
+		then(this.dbChannelRepository).should().findAll();
+		verifyNoMoreInteractions(this.dbChannelRepository, this.channelMapper);
+
+		assertThat(result).isEmpty();
+	}
+
+	@Test
+	void findAll_shouldReturnListOfChannel() {
+		// Given
+		var dbChannel_01 = DbChannel.builder().id(1L).name("channel_01").enabled(true).online(true).build();
+		var dbChannel_02 = DbChannel.builder().id(2L).name("channel_02").enabled(false).online(false).build();
+		given(this.dbChannelRepository.findAll()).willReturn(Arrays.asList(dbChannel_01, dbChannel_02));
+
+		// When
+		var result = this.findChannelRepository.findAll();
+
+		// Then
+		then(this.dbChannelRepository).should().findAll();
+		then(this.channelMapper).should().toModel(dbChannel_01);
+		then(this.channelMapper).should().toModel(dbChannel_02);
+		verifyNoMoreInteractions(this.dbChannelRepository, this.channelMapper);
+
+		var channel_01 = Channel.builder().id(1L).name("channel_01").enabled(true).online(true).build();
+		var channel_02 = Channel.builder().id(2L).name("channel_02").enabled(false).online(false).build();
+		assertThat(result).isNotNull().hasSize(2).contains(channel_01, channel_02);
+	}
+
 }

@@ -33,4 +33,9 @@ public class FindChannelRepository implements IFindChannelRepository {
 		return this.dbChannelRepository.findByName(name).map(this.channelMapper::toModel);
 	}
 
+	@Override
+	public List<Channel> findAll() {
+		return this.dbChannelRepository.findAll().stream().map(this.channelMapper::toModel).toList();
+	}
+
 }

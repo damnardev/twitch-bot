@@ -11,4 +11,6 @@ public interface IFindChannelRepository {
 
 	Optional<Channel> findByName(String name);
 
+	List<Channel> findAll();
+
 }

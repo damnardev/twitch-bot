@@ -53,8 +53,8 @@ public class ApplicationStartupListener implements ApplicationRunner {
 
 	private void setupStage(Stage stage) {
 		stage.setTitle("Twitch Bot");
-		stage.setMinWidth(600);
-		stage.setMinHeight(600);
+		stage.setMinWidth(700);
+		stage.setMinHeight(700);
 		stage.setAlwaysOnTop(false);
 		stage.getIcons().add(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/fr/damnardev/twitch/bot/primary/javafx/icon.png"))));
 		stage.setOnCloseRequest((_) -> this.springContext.close());
