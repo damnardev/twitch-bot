@@ -70,7 +70,7 @@ public class ChannelManagementController {
 		try {
 			var channel = this.createChannelService.save(form);
 			this.statusController.setLabelText("Channel added: " + channelName, false);
-			tableView.getItems().add(new ChannelWrapper(channel));
+			this.tableView.getItems().add(new ChannelWrapper(channel));
 			log.info("Channel added: {}", channel);
 		}
 		catch (Exception ex) {
