@@ -1,60 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.TableColumn?>
-<?import javafx.scene.control.TableView?>
-<?import javafx.scene.control.TextField?>
-<?import javafx.scene.layout.ColumnConstraints?>
-<?import javafx.scene.layout.GridPane?>
-<?import javafx.scene.layout.RowConstraints?>
-<GridPane xmlns:fx="http://javafx.com/fxml/1" hgap="5.0"
-		  maxHeight="1.7976931348623157E308"
-		  maxWidth="1.7976931348623157E308" prefHeight="600" prefWidth="800"
-		  vgap="5.0" xmlns="http://javafx.com/javafx/17.0.12"
-		  fx:controller="fr.damnardev.twitch.bot.primary.javafx.controller.MainController">
-	<rowConstraints>
-		<RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="ALWAYS"/>
-		<RowConstraints minHeight="10.0" prefHeight="30.0"/>
-		<RowConstraints minHeight="10.0" prefHeight="30.0"/>
-	</rowConstraints>
-	<columnConstraints>
-		<ColumnConstraints minWidth="10.0" prefWidth="100.0"/>
-		<ColumnConstraints hgrow="ALWAYS" prefWidth="100.0"/>
-		<ColumnConstraints minWidth="10.0" prefWidth="100.0"/>
-	</columnConstraints>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.layout.VBox?>
+<VBox xmlns:fx="http://javafx.com/fxml/1" maxHeight="1.7976931348623157E308"
+	  maxWidth="1.7976931348623157E308" prefHeight="600" prefWidth="600"
+	  xmlns="http://javafx.com/javafx/17.0.12">
 
-	<padding>
-		<Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
-	</padding>
+	<TabPane VBox.vgrow="ALWAYS">
+		<Tab text="Channel Management" closable="false">
+			<fx:include source="channelPane.fxml"/>
+		</Tab>
+	</TabPane>
 
-	<TableView fx:id="tableView" editable="true" GridPane.columnIndex="0"
-			   GridPane.columnSpan="3" GridPane.rowIndex="0">
-		<columns>
-			<TableColumn fx:id="columnId" editable="false" maxWidth="100" minWidth="100"
-						 text="Id"/>
-			<TableColumn fx:id="columnName" editable="false" maxWidth="Infinity"
-						 text="Name"/>
-			<TableColumn fx:id="columnEnabled" maxWidth="100" minWidth="100"
-						 text="Enabled"/>
-			<TableColumn fx:id="columnDeleted" editable="false" maxWidth="100"
-						 minWidth="100" sortable="false"/>
-		</columns>
-	</TableView>
+	<fx:include source="statusPane.fxml"/>
 
-	<Label maxWidth="1.7976931348623157E308" text="Channel Name:" GridPane.columnIndex="0"
-		   GridPane.fillHeight="1" GridPane.fillWidth="1" GridPane.rowIndex="1"/>
-
-	<TextField fx:id="textFieldChannelName" GridPane.columnIndex="1"
-			   GridPane.rowIndex="1"/>
-
-	<Button onAction="#onButtonAdd" alignment="CENTER" maxWidth="1.7976931348623157E308"
-			text="Add" GridPane.columnIndex="2"
-			GridPane.rowIndex="1"/>
-
-	<fx:include source="status.fxml" maxWidth="1.7976931348623157E308"
-				GridPane.columnIndex="0"
-				GridPane.columnSpan="3" GridPane.rowIndex="2"/>
-
-</GridPane>
+</VBox>

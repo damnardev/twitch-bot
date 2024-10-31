@@ -62,8 +62,8 @@ class AuthenticationRepositoryTests {
 	@Test
 	void init_shouldSetRefreshToken() {
 		// Given
-		var expected = DbCredential.builder().refreshToken(REFRESH_TOKEN).build();
-		var optional = Optional.of(expected);
+		var dbCredential = DbCredential.builder().refreshToken(REFRESH_TOKEN).build();
+		var optional = Optional.of(dbCredential);
 		given(this.dbCredentialRepository.findLast()).willReturn(optional);
 
 		// When

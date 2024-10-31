@@ -37,13 +37,13 @@ class AuthenticationServiceTests {
 		given(this.authenticationRepository.isInitialized()).willReturn(value);
 
 		// When
-		var expected = this.startupService.isInitialized();
+		var result = this.startupService.isInitialized();
 
 		// Then
 		then(this.authenticationRepository).should().isInitialized();
 		verifyNoMoreInteractions(this.authenticationRepository, this.chatRepository);
 
-		assertThat(expected).isEqualTo(value);
+		assertThat(result).isEqualTo(value);
 	}
 
 	@Test

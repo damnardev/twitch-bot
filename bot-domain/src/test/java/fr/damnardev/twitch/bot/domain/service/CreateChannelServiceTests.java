@@ -57,10 +57,10 @@ class CreateChannelServiceTests {
 		// Given
 		var name = "name";
 		var form = CreateChannelForm.builder().name(name).build();
-		var expected = Channel.builder().build();
+		var channel = Channel.builder().id(1L).name(name).enabled(true).online(true).build();
 
 		given(this.findChannelRepository.findByName(name)).willReturn(Optional.empty());
-		given(this.createChannelRepository.save(form)).willReturn(expected);
+		given(this.createChannelRepository.save(form)).willReturn(channel);
 
 		// When
 		var result = this.createChannelService.save(form);
@@ -70,6 +70,7 @@ class CreateChannelServiceTests {
 		then(this.createChannelRepository).should().save(form);
 		verifyNoMoreInteractions(this.findChannelRepository, this.createChannelRepository);
 
+		var expected = Channel.builder().id(1L).name(name).enabled(true).online(true).build();
 		assertThat(result).isEqualTo(expected);
 	}
 
