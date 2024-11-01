@@ -32,7 +32,7 @@ class DefaultUpdateChannelRepositoryTests {
 	private ChannelMapper channelMapper;
 
 	@Test
-	void update_shouldInvokeSave() {
+	void update_shouldInvokeSave_whenChannelIsUpdated() {
 		// Given
 		var channel = Channel.builder().id(1L).name("name").online(true).enabled(true).build();
 		var dbChannel = DbChannel.builder().id(1L).name("name").online(true).enabled(true).build();

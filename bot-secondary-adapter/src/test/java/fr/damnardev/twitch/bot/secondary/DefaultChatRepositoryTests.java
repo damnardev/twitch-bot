@@ -34,7 +34,7 @@ class DefaultChatRepositoryTests {
 	private TwitchClientHelper twitchClientHelper;
 
 	@Test
-	void reconnect_shouldInvokeReconnect() {
+	void reconnect_shouldInvokeReconnect_whenCalled() {
 		// Given
 		doNothing().when(this.twitchChat).reconnect();
 
@@ -43,12 +43,11 @@ class DefaultChatRepositoryTests {
 
 		// Then
 		then(this.twitchChat).should().reconnect();
-
 		verifyNoMoreInteractions(this.twitchChat, this.twitchClientHelper);
 	}
 
 	@Test
-	void joinAll_shouldDoNothing_ifListIsEmpty() {
+	void joinAll_shouldDoNothing_whenListIsEmpty() {
 		// When
 		this.chatRepository.joinAll(Collections.emptyList());
 
@@ -57,7 +56,7 @@ class DefaultChatRepositoryTests {
 	}
 
 	@Test
-	void joinAll_shouldJoinChannelAndListenEvent() {
+	void joinAll_shouldJoinChannelsAndListenEvents() {
 		// Given
 		var channel_01 = Channel.builder().id(1L).name("channel_01").enabled(true).build();
 		var channel_02 = Channel.builder().id(2L).name("channel_02").enabled(true).build();
@@ -77,12 +76,11 @@ class DefaultChatRepositoryTests {
 
 		then(this.twitchClientHelper).should().enableStreamEventListener(channel_01.id().toString(), channel_01.name());
 		then(this.twitchClientHelper).should().enableStreamEventListener(channel_02.id().toString(), channel_02.name());
-
 		verifyNoMoreInteractions(this.twitchChat, this.twitchClientHelper);
 	}
 
 	@Test
-	void leave_shouldLeaveChannelAndDisableEvent() {
+	void leave_shouldLeaveChannelAndDisableEvent_whenCalled() {
 		// Given
 		var channel = Channel.builder().id(1L).name("channel").enabled(true).build();
 
@@ -95,7 +93,6 @@ class DefaultChatRepositoryTests {
 		// Then
 		then(this.twitchChat).should().leaveChannel(channel.name());
 		then(this.twitchClientHelper).should().disableStreamEventListener(channel.name());
-
 		verifyNoMoreInteractions(this.twitchChat, this.twitchClientHelper);
 	}
 

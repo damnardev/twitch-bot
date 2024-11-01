@@ -32,7 +32,7 @@ class DefaultAuthenticationServiceTests {
 
 	@ParameterizedTest
 	@ValueSource(booleans = { true, false })
-	void isInitialized_shouldReturnCorrectValue(boolean value) {
+	void isInitialized_shouldReturnInitializedValue(boolean value) {
 		// Given
 		given(this.authenticationRepository.isInitialized()).willReturn(value);
 
@@ -47,7 +47,7 @@ class DefaultAuthenticationServiceTests {
 	}
 
 	@Test
-	void tryRenew_shouldDoNothingIfValid() {
+	void tryRenew_shouldDoNothing_whenTokenIsValid() {
 		// Given
 		given(this.authenticationRepository.isValid()).willReturn(true);
 
@@ -60,7 +60,7 @@ class DefaultAuthenticationServiceTests {
 	}
 
 	@Test
-	void tryRenew_shouldRenewAndReconnect() {
+	void tryRenew_shouldRenewAndReconnect_whenTokenIsNotValid() {
 		// Given
 		given(this.authenticationRepository.isValid()).willReturn(false);
 		given(this.authenticationRepository.renew()).willReturn(true);

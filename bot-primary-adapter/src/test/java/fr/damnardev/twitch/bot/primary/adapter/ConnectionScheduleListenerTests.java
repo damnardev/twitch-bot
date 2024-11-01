@@ -24,7 +24,7 @@ class ConnectionScheduleListenerTests {
 	private AuthenticationService authenticationService;
 
 	@Test
-	void schedule_shouldDoNothing() {
+	void schedule_shouldDoNothing_whenNotInitialized() {
 		// Given
 		given(this.authenticationService.isInitialized()).willReturn(false);
 
@@ -34,11 +34,10 @@ class ConnectionScheduleListenerTests {
 		// Then
 		then(this.authenticationService).should().isInitialized();
 		verifyNoMoreInteractions(this.authenticationService);
-
 	}
 
 	@Test
-	void schedule_shouldTryRenewToken() {
+	void schedule_shouldTryRenewToken_whenInitialized() {
 		// Given
 		given(this.authenticationService.isInitialized()).willReturn(true);
 
@@ -49,7 +48,6 @@ class ConnectionScheduleListenerTests {
 		then(this.authenticationService).should().isInitialized();
 		then(this.authenticationService).should().tryRenew();
 		verifyNoMoreInteractions(this.authenticationService);
-
 	}
 
 }

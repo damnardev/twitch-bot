@@ -19,21 +19,21 @@ class DbChannelRepositoryTests {
 
 	@Test
 	@Transactional(readOnly = true)
-	void findAllEnabled_shouldReturnAllEnabledChannels() {
+	void findAllEnabled_shouldReturnListOfChannel_whenEnabledIsTrue() {
 		// When
 		var result = this.dbChannelRepository.findAllEnabled();
 
 		// Then
-		var channel_01 = DbChannel.builder().id(1L).name("channel_01").enabled(true).online(true).build();
-		var channel_03 = DbChannel.builder().id(3L).name("channel_03").enabled(true).build();
+		var expected_01 = DbChannel.builder().id(1L).name("channel_01").enabled(true).online(true).build();
+		var expected_03 = DbChannel.builder().id(3L).name("channel_03").enabled(true).build();
 		assertThat(result).isNotNull().hasSize(2)
 				.usingRecursiveFieldByFieldElementComparatorIgnoringFields("dbChannelCommand", "dbChannelRaid")
-				.contains(channel_01, channel_03);
+				.contains(expected_01, expected_03);
 	}
 
 	@Test
 	@Transactional(readOnly = true)
-	void findByName_shouldReturnChannel() {
+	void findByName_shouldReturnOptionalChannel_whenNameAreSame() {
 		// When
 		var result = this.dbChannelRepository.findByName("channel_01");
 
@@ -45,7 +45,7 @@ class DbChannelRepositoryTests {
 
 	@Test
 	@Transactional(readOnly = true)
-	void findByName_shouldReturnEmpty() {
+	void findByName_shouldReturnOptionalEmpty_whenNameNotFound() {
 		// When
 		var result = this.dbChannelRepository.findByName("channel_05");
 

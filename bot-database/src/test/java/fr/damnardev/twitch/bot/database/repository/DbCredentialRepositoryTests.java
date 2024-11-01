@@ -19,7 +19,7 @@ class DbCredentialRepositoryTests {
 
 	@Test
 	@Transactional(readOnly = true)
-	void findLast_shouldReturnLastCredential() {
+	void findLast_shouldReturnOptionalCredential_whenIdIsMaxId() {
 		// When
 		var optionalDbCredential = this.dbCredentialRepository.findLast();
 

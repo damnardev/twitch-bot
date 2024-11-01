@@ -37,7 +37,7 @@ class DefaultFindChannelRepositoryTests {
 	private DbChannelRepository dbChannelRepository;
 
 	@Test
-	void findAllEnabled_shouldReturnEmptyList() {
+	void findAllEnabled_shouldReturnEmptyList_whenNoEnabledChannels() {
 		// Given
 		given(this.dbChannelRepository.findAllEnabled()).willReturn(Collections.emptyList());
 
@@ -46,14 +46,13 @@ class DefaultFindChannelRepositoryTests {
 
 		// Then
 		then(this.dbChannelRepository).should().findAllEnabled();
-
 		verifyNoMoreInteractions(this.dbChannelRepository, this.channelMapper);
 
 		assertThat(result).isEmpty();
 	}
 
 	@Test
-	void findAllEnabled_shouldReturnListOfChannel() {
+	void findAllEnabled_shouldReturnListOfChannels() {
 		// Given
 		var dbChannel_01 = DbChannel.builder().id(1L).name("channel_01").enabled(true).online(true).build();
 		var dbChannel_02 = DbChannel.builder().id(2L).name("channel_02").enabled(false).online(false).build();
@@ -66,7 +65,6 @@ class DefaultFindChannelRepositoryTests {
 		then(this.dbChannelRepository).should().findAllEnabled();
 		then(this.channelMapper).should().toModel(dbChannel_01);
 		then(this.channelMapper).should().toModel(dbChannel_02);
-
 		verifyNoMoreInteractions(this.dbChannelRepository, this.channelMapper);
 
 		var channel_01 = Channel.builder().id(1L).name("channel_01").enabled(true).online(true).build();
@@ -76,7 +74,7 @@ class DefaultFindChannelRepositoryTests {
 	}
 
 	@Test
-	void findByName_shouldReturnEmpty() {
+	void findByName_shouldReturnEmpty_whenNoChannelFound() {
 		// Given
 		var name = "name";
 		given(this.dbChannelRepository.findByName(name)).willReturn(Optional.empty());
@@ -86,14 +84,13 @@ class DefaultFindChannelRepositoryTests {
 
 		// Then
 		then(this.dbChannelRepository).should().findByName(name);
-
 		verifyNoMoreInteractions(this.dbChannelRepository, this.channelMapper);
 
 		assertThat(result).isEmpty();
 	}
 
 	@Test
-	void findByName_shouldReturnChannel() {
+	void findByName_shouldReturnChannel_whenChannelFound() {
 		// Given
 		var name = "name";
 		var dbChannel = DbChannel.builder().id(1L).name(name).enabled(true).online(true).build();
@@ -105,7 +102,6 @@ class DefaultFindChannelRepositoryTests {
 		// Then
 		then(this.dbChannelRepository).should().findByName(name);
 		then(this.channelMapper).should().toModel(dbChannel);
-
 		verifyNoMoreInteractions(this.dbChannelRepository, this.channelMapper);
 
 		var expected = Channel.builder().id(1L).name(name).enabled(true).online(true).build();
@@ -113,7 +109,7 @@ class DefaultFindChannelRepositoryTests {
 	}
 
 	@Test
-	void findAll_shouldReturnEmptyList() {
+	void findAll_shouldReturnEmptyList_whenNoChannelsFound() {
 		// Given
 		given(this.dbChannelRepository.findAll()).willReturn(Collections.emptyList());
 
@@ -128,7 +124,7 @@ class DefaultFindChannelRepositoryTests {
 	}
 
 	@Test
-	void findAll_shouldReturnListOfChannel() {
+	void findAll_shouldReturnListOfChannels() {
 		// Given
 		var dbChannel_01 = DbChannel.builder().id(1L).name("channel_01").enabled(true).online(true).build();
 		var dbChannel_02 = DbChannel.builder().id(2L).name("channel_02").enabled(false).online(false).build();
