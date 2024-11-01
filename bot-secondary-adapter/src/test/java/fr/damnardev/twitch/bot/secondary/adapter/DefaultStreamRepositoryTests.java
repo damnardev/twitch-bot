@@ -1,4 +1,4 @@
-package fr.damnardev.twitch.bot.secondary;
+package fr.damnardev.twitch.bot.secondary.adapter;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -10,7 +10,6 @@ import com.netflix.hystrix.HystrixCommand;
 import fr.damnardev.twitch.bot.database.entity.DbChannel;
 import fr.damnardev.twitch.bot.database.repository.DbChannelRepository;
 import fr.damnardev.twitch.bot.domain.model.Channel;
-import fr.damnardev.twitch.bot.secondary.adapter.DefaultStreamRepository;
 import fr.damnardev.twitch.bot.secondary.mapper.ChannelMapper;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
