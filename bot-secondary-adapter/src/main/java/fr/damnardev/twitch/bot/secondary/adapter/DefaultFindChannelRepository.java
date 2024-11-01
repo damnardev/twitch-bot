@@ -5,7 +5,7 @@ import java.util.Optional;
 
 import fr.damnardev.twitch.bot.database.repository.DbChannelRepository;
 import fr.damnardev.twitch.bot.domain.model.Channel;
-import fr.damnardev.twitch.bot.domain.port.secondary.IFindChannelRepository;
+import fr.damnardev.twitch.bot.domain.port.secondary.FindChannelRepository;
 import fr.damnardev.twitch.bot.secondary.mapper.ChannelMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -16,7 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 @Service
 @Slf4j
-public class FindChannelRepository implements IFindChannelRepository {
+public class DefaultFindChannelRepository implements FindChannelRepository {
 
 	private final DbChannelRepository dbChannelRepository;
 

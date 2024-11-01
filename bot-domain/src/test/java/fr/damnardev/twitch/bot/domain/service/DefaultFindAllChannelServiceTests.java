@@ -3,7 +3,7 @@ package fr.damnardev.twitch.bot.domain.service;
 import java.util.Collections;
 
 import fr.damnardev.twitch.bot.domain.model.Channel;
-import fr.damnardev.twitch.bot.domain.port.secondary.IFindChannelRepository;
+import fr.damnardev.twitch.bot.domain.port.secondary.FindChannelRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -19,13 +19,13 @@ import static org.mockito.BDDMockito.verifyNoMoreInteractions;
 
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.WARN)
-class FindAllChannelServiceTests {
+class DefaultFindAllChannelServiceTests {
 
 	@InjectMocks
-	private FindAllChannelService findAllChannelService;
+	private DefaultFindAllChannelService findAllChannelService;
 
 	@Mock
-	private IFindChannelRepository findChannelRepository;
+	private FindChannelRepository findChannelRepository;
 
 	@Test
 	void findAll_shouldReturnSameTable() {

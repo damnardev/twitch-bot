@@ -4,7 +4,7 @@ import java.util.List;
 
 import fr.damnardev.twitch.bot.domain.model.Channel;
 
-public interface IFindAllChannelService {
+public interface FindAllChannelService {
 
 	List<Channel> findAll();
 

@@ -3,10 +3,10 @@ package fr.damnardev.twitch.bot.domain.service;
 import java.util.Collections;
 
 import fr.damnardev.twitch.bot.domain.model.Channel;
-import fr.damnardev.twitch.bot.domain.port.secondary.IAuthenticationRepository;
-import fr.damnardev.twitch.bot.domain.port.secondary.IChatRepository;
-import fr.damnardev.twitch.bot.domain.port.secondary.IFindChannelRepository;
-import fr.damnardev.twitch.bot.domain.port.secondary.IStreamRepository;
+import fr.damnardev.twitch.bot.domain.port.secondary.AuthenticationRepository;
+import fr.damnardev.twitch.bot.domain.port.secondary.ChatRepository;
+import fr.damnardev.twitch.bot.domain.port.secondary.FindChannelRepository;
+import fr.damnardev.twitch.bot.domain.port.secondary.StreamRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -22,22 +22,22 @@ import static org.mockito.BDDMockito.verifyNoMoreInteractions;
 
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.WARN)
-class StartupServiceTests {
+class DefaultStartupServiceTests {
 
 	@InjectMocks
-	private StartupService startupService;
+	private DefaultStartupService startupService;
 
 	@Mock
-	private IAuthenticationRepository authenticationRepository;
+	private AuthenticationRepository authenticationRepository;
 
 	@Mock
-	private IFindChannelRepository findChannelRepository;
+	private FindChannelRepository findChannelRepository;
 
 	@Mock
-	private IChatRepository chatRepository;
+	private ChatRepository chatRepository;
 
 	@Mock
-	private IStreamRepository streamRepository;
+	private StreamRepository streamRepository;
 
 	@Test
 	void run_shouldRenewAuthenticationAndInitializeStreams() {

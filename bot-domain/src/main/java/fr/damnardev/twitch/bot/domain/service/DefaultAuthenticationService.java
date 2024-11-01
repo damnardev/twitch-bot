@@ -1,18 +1,18 @@
 package fr.damnardev.twitch.bot.domain.service;
 
 import fr.damnardev.twitch.bot.domain.DomainService;
-import fr.damnardev.twitch.bot.domain.port.primary.IAuthenticationService;
-import fr.damnardev.twitch.bot.domain.port.secondary.IAuthenticationRepository;
-import fr.damnardev.twitch.bot.domain.port.secondary.IChatRepository;
+import fr.damnardev.twitch.bot.domain.port.primary.AuthenticationService;
+import fr.damnardev.twitch.bot.domain.port.secondary.AuthenticationRepository;
+import fr.damnardev.twitch.bot.domain.port.secondary.ChatRepository;
 import lombok.RequiredArgsConstructor;
 
 @DomainService
 @RequiredArgsConstructor
-public class AuthenticationService implements IAuthenticationService {
+public class DefaultAuthenticationService implements AuthenticationService {
 
-	private final IAuthenticationRepository authenticationRepository;
+	private final AuthenticationRepository authenticationRepository;
 
-	private final IChatRepository chatRepository;
+	private final ChatRepository chatRepository;
 
 	@Override
 	public void tryRenew() {

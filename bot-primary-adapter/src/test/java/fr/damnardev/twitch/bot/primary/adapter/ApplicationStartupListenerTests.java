@@ -1,6 +1,6 @@
 package fr.damnardev.twitch.bot.primary.adapter;
 
-import fr.damnardev.twitch.bot.domain.port.primary.IStartupService;
+import fr.damnardev.twitch.bot.domain.port.primary.StartupService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -21,7 +21,7 @@ class ApplicationStartupListenerTests {
 	private ApplicationStartupListener applicationStartupListener;
 
 	@Mock
-	private IStartupService startupService;
+	private StartupService startupService;
 
 	@Test
 	void run_shouldInvokeStartupServiceRun() {

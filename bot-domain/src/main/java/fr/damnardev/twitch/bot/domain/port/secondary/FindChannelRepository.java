@@ -5,7 +5,7 @@ import java.util.Optional;
 
 import fr.damnardev.twitch.bot.domain.model.Channel;
 
-public interface IFindChannelRepository {
+public interface FindChannelRepository {
 
 	List<Channel> findAllEnabled();
 

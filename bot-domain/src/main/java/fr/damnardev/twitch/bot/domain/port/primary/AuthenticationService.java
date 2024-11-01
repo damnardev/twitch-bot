@@ -1,6 +1,6 @@
 package fr.damnardev.twitch.bot.domain.port.primary;
 
-public interface IAuthenticationService {
+public interface AuthenticationService {
 
 	boolean isInitialized();
 
