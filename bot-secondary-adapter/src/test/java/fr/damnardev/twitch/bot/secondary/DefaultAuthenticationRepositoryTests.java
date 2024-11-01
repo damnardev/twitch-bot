@@ -10,7 +10,7 @@ import com.github.philippheuer.credentialmanager.domain.OAuth2Credential;
 import com.github.twitch4j.auth.providers.TwitchIdentityProvider;
 import fr.damnardev.twitch.bot.database.entity.DbCredential;
 import fr.damnardev.twitch.bot.database.repository.DbCredentialRepository;
-import fr.damnardev.twitch.bot.secondary.adapter.AuthenticationRepository;
+import fr.damnardev.twitch.bot.secondary.adapter.DefaultAuthenticationRepository;
 import fr.damnardev.twitch.bot.secondary.property.TwitchOAuthProperties;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -32,7 +32,7 @@ import static org.mockito.BDDMockito.verifyNoMoreInteractions;
 
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.WARN)
-class AuthenticationRepositoryTests {
+class DefaultAuthenticationRepositoryTests {
 
 	public static final String REFRESH_TOKEN = "refresh_token";
 
@@ -45,7 +45,7 @@ class AuthenticationRepositoryTests {
 	public static final String HTTP_LOCALHOST = "http://localhost/";
 
 	@InjectMocks
-	private AuthenticationRepository authenticationRepository;
+	private DefaultAuthenticationRepository authenticationRepository;
 
 	@Mock
 	private TwitchOAuthProperties properties;

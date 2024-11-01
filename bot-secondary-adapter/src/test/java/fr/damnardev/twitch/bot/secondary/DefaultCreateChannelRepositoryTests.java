@@ -10,7 +10,7 @@ import fr.damnardev.twitch.bot.database.entity.DbChannel;
 import fr.damnardev.twitch.bot.database.repository.DbChannelRepository;
 import fr.damnardev.twitch.bot.domain.model.Channel;
 import fr.damnardev.twitch.bot.domain.model.form.CreateChannelForm;
-import fr.damnardev.twitch.bot.secondary.adapter.CreateChannelRepository;
+import fr.damnardev.twitch.bot.secondary.adapter.DefaultCreateChannelRepository;
 import fr.damnardev.twitch.bot.secondary.mapper.ChannelMapper;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -29,10 +29,10 @@ import static org.mockito.BDDMockito.verifyNoMoreInteractions;
 
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.WARN)
-class CreateChannelRepositoryTests {
+class DefaultCreateChannelRepositoryTests {
 
 	@InjectMocks
-	private CreateChannelRepository createChannelRepository;
+	private DefaultCreateChannelRepository createChannelRepository;
 
 	@Mock
 	private DbChannelRepository dbChannelRepository;

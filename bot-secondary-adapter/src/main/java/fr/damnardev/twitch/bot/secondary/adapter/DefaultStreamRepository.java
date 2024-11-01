@@ -11,7 +11,7 @@ import com.github.twitch4j.helix.domain.StreamList;
 import fr.damnardev.twitch.bot.database.entity.DbChannel;
 import fr.damnardev.twitch.bot.database.repository.DbChannelRepository;
 import fr.damnardev.twitch.bot.domain.model.Channel;
-import fr.damnardev.twitch.bot.domain.port.secondary.IStreamRepository;
+import fr.damnardev.twitch.bot.domain.port.secondary.StreamRepository;
 import fr.damnardev.twitch.bot.secondary.mapper.ChannelMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -22,7 +22,7 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 @Service
 @Slf4j
-public class StreamRepository implements IStreamRepository {
+public class DefaultStreamRepository implements StreamRepository {
 
 	private static final String STATUS = "live";
 

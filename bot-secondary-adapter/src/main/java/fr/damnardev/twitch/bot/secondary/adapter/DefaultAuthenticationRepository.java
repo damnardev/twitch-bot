@@ -6,7 +6,7 @@ import com.github.twitch4j.auth.providers.TwitchIdentityProvider;
 import fr.damnardev.twitch.bot.database.entity.DbCredential;
 import fr.damnardev.twitch.bot.database.repository.DbCredentialRepository;
 import fr.damnardev.twitch.bot.domain.exception.FatalException;
-import fr.damnardev.twitch.bot.domain.port.secondary.IAuthenticationRepository;
+import fr.damnardev.twitch.bot.domain.port.secondary.AuthenticationRepository;
 import fr.damnardev.twitch.bot.secondary.property.TwitchOAuthProperties;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
@@ -18,7 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 @Service
 @Slf4j
-public class AuthenticationRepository implements IAuthenticationRepository {
+public class DefaultAuthenticationRepository implements AuthenticationRepository {
 
 	private final TwitchOAuthProperties properties;
 

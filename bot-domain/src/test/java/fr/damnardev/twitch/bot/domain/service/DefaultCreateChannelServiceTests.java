@@ -5,8 +5,8 @@ import java.util.Optional;
 import fr.damnardev.twitch.bot.domain.exception.BusinessException;
 import fr.damnardev.twitch.bot.domain.model.Channel;
 import fr.damnardev.twitch.bot.domain.model.form.CreateChannelForm;
-import fr.damnardev.twitch.bot.domain.port.secondary.ICreateChannelRepository;
-import fr.damnardev.twitch.bot.domain.port.secondary.IFindChannelRepository;
+import fr.damnardev.twitch.bot.domain.port.secondary.CreateChannelRepository;
+import fr.damnardev.twitch.bot.domain.port.secondary.FindChannelRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -23,16 +23,16 @@ import static org.mockito.BDDMockito.verifyNoMoreInteractions;
 
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.WARN)
-class CreateChannelServiceTests {
+class DefaultCreateChannelServiceTests {
 
 	@InjectMocks
-	private CreateChannelService createChannelService;
+	private DefaultCreateChannelService createChannelService;
 
 	@Mock
-	private IFindChannelRepository findChannelRepository;
+	private FindChannelRepository findChannelRepository;
 
 	@Mock
-	private ICreateChannelRepository createChannelRepository;
+	private CreateChannelRepository createChannelRepository;
 
 	@Test
 	void save_channelAlreadyExists() {

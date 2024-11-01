@@ -6,7 +6,7 @@ import java.util.Collections;
 import com.github.twitch4j.TwitchClientHelper;
 import com.github.twitch4j.chat.TwitchChat;
 import fr.damnardev.twitch.bot.domain.model.Channel;
-import fr.damnardev.twitch.bot.secondary.adapter.ChatRepository;
+import fr.damnardev.twitch.bot.secondary.adapter.DefaultChatRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -22,10 +22,10 @@ import static org.mockito.BDDMockito.verifyNoMoreInteractions;
 
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.WARN)
-class ChatRepositoryTests {
+class DefaultChatRepositoryTests {
 
 	@InjectMocks
-	private ChatRepository chatRepository;
+	private DefaultChatRepository chatRepository;
 
 	@Mock
 	private TwitchChat twitchChat;

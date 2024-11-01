@@ -5,7 +5,7 @@ import java.util.List;
 import com.github.twitch4j.TwitchClientHelper;
 import com.github.twitch4j.chat.TwitchChat;
 import fr.damnardev.twitch.bot.domain.model.Channel;
-import fr.damnardev.twitch.bot.domain.port.secondary.IChatRepository;
+import fr.damnardev.twitch.bot.domain.port.secondary.ChatRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -14,7 +14,7 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 @Service
 @Slf4j
-public class ChatRepository implements IChatRepository {
+public class DefaultChatRepository implements ChatRepository {
 
 	private final TwitchChat twitchChat;
 

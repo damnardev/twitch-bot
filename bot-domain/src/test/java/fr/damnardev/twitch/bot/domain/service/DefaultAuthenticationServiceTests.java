@@ -1,7 +1,7 @@
 package fr.damnardev.twitch.bot.domain.service;
 
-import fr.damnardev.twitch.bot.domain.port.secondary.IAuthenticationRepository;
-import fr.damnardev.twitch.bot.domain.port.secondary.IChatRepository;
+import fr.damnardev.twitch.bot.domain.port.secondary.AuthenticationRepository;
+import fr.damnardev.twitch.bot.domain.port.secondary.ChatRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -19,16 +19,16 @@ import static org.mockito.BDDMockito.verifyNoMoreInteractions;
 
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.WARN)
-class AuthenticationServiceTests {
+class DefaultAuthenticationServiceTests {
 
 	@InjectMocks
-	private AuthenticationService startupService;
+	private DefaultAuthenticationService startupService;
 
 	@Mock
-	private IAuthenticationRepository authenticationRepository;
+	private AuthenticationRepository authenticationRepository;
 
 	@Mock
-	private IChatRepository chatRepository;
+	private ChatRepository chatRepository;
 
 	@ParameterizedTest
 	@ValueSource(booleans = { true, false })

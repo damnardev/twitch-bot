@@ -1,8 +1,8 @@
 package fr.damnardev.twitch.bot.primary.javafx.controller;
 
 import fr.damnardev.twitch.bot.domain.model.form.CreateChannelForm;
-import fr.damnardev.twitch.bot.domain.port.primary.ICreateChannelService;
-import fr.damnardev.twitch.bot.domain.port.primary.IFindAllChannelService;
+import fr.damnardev.twitch.bot.domain.port.primary.CreateChannelService;
+import fr.damnardev.twitch.bot.domain.port.primary.FindAllChannelService;
 import fr.damnardev.twitch.bot.primary.javafx.adapter.ApplicationStartupListener;
 import fr.damnardev.twitch.bot.primary.javafx.wrapper.ChannelWrapper;
 import javafx.fxml.FXML;
@@ -25,9 +25,9 @@ public class ChannelManagementController {
 
 	private final StatusController statusController;
 
-	private final ICreateChannelService createChannelService;
+	private final CreateChannelService createChannelService;
 
-	private final IFindAllChannelService findAllChannelService;
+	private final FindAllChannelService findAllChannelService;
 
 	@FXML
 	public TableColumn<ChannelWrapper, String> columnDeleted;

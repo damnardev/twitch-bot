@@ -4,8 +4,10 @@ import java.util.List;
 
 import fr.damnardev.twitch.bot.domain.model.Channel;
 
-public interface IStreamRepository {
+public interface ChatRepository {
 
-	List<Channel> computeAll(List<Channel> channels);
+	void joinAll(List<Channel> channel);
+
+	void reconnect();
 
 }

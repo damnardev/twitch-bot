@@ -1,6 +1,6 @@
 package fr.damnardev.twitch.bot.domain.port.primary;
 
-public interface IStartupService {
+public interface StartupService {
 
 	void run();
 
