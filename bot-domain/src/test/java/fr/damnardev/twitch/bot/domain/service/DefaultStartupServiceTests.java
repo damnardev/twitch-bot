@@ -64,7 +64,6 @@ class DefaultStartupServiceTests {
 		then(this.chatRepository).should().joinAll(channels);
 		then(this.chatRepository).should().reconnect();
 		then(this.streamRepository).should().computeAll(channels);
-
 		verifyNoMoreInteractions(this.authenticationRepository, this.findChannelRepository, this.chatRepository, this.streamRepository);
 	}
 

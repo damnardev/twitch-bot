@@ -39,7 +39,7 @@ class DefaultUpdateEnableChannelServiceTests {
 	private ChatRepository chatRepository;
 
 	@Test
-	void updateEnabled_shouldThrowException_channelNotFound() {
+	void updateEnabled_shouldThrowException_whenChannelNotFound() {
 		// Given
 		var name = "name";
 		var form = UpdateChannelEnabledForm.builder().name(name).enabled(true).build();
@@ -57,7 +57,7 @@ class DefaultUpdateEnableChannelServiceTests {
 	}
 
 	@Test
-	void updateEnabled_shouldUpdateChannelAndJoin() {
+	void updateEnabled_shouldUpdateChannelAndJoin_whenEnabledIsTrue() {
 		// Given
 		var name = "name";
 		var form = UpdateChannelEnabledForm.builder().name(name).enabled(true).build();
@@ -78,7 +78,7 @@ class DefaultUpdateEnableChannelServiceTests {
 	}
 
 	@Test
-	void updateEnabled_shouldUpdateChannelAndLeave() {
+	void updateEnabled_shouldUpdateChannelAndLeave_whenEnabledIsFalse() {
 		// Given
 		var name = "name";
 		var form = UpdateChannelEnabledForm.builder().name(name).enabled(false).build();

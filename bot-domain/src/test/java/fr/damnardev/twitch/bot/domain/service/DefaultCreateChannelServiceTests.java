@@ -35,7 +35,7 @@ class DefaultCreateChannelServiceTests {
 	private CreateChannelRepository createChannelRepository;
 
 	@Test
-	void save_channelAlreadyExists() {
+	void save_shouldThrowException_whenChannelAlreadyExist() {
 		// Given
 		var name = "name";
 		var form = CreateChannelForm.builder().name(name).build();
@@ -53,24 +53,24 @@ class DefaultCreateChannelServiceTests {
 	}
 
 	@Test
-	void save_channelDoesNotExist() {
+	void save_shouldCreateAndReturnChannel_whenChannelNotExist() {
 		// Given
 		var name = "name";
 		var form = CreateChannelForm.builder().name(name).build();
-		var channel = Channel.builder().id(1L).name(name).enabled(true).online(true).build();
+		var channel = Channel.builder().name(name).build();
 
 		given(this.findChannelRepository.findByName(name)).willReturn(Optional.empty());
-		given(this.createChannelRepository.save(form)).willReturn(channel);
+		given(this.createChannelRepository.save(channel)).willReturn(channel);
 
 		// When
 		var result = this.createChannelService.save(form);
 
 		// Then
 		then(this.findChannelRepository).should().findByName(name);
-		then(this.createChannelRepository).should().save(form);
+		then(this.createChannelRepository).should().save(channel);
 		verifyNoMoreInteractions(this.findChannelRepository, this.createChannelRepository);
 
-		var expected = Channel.builder().id(1L).name(name).enabled(true).online(true).build();
+		var expected = Channel.builder().name(name).build();
 		assertThat(result).isEqualTo(expected);
 	}
 

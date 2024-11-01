@@ -6,7 +6,6 @@ import com.github.twitch4j.helix.TwitchHelix;
 import fr.damnardev.twitch.bot.database.entity.DbChannel;
 import fr.damnardev.twitch.bot.database.repository.DbChannelRepository;
 import fr.damnardev.twitch.bot.domain.model.Channel;
-import fr.damnardev.twitch.bot.domain.model.form.CreateChannelForm;
 import fr.damnardev.twitch.bot.domain.port.secondary.CreateChannelRepository;
 import fr.damnardev.twitch.bot.secondary.mapper.ChannelMapper;
 import lombok.RequiredArgsConstructor;
@@ -26,10 +25,10 @@ public class DefaultCreateChannelRepository implements CreateChannelRepository {
 	private final ChannelMapper channelMapper;
 
 	@Override
-	public Channel save(CreateChannelForm form) {
-		var user = this.twitchHelix.getUsers(null, null, Collections.singletonList(form.name())).execute().getUsers().getFirst();
+	public Channel save(Channel channel) {
+		var user = this.twitchHelix.getUsers(null, null, Collections.singletonList(channel.name())).execute().getUsers().getFirst();
 		var id = Long.parseLong(user.getId());
-		var dbChannel = DbChannel.builder().id(id).name(form.name()).build();
+		var dbChannel = DbChannel.builder().id(id).name(channel.name()).build();
 		dbChannel = this.dbChannelRepository.save(dbChannel);
 		return this.channelMapper.toModel(dbChannel);
 	}

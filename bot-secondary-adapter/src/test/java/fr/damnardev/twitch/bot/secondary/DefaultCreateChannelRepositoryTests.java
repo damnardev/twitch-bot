@@ -9,7 +9,6 @@ import com.netflix.hystrix.HystrixCommand;
 import fr.damnardev.twitch.bot.database.entity.DbChannel;
 import fr.damnardev.twitch.bot.database.repository.DbChannelRepository;
 import fr.damnardev.twitch.bot.domain.model.Channel;
-import fr.damnardev.twitch.bot.domain.model.form.CreateChannelForm;
 import fr.damnardev.twitch.bot.secondary.adapter.DefaultCreateChannelRepository;
 import fr.damnardev.twitch.bot.secondary.mapper.ChannelMapper;
 import org.junit.jupiter.api.Test;
@@ -44,10 +43,10 @@ class DefaultCreateChannelRepositoryTests {
 	private ChannelMapper channelMapper;
 
 	@Test
-	void save_shouldReturnChannel() {
+	void save_shouldReturnChannel_whenCalled() {
 		// Given
 		var name = "name";
-		var form = CreateChannelForm.builder().name(name).build();
+		var channel = Channel.builder().name(name).build();
 
 		var hystrixCommand = mock(HystrixCommand.class);
 		var userList = mock(UserList.class);
@@ -62,7 +61,7 @@ class DefaultCreateChannelRepositoryTests {
 		given(this.dbChannelRepository.save(dbChannel)).willReturn(dbChannel);
 
 		// When
-		var result = this.createChannelRepository.save(form);
+		var result = this.createChannelRepository.save(channel);
 
 		// Then
 		then(this.twitchHelix).should().getUsers(null, null, Collections.singletonList(name));
@@ -75,7 +74,6 @@ class DefaultCreateChannelRepositoryTests {
 		verifyNoMoreInteractions(this.twitchHelix, hystrixCommand, userList, user, this.dbChannelRepository, this.channelMapper);
 
 		var expected = Channel.builder().build().toBuilder().id(1L).name(name).build();
-
 		assertThat(result).isEqualTo(expected);
 	}
 

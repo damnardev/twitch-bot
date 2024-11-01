@@ -19,10 +19,11 @@ public class DefaultCreateChannelService implements CreateChannelService {
 
 	@Override
 	public Channel save(CreateChannelForm form) {
-		this.findChannelRepository.findByName(form.name()).ifPresent((_) -> {
+		var channelName = form.name();
+		this.findChannelRepository.findByName(channelName).ifPresent((_) -> {
 			throw new BusinessException("Channel already exists");
 		});
-		return this.createChannelRepository.save(form);
+		return this.createChannelRepository.save(Channel.builder().name(channelName).build());
 	}
 
 }

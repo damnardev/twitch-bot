@@ -28,7 +28,7 @@ class DefaultFindAllChannelServiceTests {
 	private FindChannelRepository findChannelRepository;
 
 	@Test
-	void findAll_shouldReturnSameTable() {
+	void findAll_shouldReturnListOfChannels() {
 		// Given
 		var channels = Collections.singletonList(Channel.builder().build());
 		given(this.findChannelRepository.findAll()).willReturn(channels);

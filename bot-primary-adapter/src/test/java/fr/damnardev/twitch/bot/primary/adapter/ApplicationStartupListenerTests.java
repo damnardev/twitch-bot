@@ -24,7 +24,7 @@ class ApplicationStartupListenerTests {
 	private StartupService startupService;
 
 	@Test
-	void run_shouldInvokeStartupServiceRun() {
+	void run_shouldInvokeStartupServiceRun_whenCalled() {
 		// Given
 		doNothing().when(this.startupService).run();
 
@@ -33,7 +33,6 @@ class ApplicationStartupListenerTests {
 
 		// Then
 		then(this.startupService).should().run();
-
 		verifyNoMoreInteractions(this.startupService);
 	}
 

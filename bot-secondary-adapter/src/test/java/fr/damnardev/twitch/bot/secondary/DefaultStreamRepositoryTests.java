@@ -44,7 +44,7 @@ class DefaultStreamRepositoryTests {
 	private ChannelMapper channelMapper;
 
 	@Test
-	void comuteAll_shouldReturnEmptyList() {
+	void computeAll_shouldReturnEmptyList() {
 		// Given
 		var channels = Collections.<Channel>emptyList();
 
@@ -58,7 +58,7 @@ class DefaultStreamRepositoryTests {
 	}
 
 	@Test
-	void computeAll_shouldUpdateTheStatus() {
+	void computeAll_shouldUpdateStatus() {
 		// Given
 		var channel_01 = Channel.builder().id(1L).build();
 		var channel_02 = Channel.builder().id(2L).build();
