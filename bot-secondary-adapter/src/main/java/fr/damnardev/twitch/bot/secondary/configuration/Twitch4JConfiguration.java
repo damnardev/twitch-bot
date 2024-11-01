@@ -34,7 +34,7 @@ public class Twitch4JConfiguration {
 	@Bean("twitchClient")
 	public TwitchClient twitchClient(CredentialManager credentialManager, OAuth2Credential credential, TwitchOAuthProperties twitchOAuthProperties) {
 		var clientBuilder = TwitchClientBuilder.builder();
-		return clientBuilder.withCredentialManager(credentialManager).withClientId(twitchOAuthProperties.getClientId()).withClientSecret(null).withDefaultAuthToken(credential).withEnableHelix(true).withChatAccount(credential).withEnableChat(true).withEnableEventSocket(true).build();
+		return clientBuilder.withCredentialManager(credentialManager).withClientId(twitchOAuthProperties.getClientId()).withClientSecret(null).withDefaultAuthToken(credential).withEnableHelix(true).withChatAccount(credential).withEnableChat(true).build();
 	}
 
 	@Bean

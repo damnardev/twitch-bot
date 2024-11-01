@@ -1,8 +1,11 @@
 package fr.damnardev.twitch.bot.primary.javafx.controller;
 
+import fr.damnardev.twitch.bot.domain.model.Channel;
 import fr.damnardev.twitch.bot.domain.model.form.CreateChannelForm;
+import fr.damnardev.twitch.bot.domain.model.form.UpdateChannelEnabledForm;
 import fr.damnardev.twitch.bot.domain.port.primary.CreateChannelService;
 import fr.damnardev.twitch.bot.domain.port.primary.FindAllChannelService;
+import fr.damnardev.twitch.bot.domain.port.primary.UpdateEnableChannelService;
 import fr.damnardev.twitch.bot.primary.javafx.adapter.ApplicationStartupListener;
 import fr.damnardev.twitch.bot.primary.javafx.wrapper.ChannelWrapper;
 import javafx.fxml.FXML;
@@ -10,7 +13,6 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.CheckBoxTableCell;
-import javafx.scene.control.cell.PropertyValueFactory;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -29,6 +31,8 @@ public class ChannelManagementController {
 
 	private final FindAllChannelService findAllChannelService;
 
+	private final UpdateEnableChannelService updateEnableChannelService;
+
 	@FXML
 	public TableColumn<ChannelWrapper, String> columnDeleted;
 
@@ -39,7 +43,7 @@ public class ChannelManagementController {
 	public TableColumn<ChannelWrapper, String> columnName;
 
 	@FXML
-	public TableColumn<ChannelWrapper, Long> columnId;
+	public TableColumn<ChannelWrapper, Number> columnId;
 
 	@FXML
 	public TableView<ChannelWrapper> tableView;
@@ -49,14 +53,28 @@ public class ChannelManagementController {
 
 	@FXML
 	public void initialize() {
-		this.columnId.setCellValueFactory(new PropertyValueFactory<>("id"));
-		this.columnName.setCellValueFactory(new PropertyValueFactory<>("name"));
-		this.columnEnabled.setCellValueFactory(new PropertyValueFactory<>("enabled"));
+		this.columnId.setCellValueFactory((cell) -> cell.getValue().idProperty());
+		this.columnName.setCellValueFactory((cell) -> cell.getValue().nameProperty());
+		this.columnEnabled.setCellValueFactory((cell) -> cell.getValue().enabledProperty());
 		this.columnEnabled.setCellFactory(CheckBoxTableCell.forTableColumn(this.columnEnabled));
 
+		reload();
+	}
+
+	private void reload() {
 		var channels = this.findAllChannelService.findAll();
-		var wrappers = channels.stream().map(ChannelWrapper::new).toList();
+		var wrappers = channels.stream().map(this::buildWrapper).toList();
+		this.tableView.getItems().clear();
 		this.tableView.getItems().addAll(wrappers);
+	}
+
+	private ChannelWrapper buildWrapper(Channel channel) {
+		var channelWrapper = new ChannelWrapper(channel);
+		channelWrapper.enabledProperty().addListener((observable, oldValue, newValue) -> {
+			var form = UpdateChannelEnabledForm.builder().id(channel.id()).name(channel.name()).enabled(newValue).build();
+			this.updateEnableChannelService.updateEnabled(form);
+		});
+		return channelWrapper;
 	}
 
 	public void onButtonAdd() {
@@ -70,7 +88,7 @@ public class ChannelManagementController {
 		try {
 			var channel = this.createChannelService.save(form);
 			this.statusController.setLabelText("Channel added: " + channelName, false);
-			this.tableView.getItems().add(new ChannelWrapper(channel));
+			this.tableView.getItems().add(buildWrapper(channel));
 			log.info("Channel added: {}", channel);
 		}
 		catch (Exception ex) {

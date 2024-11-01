@@ -8,6 +8,10 @@ public interface ChatRepository {
 
 	void joinAll(List<Channel> channel);
 
+	void join(Channel channel);
+
 	void reconnect();
+
+	void leave(Channel channel);
 
 }

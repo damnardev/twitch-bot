@@ -81,4 +81,22 @@ class DefaultChatRepositoryTests {
 		verifyNoMoreInteractions(this.twitchChat, this.twitchClientHelper);
 	}
 
+	@Test
+	void leave_shouldLeaveChannelAndDisableEvent() {
+		// Given
+		var channel = Channel.builder().id(1L).name("channel").enabled(true).build();
+
+		given(this.twitchChat.leaveChannel(channel.name())).willReturn(false);
+		doNothing().when(this.twitchClientHelper).disableStreamEventListener(channel.name());
+
+		// When
+		this.chatRepository.leave(channel);
+
+		// Then
+		then(this.twitchChat).should().leaveChannel(channel.name());
+		then(this.twitchClientHelper).should().disableStreamEventListener(channel.name());
+
+		verifyNoMoreInteractions(this.twitchChat, this.twitchClientHelper);
+	}
+
 }

@@ -26,7 +26,7 @@ public class DefaultChatRepository implements ChatRepository {
 		channel.stream().forEach(this::join);
 	}
 
-	private void join(Channel channel) {
+	public void join(Channel channel) {
 		log.info("Joining channel {}", channel.name());
 		this.twitchChat.joinChannel(channel.name());
 		this.twitchClientHelper.enableStreamEventListener(channel.id().toString(), channel.name());
@@ -38,6 +38,14 @@ public class DefaultChatRepository implements ChatRepository {
 		log.info("Reconnecting to chat");
 		this.twitchChat.reconnect();
 		log.info("Reconnected to chat");
+	}
+
+	@Override
+	public void leave(Channel channel) {
+		log.info("Leaving channel {}", channel.name());
+		this.twitchChat.leaveChannel(channel.name());
+		this.twitchClientHelper.disableStreamEventListener(channel.name());
+		log.info("Left channel {}", channel.name());
 	}
 
 }
