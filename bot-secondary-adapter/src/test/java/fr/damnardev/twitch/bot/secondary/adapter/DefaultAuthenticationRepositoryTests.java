@@ -1,4 +1,4 @@
-package fr.damnardev.twitch.bot.secondary;
+package fr.damnardev.twitch.bot.secondary.adapter;
 
 import java.util.Arrays;
 import java.util.Optional;
@@ -10,7 +10,6 @@ import com.github.philippheuer.credentialmanager.domain.OAuth2Credential;
 import com.github.twitch4j.auth.providers.TwitchIdentityProvider;
 import fr.damnardev.twitch.bot.database.entity.DbCredential;
 import fr.damnardev.twitch.bot.database.repository.DbCredentialRepository;
-import fr.damnardev.twitch.bot.secondary.adapter.DefaultAuthenticationRepository;
 import fr.damnardev.twitch.bot.secondary.property.TwitchOAuthProperties;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

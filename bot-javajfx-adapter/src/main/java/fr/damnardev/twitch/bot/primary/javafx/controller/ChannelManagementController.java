@@ -2,13 +2,17 @@ package fr.damnardev.twitch.bot.primary.javafx.controller;
 
 import fr.damnardev.twitch.bot.domain.model.Channel;
 import fr.damnardev.twitch.bot.domain.model.form.CreateChannelForm;
+import fr.damnardev.twitch.bot.domain.model.form.DeleteChannelForm;
 import fr.damnardev.twitch.bot.domain.model.form.UpdateChannelEnabledForm;
 import fr.damnardev.twitch.bot.domain.port.primary.CreateChannelService;
+import fr.damnardev.twitch.bot.domain.port.primary.DeleteChannelService;
 import fr.damnardev.twitch.bot.domain.port.primary.FindAllChannelService;
 import fr.damnardev.twitch.bot.domain.port.primary.UpdateEnableChannelService;
 import fr.damnardev.twitch.bot.primary.javafx.adapter.ApplicationStartupListener;
 import fr.damnardev.twitch.bot.primary.javafx.wrapper.ChannelWrapper;
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
+import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
@@ -32,6 +36,8 @@ public class ChannelManagementController {
 	private final FindAllChannelService findAllChannelService;
 
 	private final UpdateEnableChannelService updateEnableChannelService;
+
+	private final DeleteChannelService deleteChannelService;
 
 	@FXML
 	public TableColumn<ChannelWrapper, String> columnDeleted;
@@ -58,8 +64,37 @@ public class ChannelManagementController {
 		this.columnEnabled.setCellValueFactory((cell) -> cell.getValue().enabledProperty());
 		this.columnEnabled.setCellFactory(CheckBoxTableCell.forTableColumn(this.columnEnabled));
 
+		this.columnDeleted.setCellFactory(this::deletedCellFactory);
+
 		reload();
 	}
+
+	private TableCell<ChannelWrapper, String> deletedCellFactory(TableColumn<ChannelWrapper, String> column) {
+		return new TableCell<>() {
+
+			final Button button = new Button("Delete");
+
+			@Override
+			protected void updateItem(String item, boolean empty) {
+				super.updateItem(item, empty);
+				if (empty) {
+					setText(null);
+					setGraphic(null);
+				}
+				else {
+					var channel = getTableView().getItems().get(getIndex());
+					this.button.setOnMouseClicked((event) -> {
+						var form = DeleteChannelForm.builder().id(channel.idProperty().getValue()).name(channel.nameProperty().getValue()).build();
+						ChannelManagementController.this.deleteChannelService.delete(form);
+						getTableView().getItems().remove(channel);
+					});
+					this.button.setMaxWidth(Double.MAX_VALUE);
+					setGraphic(this.button);
+				}
+			}
+		};
+	}
+
 
 	private void reload() {
 		var channels = this.findAllChannelService.findAll();

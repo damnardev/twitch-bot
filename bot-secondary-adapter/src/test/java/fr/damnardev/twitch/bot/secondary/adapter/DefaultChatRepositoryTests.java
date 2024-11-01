@@ -1,4 +1,4 @@
-package fr.damnardev.twitch.bot.secondary;
+package fr.damnardev.twitch.bot.secondary.adapter;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -6,7 +6,6 @@ import java.util.Collections;
 import com.github.twitch4j.TwitchClientHelper;
 import com.github.twitch4j.chat.TwitchChat;
 import fr.damnardev.twitch.bot.domain.model.Channel;
-import fr.damnardev.twitch.bot.secondary.adapter.DefaultChatRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
