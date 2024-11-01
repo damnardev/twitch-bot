@@ -17,4 +17,12 @@ public class ChannelMapper {
 				.build();
 	}
 
+	public DbChannel toEntity(Channel channel) {
+		return DbChannel.builder()
+				.id(channel.id())
+				.name(channel.name())
+				.online(channel.online())
+				.enabled(channel.enabled())
+				.build();
+	}
 }

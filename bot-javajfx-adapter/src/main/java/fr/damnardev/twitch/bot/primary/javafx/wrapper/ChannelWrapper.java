@@ -1,20 +1,17 @@
 package fr.damnardev.twitch.bot.primary.javafx.wrapper;
 
 import fr.damnardev.twitch.bot.domain.model.Channel;
-import javafx.beans.property.BooleanProperty;
-import javafx.beans.property.LongProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleLongProperty;
 import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
 
 public class ChannelWrapper {
 
-	private final LongProperty id;
+	private final SimpleLongProperty id;
 
-	private final StringProperty name;
+	private final SimpleStringProperty name;
 
-	private final BooleanProperty enabled;
+	private final SimpleBooleanProperty enabled;
 
 	public ChannelWrapper(Channel channel) {
 		this.id = new SimpleLongProperty(channel.id());
@@ -22,15 +19,15 @@ public class ChannelWrapper {
 		this.enabled = new SimpleBooleanProperty(channel.enabled());
 	}
 
-	public LongProperty idProperty() {
+	public SimpleLongProperty idProperty() {
 		return this.id;
 	}
 
-	public StringProperty nameProperty() {
+	public SimpleStringProperty nameProperty() {
 		return this.name;
 	}
 
-	public BooleanProperty enabledProperty() {
+	public SimpleBooleanProperty enabledProperty() {
 		return this.enabled;
 	}
 
