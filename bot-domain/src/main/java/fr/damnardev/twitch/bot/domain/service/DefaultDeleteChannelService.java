@@ -27,9 +27,9 @@ public class DefaultDeleteChannelService implements DeleteChannelService {
 		}
 		var channel = optionalChannel.get();
 		if (channel.enabled()) {
-			chatRepository.leave(channel);
+			this.chatRepository.leave(channel);
 		}
-		deleteChannelRepository.delete(channel);
+		this.deleteChannelRepository.delete(channel);
 	}
 
 }

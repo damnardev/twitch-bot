@@ -16,7 +16,7 @@ import static org.mockito.Mockito.verifyNoMoreInteractions;
 
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.WARN)
-class DefaultDeleteChannelRepositoryTest {
+class DefaultDeleteChannelRepositoryTests {
 
 	@InjectMocks
 	private DefaultDeleteChannelRepository deleteChannelRepository;
