@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.Objects;
 
 import fr.damnardev.twitch.bot.domain.exception.FatalException;
+import fr.damnardev.twitch.bot.domain.model.event.ApplicationStartedEvent;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -12,24 +13,23 @@ import javafx.stage.Stage;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import org.springframework.boot.ApplicationArguments;
-import org.springframework.boot.ApplicationRunner;
 import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Service;
 
 @RequiredArgsConstructor
 @Service
 @Slf4j
 //@ConditionalOnProperty(name = "javafx.enabled", havingValue = "true")
-public class ApplicationStartupListener implements ApplicationRunner {
+public class ApplicationStartedEventListener {
 
 	private final ConfigurableApplicationContext springContext;
 
-	@Override
-	public void run(ApplicationArguments args) {
-		log.info("Starting GUI");
+	@EventListener
+	public void onApplicationStartedEvent(ApplicationStartedEvent event) {
+		log.info("Starting JavaFX application [{}]", event);
 		startup();
-		log.info("GUI started");
+		log.info("JavaFX application started [{}]", event);
 	}
 
 	private void startup() {

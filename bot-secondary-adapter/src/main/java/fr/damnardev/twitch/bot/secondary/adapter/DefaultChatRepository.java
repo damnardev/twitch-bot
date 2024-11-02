@@ -21,11 +21,12 @@ public class DefaultChatRepository implements ChatRepository {
 	private final TwitchClientHelper twitchClientHelper;
 
 	@Override
-	public void joinAll(List<Channel> channel) {
+	public void joinAll(List<Channel> channels) {
 		log.info("Joining all channels");
-		channel.stream().forEach(this::join);
+		channels.forEach(this::join);
 	}
 
+	@Override
 	public void join(Channel channel) {
 		log.info("Joining channel {}", channel.name());
 		this.twitchChat.joinChannel(channel.name());

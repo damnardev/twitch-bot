@@ -43,7 +43,7 @@ class DefaultStreamRepositoryTests {
 	private ChannelMapper channelMapper;
 
 	@Test
-	void computeAll_shouldReturnEmptyList() {
+	void computeAll_shouldReturnEmptyList_whenNoChannelsProvided() {
 		// Given
 		var channels = Collections.<Channel>emptyList();
 
@@ -57,29 +57,24 @@ class DefaultStreamRepositoryTests {
 	}
 
 	@Test
-	void computeAll_shouldUpdateStatus() {
+	void computeAll_shouldUpdateStatus_whenChannelsProvided() {
 		// Given
 		var channel_01 = Channel.builder().id(1L).build();
 		var channel_02 = Channel.builder().id(2L).build();
-
 		var dbChannel_01 = DbChannel.builder().id(1L).name("channel_01").enabled(true).online(true).build();
 		var dbChannel_02 = DbChannel.builder().id(2L).name("channel_02").enabled(true).build();
-
 		var names = Arrays.asList("channel_01", "channel_02");
-
 		var hystrixCommand = mock(HystrixCommand.class);
 		var streamList = mock(StreamList.class);
 		var stream_02 = mock(Stream.class);
 
 		given(this.dbChannelRepository.findAllById(Arrays.asList(1L, 2L))).willReturn(Arrays.asList(dbChannel_01, dbChannel_02));
-		given(this.twitchHelix.getStreams(null, null, null, null, null, null, null, names))
-				.willReturn(hystrixCommand);
+		given(this.twitchHelix.getStreams(null, null, null, null, null, null, null, names)).willReturn(hystrixCommand);
 		given(hystrixCommand.execute()).willReturn(streamList);
 		given(streamList.getStreams()).willReturn(Collections.singletonList(stream_02));
 		given(stream_02.getUserLogin()).willReturn("channel_02");
 		given(stream_02.getType()).willReturn("live");
-		given(this.dbChannelRepository.saveAllAndFlush(Arrays.asList(dbChannel_01, dbChannel_02)))
-				.willReturn(Arrays.asList(dbChannel_01, dbChannel_02));
+		given(this.dbChannelRepository.saveAllAndFlush(Arrays.asList(dbChannel_01, dbChannel_02))).willReturn(Arrays.asList(dbChannel_01, dbChannel_02));
 
 		// When
 		var channels = this.streamRepository.computeAll(Arrays.asList(channel_01, channel_02));
@@ -98,7 +93,6 @@ class DefaultStreamRepositoryTests {
 
 		var expectedChannel_01 = Channel.builder().id(1L).name("channel_01").enabled(true).online(false).build();
 		var expectedChannel_02 = Channel.builder().id(2L).name("channel_02").enabled(true).online(true).build();
-
 		assertThat(channels).isNotNull().hasSize(2)
 				.usingRecursiveFieldByFieldElementComparatorIgnoringFields("commands", "raids")
 				.contains(expectedChannel_01, expectedChannel_02);

@@ -21,11 +21,11 @@ class DbCredentialRepositoryTests {
 	@Transactional(readOnly = true)
 	void findLast_shouldReturnOptionalCredential_whenIdIsMaxId() {
 		// When
-		var optionalDbCredential = this.dbCredentialRepository.findLast();
+		var result = this.dbCredentialRepository.findLast();
 
 		// Then
-		var refreshToken = DbCredential.builder().id(3L).refreshToken("refresh_token_03").build();
-		assertThat(optionalDbCredential).isPresent().hasValue(refreshToken);
+		var expected = DbCredential.builder().id(3L).refreshToken("refresh_token_03").build();
+		assertThat(result).isPresent().hasValue(expected);
 	}
 
 }

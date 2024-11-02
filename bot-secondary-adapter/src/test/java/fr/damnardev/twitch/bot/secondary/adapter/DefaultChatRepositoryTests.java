@@ -55,16 +55,15 @@ class DefaultChatRepositoryTests {
 	}
 
 	@Test
-	void joinAll_shouldJoinChannelsAndListenEvents() {
+	void joinAll_shouldJoinChannelsAndListenEvent_whenCalled() {
 		// Given
 		var channel_01 = Channel.builder().id(1L).name("channel_01").enabled(true).build();
 		var channel_02 = Channel.builder().id(2L).name("channel_02").enabled(true).build();
 
 		doNothing().when(this.twitchChat).joinChannel(channel_01.name());
 		doNothing().when(this.twitchChat).joinChannel(channel_02.name());
-
 		given(this.twitchClientHelper.enableStreamEventListener(channel_01.id().toString(), channel_01.name())).willReturn(false);
-		given(this.twitchClientHelper.enableStreamEventListener(channel_01.id().toString(), channel_01.name())).willReturn(false);
+		given(this.twitchClientHelper.enableStreamEventListener(channel_02.id().toString(), channel_02.name())).willReturn(false);
 
 		// When
 		this.chatRepository.joinAll(Arrays.asList(channel_01, channel_02));
@@ -72,11 +71,28 @@ class DefaultChatRepositoryTests {
 		// Then
 		then(this.twitchChat).should().joinChannel(channel_01.name());
 		then(this.twitchChat).should().joinChannel(channel_02.name());
-
 		then(this.twitchClientHelper).should().enableStreamEventListener(channel_01.id().toString(), channel_01.name());
 		then(this.twitchClientHelper).should().enableStreamEventListener(channel_02.id().toString(), channel_02.name());
 		verifyNoMoreInteractions(this.twitchChat, this.twitchClientHelper);
 	}
+
+	@Test
+	void join_shouldJoinChannelsAndListenEvent_whenCalled() {
+		// Given
+		var channel = Channel.builder().id(1L).name("channel").enabled(true).build();
+
+		doNothing().when(this.twitchChat).joinChannel(channel.name());
+		given(this.twitchClientHelper.enableStreamEventListener(channel.id().toString(), channel.name())).willReturn(false);
+
+		// When
+		this.chatRepository.join(channel);
+
+		// Then
+		then(this.twitchChat).should().joinChannel(channel.name());
+		then(this.twitchClientHelper).should().enableStreamEventListener(channel.id().toString(), channel.name());
+		verifyNoMoreInteractions(this.twitchChat, this.twitchClientHelper);
+	}
+
 
 	@Test
 	void leave_shouldLeaveChannelAndDisableEvent_whenCalled() {

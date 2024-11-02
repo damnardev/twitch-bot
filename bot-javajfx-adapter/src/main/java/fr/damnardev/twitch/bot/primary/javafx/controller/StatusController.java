@@ -1,6 +1,6 @@
 package fr.damnardev.twitch.bot.primary.javafx.controller;
 
-import fr.damnardev.twitch.bot.primary.javafx.adapter.ApplicationStartupListener;
+import fr.damnardev.twitch.bot.primary.javafx.adapter.ApplicationStartedEventListener;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import lombok.RequiredArgsConstructor;
@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-@ConditionalOnBean(ApplicationStartupListener.class)
+@ConditionalOnBean(ApplicationStartedEventListener.class)
 public class StatusController {
 
 	@FXML

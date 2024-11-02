@@ -32,7 +32,7 @@ class DefaultAuthenticationServiceTests {
 
 	@ParameterizedTest
 	@ValueSource(booleans = { true, false })
-	void isInitialized_shouldReturnInitializedValue(boolean value) {
+	void isInitialized_shouldReturnExpectedValue_whenCalled(boolean value) {
 		// Given
 		given(this.authenticationRepository.isInitialized()).willReturn(value);
 
@@ -60,7 +60,7 @@ class DefaultAuthenticationServiceTests {
 	}
 
 	@Test
-	void tryRenew_shouldRenewAndReconnect_whenTokenIsNotValid() {
+	void tryRenew_shouldRenewAndReconnect_whenTokenIsInvalid() {
 		// Given
 		given(this.authenticationRepository.isValid()).willReturn(false);
 		given(this.authenticationRepository.renew()).willReturn(true);
@@ -72,6 +72,21 @@ class DefaultAuthenticationServiceTests {
 		then(this.authenticationRepository).should().isValid();
 		then(this.authenticationRepository).should().renew();
 		then(this.chatRepository).should().reconnect();
+		verifyNoMoreInteractions(this.authenticationRepository, this.chatRepository);
+	}
+
+	@Test
+	void tryRenew_shouldRenewAndNotReconnect_whenTokenIsInvalid() {
+		// Given
+		given(this.authenticationRepository.isValid()).willReturn(false);
+		given(this.authenticationRepository.renew()).willReturn(false);
+
+		// When
+		this.startupService.tryRenew();
+
+		// Then
+		then(this.authenticationRepository).should().isValid();
+		then(this.authenticationRepository).should().renew();
 		verifyNoMoreInteractions(this.authenticationRepository, this.chatRepository);
 	}
 

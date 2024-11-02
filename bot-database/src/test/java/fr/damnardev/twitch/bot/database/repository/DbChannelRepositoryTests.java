@@ -39,7 +39,8 @@ class DbChannelRepositoryTests {
 
 		// Then
 		var expected = DbChannel.builder().id(1L).name("channel_01").enabled(true).online(true).build();
-		assertThat(result).isPresent().get().usingRecursiveComparison().ignoringFields("dbChannelCommand", "dbChannelRaid")
+		assertThat(result).isPresent().get()
+				.usingRecursiveComparison().ignoringFields("dbChannelCommand", "dbChannelRaid")
 				.isEqualTo(expected);
 	}
 

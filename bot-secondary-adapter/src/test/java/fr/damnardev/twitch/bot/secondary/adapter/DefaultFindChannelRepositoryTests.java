@@ -29,11 +29,11 @@ class DefaultFindChannelRepositoryTests {
 	@InjectMocks
 	private DefaultFindChannelRepository findChannelRepository;
 
-	@Spy
-	private ChannelMapper channelMapper;
-
 	@Mock
 	private DbChannelRepository dbChannelRepository;
+
+	@Spy
+	private ChannelMapper channelMapper;
 
 	@Test
 	void findAllEnabled_shouldReturnEmptyList_whenNoEnabledChannels() {
@@ -51,10 +51,11 @@ class DefaultFindChannelRepositoryTests {
 	}
 
 	@Test
-	void findAllEnabled_shouldReturnListOfChannels() {
+	void findAllEnabled_shouldReturnListOfChannels_whenEnabledChannelsExist() {
 		// Given
 		var dbChannel_01 = DbChannel.builder().id(1L).name("channel_01").enabled(true).online(true).build();
 		var dbChannel_02 = DbChannel.builder().id(2L).name("channel_02").enabled(false).online(false).build();
+
 		given(this.dbChannelRepository.findAllEnabled()).willReturn(Arrays.asList(dbChannel_01, dbChannel_02));
 
 		// When
@@ -68,14 +69,14 @@ class DefaultFindChannelRepositoryTests {
 
 		var channel_01 = Channel.builder().id(1L).name("channel_01").enabled(true).online(true).build();
 		var channel_02 = Channel.builder().id(2L).name("channel_02").enabled(false).online(false).build();
-
 		assertThat(result).isNotNull().hasSize(2).contains(channel_01, channel_02);
 	}
 
 	@Test
-	void findByName_shouldReturnEmpty_whenNoChannelFound() {
+	void findByName_shouldReturnOptionalEmpty_whenNameNotFound() {
 		// Given
 		var name = "name";
+
 		given(this.dbChannelRepository.findByName(name)).willReturn(Optional.empty());
 
 		// When
@@ -89,10 +90,11 @@ class DefaultFindChannelRepositoryTests {
 	}
 
 	@Test
-	void findByName_shouldReturnChannel_whenChannelFound() {
+	void findByName_shouldReturnChannel_whenNameFound() {
 		// Given
 		var name = "name";
 		var dbChannel = DbChannel.builder().id(1L).name(name).enabled(true).online(true).build();
+
 		given(this.dbChannelRepository.findByName(name)).willReturn(Optional.of(dbChannel));
 
 		// When
@@ -108,7 +110,7 @@ class DefaultFindChannelRepositoryTests {
 	}
 
 	@Test
-	void findAll_shouldReturnEmptyList_whenNoChannelsFound() {
+	void findAll_shouldReturnEmptyList_whenNoChannelsExist() {
 		// Given
 		given(this.dbChannelRepository.findAll()).willReturn(Collections.emptyList());
 
@@ -123,10 +125,11 @@ class DefaultFindChannelRepositoryTests {
 	}
 
 	@Test
-	void findAll_shouldReturnListOfChannels() {
+	void findAll_shouldReturnListOfChannels_whenChannelsExist() {
 		// Given
 		var dbChannel_01 = DbChannel.builder().id(1L).name("channel_01").enabled(true).online(true).build();
 		var dbChannel_02 = DbChannel.builder().id(2L).name("channel_02").enabled(false).online(false).build();
+
 		given(this.dbChannelRepository.findAll()).willReturn(Arrays.asList(dbChannel_01, dbChannel_02));
 
 		// When

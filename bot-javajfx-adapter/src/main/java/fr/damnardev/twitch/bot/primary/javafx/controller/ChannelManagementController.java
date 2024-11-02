@@ -1,6 +1,11 @@
 package fr.damnardev.twitch.bot.primary.javafx.controller;
 
 import fr.damnardev.twitch.bot.domain.model.Channel;
+import fr.damnardev.twitch.bot.domain.model.event.ChannelCreatedEvent;
+import fr.damnardev.twitch.bot.domain.model.event.ChannelDeletedEvent;
+import fr.damnardev.twitch.bot.domain.model.event.ChannelFindEvent;
+import fr.damnardev.twitch.bot.domain.model.event.ChannelUpdatedEvent;
+import fr.damnardev.twitch.bot.domain.model.event.ErrorEvent;
 import fr.damnardev.twitch.bot.domain.model.form.CreateChannelForm;
 import fr.damnardev.twitch.bot.domain.model.form.DeleteChannelForm;
 import fr.damnardev.twitch.bot.domain.model.form.UpdateChannelEnabledForm;
@@ -8,7 +13,7 @@ import fr.damnardev.twitch.bot.domain.port.primary.CreateChannelService;
 import fr.damnardev.twitch.bot.domain.port.primary.DeleteChannelService;
 import fr.damnardev.twitch.bot.domain.port.primary.FindAllChannelService;
 import fr.damnardev.twitch.bot.domain.port.primary.UpdateEnableChannelService;
-import fr.damnardev.twitch.bot.primary.javafx.adapter.ApplicationStartupListener;
+import fr.damnardev.twitch.bot.primary.javafx.adapter.ApplicationStartedEventListener;
 import fr.damnardev.twitch.bot.primary.javafx.wrapper.ChannelWrapper;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -21,13 +26,16 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
+import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
 @Slf4j
-@ConditionalOnBean(ApplicationStartupListener.class)
+@ConditionalOnBean(ApplicationStartedEventListener.class)
 public class ChannelManagementController {
+
+	public static final String ERROR_STR = "Error: %s";
 
 	private final StatusController statusController;
 
@@ -38,6 +46,8 @@ public class ChannelManagementController {
 	private final UpdateEnableChannelService updateEnableChannelService;
 
 	private final DeleteChannelService deleteChannelService;
+
+	private final ThreadPoolTaskExecutor executor;
 
 	@FXML
 	public TableColumn<ChannelWrapper, String> columnDeleted;
@@ -66,9 +76,10 @@ public class ChannelManagementController {
 
 		this.columnDeleted.setCellFactory(this::deletedCellFactory);
 
-		reload();
+		refresh();
 	}
 
+	@SuppressWarnings("java:S110")
 	private TableCell<ChannelWrapper, String> deletedCellFactory(TableColumn<ChannelWrapper, String> column) {
 		return new TableCell<>() {
 
@@ -83,11 +94,11 @@ public class ChannelManagementController {
 				}
 				else {
 					var channel = getTableView().getItems().get(getIndex());
-					this.button.setOnMouseClicked((event) -> {
+					this.button.setOnMouseClicked((event) -> ChannelManagementController.this.executor.execute(() -> {
+						log.info("Try to delete channel: {}", channel);
 						var form = DeleteChannelForm.builder().id(channel.idProperty().getValue()).name(channel.nameProperty().getValue()).build();
 						ChannelManagementController.this.deleteChannelService.delete(form);
-						getTableView().getItems().remove(channel);
-					});
+					}));
 					this.button.setMaxWidth(Double.MAX_VALUE);
 					setGraphic(this.button);
 				}
@@ -95,12 +106,27 @@ public class ChannelManagementController {
 		};
 	}
 
+	private void refresh() {
+		this.executor.execute(this.findAllChannelService::findAll);
+	}
 
-	private void reload() {
-		var channels = this.findAllChannelService.findAll();
-		var wrappers = channels.stream().map(this::buildWrapper).toList();
+	public void onButtonAdd() {
+		var channelName = this.textFieldChannelName.getText();
+		if (channelName.isBlank()) {
+			this.statusController.setLabelText("Channel name is empty", true);
+			return;
+		}
+		log.info("Try to add channel: {}", channelName);
+		var form = CreateChannelForm.builder().name(channelName).build();
+		this.executor.execute(() -> this.createChannelService.save(form));
+	}
+
+	public void onChannelFindEvent(ChannelFindEvent event) {
+		log.info("Channels found: {}", event.getChannels());
+		var wrappers = event.getChannels().stream().map(this::buildWrapper).toList();
 		this.tableView.getItems().clear();
 		this.tableView.getItems().addAll(wrappers);
+		this.tableView.sort();
 	}
 
 	private ChannelWrapper buildWrapper(Channel channel) {
@@ -112,24 +138,41 @@ public class ChannelManagementController {
 		return channelWrapper;
 	}
 
-	public void onButtonAdd() {
-		var channelName = this.textFieldChannelName.getText();
-		if (channelName.isBlank()) {
-			this.statusController.setLabelText("Channel name is empty", true);
+	public void onChannelCreatedEvent(ChannelCreatedEvent event) {
+		log.info("Channel created: {}", event.getChannel());
+		if (event.hasError()) {
+			this.statusController.setLabelText(ERROR_STR.formatted(event.getError()), true);
 			return;
 		}
-		log.info("Try to add channel: {}", channelName);
-		var form = CreateChannelForm.builder().name(channelName).build();
-		try {
-			var channel = this.createChannelService.save(form);
-			this.statusController.setLabelText("Channel added: " + channelName, false);
-			this.tableView.getItems().add(buildWrapper(channel));
-			log.info("Channel added: {}", channel);
+		this.tableView.getItems().add(buildWrapper(event.getChannel()));
+		this.tableView.sort();
+		this.statusController.setLabelText("Channel created: " + event.getChannel(), false);
+	}
+
+	public void onChannelUpdatedEvent(ChannelUpdatedEvent event) {
+		log.info("Channel updated: {}", event.getChannel());
+		if (event.hasError()) {
+			this.statusController.setLabelText(ERROR_STR.formatted(event.getError()), true);
+			return;
 		}
-		catch (Exception ex) {
-			this.statusController.setLabelText("Error while adding channel: " + channelName, true);
-			log.error("Error while adding channel: {}", channelName, ex);
+		var channel = event.getChannel();
+		var wrapper = this.tableView.getItems().stream().filter((w) -> w.idProperty().getValue().equals(channel.id())).findFirst().orElseThrow();
+		wrapper.enabledProperty().set(channel.enabled());
+	}
+
+	public void onChannelDeletedEvent(ChannelDeletedEvent event) {
+		log.info("Channel deleted: {}", event.getChannel());
+		if (event.hasError()) {
+			this.statusController.setLabelText(ERROR_STR.formatted(event.getError()), true);
+			return;
 		}
+		this.statusController.setLabelText("Channel deleted: " + event.getChannel(), false);
+		refresh();
+	}
+
+	public void onErrorEvent(ErrorEvent event) {
+		log.error("Error has occurred", event.getException());
+		this.statusController.setLabelText(ERROR_STR.formatted(event.getException().getMessage()), true);
 	}
 
 }

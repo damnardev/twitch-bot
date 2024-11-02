@@ -6,7 +6,7 @@ import fr.damnardev.twitch.bot.domain.model.Channel;
 
 public interface ChatRepository {
 
-	void joinAll(List<Channel> channel);
+	void joinAll(List<Channel> channels);
 
 	void join(Channel channel);
 

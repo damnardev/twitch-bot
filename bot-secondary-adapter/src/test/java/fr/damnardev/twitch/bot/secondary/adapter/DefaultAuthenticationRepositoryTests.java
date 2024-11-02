@@ -63,6 +63,7 @@ class DefaultAuthenticationRepositoryTests {
 		// Given
 		var dbCredential = DbCredential.builder().refreshToken(REFRESH_TOKEN).build();
 		var optional = Optional.of(dbCredential);
+
 		given(this.dbCredentialRepository.findLast()).willReturn(optional);
 
 		// When
@@ -71,7 +72,7 @@ class DefaultAuthenticationRepositoryTests {
 		// Then
 		then(this.dbCredentialRepository).should().findLast();
 		then(this.credential).should().setRefreshToken(REFRESH_TOKEN);
-		verifyNoMoreInteractions(this.dbCredentialRepository, this.credential);
+		verifyNoMoreInteractions(this.properties, this.provider, this.credential, this.dbCredentialRepository);
 	}
 
 	@Test
@@ -84,15 +85,14 @@ class DefaultAuthenticationRepositoryTests {
 
 		// Then
 		then(this.dbCredentialRepository).should().findLast();
-		verifyNoMoreInteractions(this.dbCredentialRepository, this.credential);
+		verifyNoMoreInteractions(this.properties, this.provider, this.credential, this.dbCredentialRepository);
 	}
 
 	@ParameterizedTest
 	@ValueSource(ints = { 0, 1, 2 })
-	void renew_shouldReturnFalse_whenRetryIsGiven(int retry) {
+	void renew_shouldReturnFalse_whenRetryIsExceeded(int retry) {
 		// Given
 		var scopes = Arrays.<Object>asList(SCOPE_01, SCOPE_02);
-
 		var deviceAuthorization = mock(DeviceAuthorization.class);
 		var deviceTokenResponse = mock(DeviceTokenResponse.class);
 
@@ -111,7 +111,7 @@ class DefaultAuthenticationRepositoryTests {
 		}
 
 		// When
-		var renewed = this.authenticationRepository.renew();
+		var result = this.authenticationRepository.renew();
 
 		// Then
 		then(this.provider).should().renew(this.credential);
@@ -119,7 +119,6 @@ class DefaultAuthenticationRepositoryTests {
 		then(this.provider).should().createDeviceFlowRequest(scopes);
 		then(deviceAuthorization).should().getVerificationUri();
 		then(this.properties).should().getRetry();
-
 		var times = times(retry);
 		then(deviceAuthorization).should(times).getDeviceCode();
 		then(this.provider).should(times).getDeviceAccessToken(DEVICE_CODE);
@@ -128,17 +127,17 @@ class DefaultAuthenticationRepositoryTests {
 		then(this.properties).should(times).getTimeout();
 		verifyNoMoreInteractions(this.properties, this.provider, this.credential, this.dbCredentialRepository, deviceTokenResponse, deviceAuthorization);
 
-		assertThat(renewed).isFalse();
+		assertThat(result).isFalse();
 	}
 
 	@Test
 	void renew_shouldReturnTrue_whenGenerateDevice() {
 		// Given
 		var scopes = Arrays.<Object>asList(SCOPE_01, SCOPE_02);
-
 		var deviceAuthorization = mock(DeviceAuthorization.class);
 		var deviceTokenResponse = mock(DeviceTokenResponse.class);
 		var newCredential = mock(OAuth2Credential.class);
+		var dbCredential = DbCredential.builder().refreshToken(REFRESH_TOKEN).build();
 
 		given(this.provider.renew(this.credential)).willReturn(false);
 		given(this.properties.getScopes()).willReturn(scopes);
@@ -152,12 +151,10 @@ class DefaultAuthenticationRepositoryTests {
 		given(this.credential.getExpiresIn()).willReturn(3600);
 		doNothing().when(this.credential).setExpiresIn(1800);
 		given(this.credential.getRefreshToken()).willReturn(REFRESH_TOKEN);
-
-		var dbCredential = DbCredential.builder().refreshToken(REFRESH_TOKEN).build();
 		given(this.dbCredentialRepository.save(dbCredential)).willReturn(dbCredential);
 
 		// When
-		var renewed = this.authenticationRepository.renew();
+		var result = this.authenticationRepository.renew();
 
 		// Then
 		then(this.provider).should().renew(this.credential);
@@ -165,7 +162,6 @@ class DefaultAuthenticationRepositoryTests {
 		then(this.provider).should().createDeviceFlowRequest(scopes);
 		then(deviceAuthorization).should().getVerificationUri();
 		then(this.properties).should().getRetry();
-
 		then(deviceAuthorization).should().getDeviceCode();
 		then(this.provider).should().getDeviceAccessToken(DEVICE_CODE);
 		then(deviceTokenResponse).should().getCredential();
@@ -174,9 +170,9 @@ class DefaultAuthenticationRepositoryTests {
 		then(this.credential).should().setExpiresIn(1800);
 		then(this.credential).should().getRefreshToken();
 		then(this.dbCredentialRepository).should().save(dbCredential);
-		verifyNoMoreInteractions(this.properties, this.provider, this.credential, this.dbCredentialRepository, newCredential, deviceTokenResponse, deviceAuthorization);
+		verifyNoMoreInteractions(this.properties, this.provider, this.credential, this.dbCredentialRepository, deviceTokenResponse, deviceAuthorization);
 
-		assertThat(renewed).isTrue();
+		assertThat(result).isTrue();
 	}
 
 	@Test
@@ -185,17 +181,16 @@ class DefaultAuthenticationRepositoryTests {
 		var deviceAuthorization = mock(DeviceAuthorization.class);
 		var deviceTokenResponse = mock(DeviceTokenResponse.class);
 		var newCredential = mock(OAuth2Credential.class);
+		var dbCredential = DbCredential.builder().refreshToken(REFRESH_TOKEN).build();
 
 		given(this.provider.renew(this.credential)).willReturn(true);
 		given(this.credential.getExpiresIn()).willReturn(3600);
 		doNothing().when(this.credential).setExpiresIn(1800);
 		given(this.credential.getRefreshToken()).willReturn(REFRESH_TOKEN);
-
-		var dbCredential = DbCredential.builder().refreshToken(REFRESH_TOKEN).build();
 		given(this.dbCredentialRepository.save(dbCredential)).willReturn(dbCredential);
 
 		// When
-		var renewed = this.authenticationRepository.renew();
+		var result = this.authenticationRepository.renew();
 
 		// Then
 		then(this.provider).should().renew(this.credential);
@@ -205,32 +200,34 @@ class DefaultAuthenticationRepositoryTests {
 		then(this.dbCredentialRepository).should().save(dbCredential);
 		verifyNoMoreInteractions(this.properties, this.provider, this.credential, this.dbCredentialRepository, newCredential, deviceTokenResponse, deviceAuthorization);
 
-		assertThat(renewed).isTrue();
+		assertThat(result).isTrue();
 	}
 
 	@Test
 	void isInitialized_shouldReturnFalse_whenCalled() {
 		// When
-		var initialized = this.authenticationRepository.isInitialized();
+		var result = this.authenticationRepository.isInitialized();
 
 		// Then
-		assertThat(initialized).isFalse();
+		verifyNoMoreInteractions(this.properties, this.provider, this.credential, this.dbCredentialRepository);
+
+		assertThat(result).isFalse();
 	}
 
 	@ParameterizedTest
 	@ValueSource(booleans = { true, false })
-	void isValid_shouldReturnExpectedValue(boolean expected) {
+	void isValid_shouldReturnExpectedValue_whenCalled(boolean expected) {
 		// Given
 		given(this.provider.isValid(this.credential)).willReturn(expected);
 
 		// When
-		var isValid = this.authenticationRepository.isValid();
+		var result = this.authenticationRepository.isValid();
 
 		// Then
 		then(this.provider).should().isValid(this.credential);
 		verifyNoMoreInteractions(this.properties, this.provider, this.credential, this.dbCredentialRepository);
 
-		assertThat(isValid).isEqualTo(expected);
+		assertThat(result).isEqualTo(expected);
 	}
 
 }
