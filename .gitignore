@@ -30,3 +30,5 @@ saints*.txt
 **/old/*
 /bot-database/src/main/resources/liquibase.properties
 *.iml
+/qodana.yaml
+/COPILOT.md

@@ -1,9 +1,11 @@
 package fr.damnardev.twitch.bot.domain.service;
 
 import fr.damnardev.twitch.bot.domain.DomainService;
+import fr.damnardev.twitch.bot.domain.model.event.ApplicationStartedEvent;
 import fr.damnardev.twitch.bot.domain.port.primary.StartupService;
 import fr.damnardev.twitch.bot.domain.port.secondary.AuthenticationRepository;
 import fr.damnardev.twitch.bot.domain.port.secondary.ChatRepository;
+import fr.damnardev.twitch.bot.domain.port.secondary.EventPublisher;
 import fr.damnardev.twitch.bot.domain.port.secondary.FindChannelRepository;
 import fr.damnardev.twitch.bot.domain.port.secondary.StreamRepository;
 import lombok.RequiredArgsConstructor;
@@ -20,6 +22,8 @@ public class DefaultStartupService implements StartupService {
 
 	private final StreamRepository streamRepository;
 
+	private final EventPublisher eventPublisher;
+
 	@Override
 	public void run() {
 		var generated = this.authenticationRepository.renew();
@@ -30,6 +34,7 @@ public class DefaultStartupService implements StartupService {
 		this.chatRepository.joinAll(channels);
 		this.chatRepository.reconnect();
 		this.streamRepository.computeAll(channels);
+		this.eventPublisher.publish(ApplicationStartedEvent.builder().build());
 	}
 
 }

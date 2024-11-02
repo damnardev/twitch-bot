@@ -5,6 +5,7 @@ import java.util.Collections;
 import fr.damnardev.twitch.bot.domain.model.Channel;
 import fr.damnardev.twitch.bot.domain.port.secondary.AuthenticationRepository;
 import fr.damnardev.twitch.bot.domain.port.secondary.ChatRepository;
+import fr.damnardev.twitch.bot.domain.port.secondary.EventPublisher;
 import fr.damnardev.twitch.bot.domain.port.secondary.FindChannelRepository;
 import fr.damnardev.twitch.bot.domain.port.secondary.StreamRepository;
 import org.junit.jupiter.api.Test;
@@ -15,6 +16,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
 
+import static org.mockito.BDDMockito.any;
 import static org.mockito.BDDMockito.doNothing;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
@@ -39,6 +41,9 @@ class DefaultStartupServiceTests {
 	@Mock
 	private StreamRepository streamRepository;
 
+	@Mock
+	private EventPublisher eventPublisher;
+
 	@Test
 	void run_shouldRenewAuthenticationAndInitializeStreams() {
 		// Given
@@ -52,6 +57,7 @@ class DefaultStartupServiceTests {
 		given(this.findChannelRepository.findAllEnabled()).willReturn(channels);
 		doNothing().when(this.chatRepository).joinAll(channels);
 		doNothing().when(this.chatRepository).reconnect();
+		doNothing().when(this.eventPublisher).publish(any());
 
 		given(this.streamRepository.computeAll(channels)).willReturn(channelsAfterCompute);
 
@@ -64,7 +70,8 @@ class DefaultStartupServiceTests {
 		then(this.chatRepository).should().joinAll(channels);
 		then(this.chatRepository).should().reconnect();
 		then(this.streamRepository).should().computeAll(channels);
-		verifyNoMoreInteractions(this.authenticationRepository, this.findChannelRepository, this.chatRepository, this.streamRepository);
+		then(this.eventPublisher).should().publish(any());
+		verifyNoMoreInteractions(this.authenticationRepository, this.findChannelRepository, this.chatRepository, this.streamRepository, this.eventPublisher);
 	}
 
 }

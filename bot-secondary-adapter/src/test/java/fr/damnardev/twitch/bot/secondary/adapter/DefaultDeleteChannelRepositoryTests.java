@@ -25,7 +25,7 @@ class DefaultDeleteChannelRepositoryTests {
 	private DbChannelRepository dbChannelRepository;
 
 	@Test
-	void delete_shouldInvokeDelete() {
+	void delete_shouldInvokeDelete_whenCalled() {
 		// Given
 		var channelId = 1L;
 		var channel = Channel.builder().id(channelId).build();

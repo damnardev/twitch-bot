@@ -26,10 +26,12 @@ public class DefaultCreateChannelRepository implements CreateChannelRepository {
 
 	@Override
 	public Channel save(Channel channel) {
+		log.info("Creating channel {}", channel.name());
 		var user = this.twitchHelix.getUsers(null, null, Collections.singletonList(channel.name())).execute().getUsers().getFirst();
 		var id = Long.parseLong(user.getId());
 		var dbChannel = DbChannel.builder().id(id).name(channel.name()).build();
 		dbChannel = this.dbChannelRepository.save(dbChannel);
+		log.info("Created channel {}", channel.name());
 		return this.channelMapper.toModel(dbChannel);
 	}
 

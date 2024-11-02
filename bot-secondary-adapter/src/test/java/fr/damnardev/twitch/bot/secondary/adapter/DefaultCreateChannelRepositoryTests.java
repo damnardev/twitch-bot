@@ -46,11 +46,9 @@ class DefaultCreateChannelRepositoryTests {
 		// Given
 		var name = "name";
 		var channel = Channel.builder().name(name).build();
-
 		var hystrixCommand = mock(HystrixCommand.class);
 		var userList = mock(UserList.class);
 		var user = mock(User.class);
-
 		var dbChannel = DbChannel.builder().id(1L).name(name).build();
 
 		given(this.twitchHelix.getUsers(null, null, Collections.singletonList(name))).willReturn(hystrixCommand);
@@ -70,7 +68,7 @@ class DefaultCreateChannelRepositoryTests {
 		then(this.channelMapper).should().toModel(dbChannel);
 		then(this.dbChannelRepository).should().save(dbChannel);
 		then(this.channelMapper).should().toModel(dbChannel);
-		verifyNoMoreInteractions(this.twitchHelix, hystrixCommand, userList, user, this.dbChannelRepository, this.channelMapper);
+		verifyNoMoreInteractions(this.twitchHelix, this.dbChannelRepository, this.channelMapper, hystrixCommand, userList, user);
 
 		var expected = Channel.builder().build().toBuilder().id(1L).name(name).build();
 		assertThat(result).isEqualTo(expected);
