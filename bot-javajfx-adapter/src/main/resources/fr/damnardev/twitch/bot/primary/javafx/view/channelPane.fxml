@@ -22,6 +22,8 @@
 						 style="-fx-alignment: CENTER-LEFT" text="Name"/>
 			<TableColumn fx:id="columnEnabled" maxWidth="100" minWidth="100"
 						 prefWidth="-1.0" text="Enabled"/>
+			<TableColumn editable="false" fx:id="columnOnline" maxWidth="100"
+						 minWidth="100" prefWidth="-1.0" text="Online" />
 			<TableColumn editable="false" fx:id="columnDeleted" maxWidth="100"
 						 minWidth="100" prefWidth="-1.0" sortable="false"/>
 		</columns>
