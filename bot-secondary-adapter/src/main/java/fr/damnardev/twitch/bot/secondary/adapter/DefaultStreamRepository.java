@@ -8,17 +8,12 @@ import java.util.stream.Collectors;
 import com.github.twitch4j.helix.TwitchHelix;
 import com.github.twitch4j.helix.domain.Stream;
 import com.github.twitch4j.helix.domain.StreamList;
-import fr.damnardev.twitch.bot.database.entity.DbChannel;
-import fr.damnardev.twitch.bot.database.repository.DbChannelRepository;
-import fr.damnardev.twitch.bot.domain.exception.FatalException;
 import fr.damnardev.twitch.bot.domain.model.Channel;
 import fr.damnardev.twitch.bot.domain.port.secondary.StreamRepository;
-import fr.damnardev.twitch.bot.secondary.mapper.ChannelMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 @RequiredArgsConstructor
 @Service
@@ -27,41 +22,29 @@ public class DefaultStreamRepository implements StreamRepository {
 
 	private static final String STATUS = "live";
 
-	private final DbChannelRepository dbChannelRepository;
-
 	private final TwitchHelix twitchHelix;
 
-	private final ChannelMapper channelMapper;
-
 	@Override
-	@Transactional
-	public List<Channel> computeAll(List<Channel> channels) {
+	public List<Channel> computeOnline(List<Channel> channels) {
 		log.info("Computing channels status");
 		if (channels.isEmpty()) {
 			return Collections.emptyList();
 		}
-		var dbChannels = this.dbChannelRepository.findAllById(channels.stream().map(Channel::id).toList());
-		var onLiveMap = getOnLive(dbChannels.stream().map(DbChannel::getName).toList());
-		dbChannels.forEach((channel) -> {
-			var status = onLiveMap.getOrDefault(channel.getName(), false);
-			channel.setOnline(status);
-		});
-		dbChannels = this.dbChannelRepository.saveAllAndFlush(dbChannels);
-		channels = dbChannels.stream().map(this.channelMapper::toModel).toList();
+		var onLiveMap = getOnLive(channels.stream().map(Channel::name).toList());
+		channels = channels.stream().map((channel) -> {
+			var status = onLiveMap.getOrDefault(channel.name(), false);
+			return channel.toBuilder().online(status).build();
+		}).toList();
 		log.info("Channels status computed");
 		return channels;
 	}
 
 	@Override
-	@Transactional
-	public Channel compute(Channel channel) {
+	public Channel computeOnline(Channel channel) {
 		log.info("Computing status for channel: {}", channel);
-		var dbChannel = this.dbChannelRepository.findById(channel.id()).orElseThrow(() -> new FatalException("Channel not found"));
-		var onLiveMap = getOnLive(Collections.singletonList(dbChannel.getName()));
-		var status = onLiveMap.getOrDefault(dbChannel.getName(), false);
-		dbChannel.setOnline(status);
-		dbChannel = this.dbChannelRepository.saveAndFlush(dbChannel);
-		channel = this.channelMapper.toModel(dbChannel);
+		var onLiveMap = getOnLive(Collections.singletonList(channel.name()));
+		var status = onLiveMap.getOrDefault(channel.name(), false);
+		channel = channel.toBuilder().online(status).build();
 		log.info("Status computed for channel: {}", channel);
 		return channel;
 	}

@@ -6,8 +6,8 @@ import fr.damnardev.twitch.bot.domain.model.Channel;
 
 public interface StreamRepository {
 
-	List<Channel> computeAll(List<Channel> channels);
+	List<Channel> computeOnline(List<Channel> channels);
 
-	Channel compute(Channel channel);
+	Channel computeOnline(Channel channel);
 
 }

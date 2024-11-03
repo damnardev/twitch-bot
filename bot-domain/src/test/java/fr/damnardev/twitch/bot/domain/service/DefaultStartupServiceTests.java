@@ -8,6 +8,7 @@ import fr.damnardev.twitch.bot.domain.port.secondary.ChatRepository;
 import fr.damnardev.twitch.bot.domain.port.secondary.EventPublisher;
 import fr.damnardev.twitch.bot.domain.port.secondary.FindChannelRepository;
 import fr.damnardev.twitch.bot.domain.port.secondary.StreamRepository;
+import fr.damnardev.twitch.bot.domain.port.secondary.UpdateChannelRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -42,6 +43,9 @@ class DefaultStartupServiceTests {
 	private StreamRepository streamRepository;
 
 	@Mock
+	private UpdateChannelRepository updateChannelRepository;
+
+	@Mock
 	private EventPublisher eventPublisher;
 
 	@Test
@@ -57,9 +61,10 @@ class DefaultStartupServiceTests {
 		given(this.findChannelRepository.findAllEnabled()).willReturn(channels);
 		doNothing().when(this.chatRepository).joinAll(channels);
 		doNothing().when(this.chatRepository).reconnect();
+		given(this.streamRepository.computeOnline(channels)).willReturn(channelsAfterCompute);
+		doNothing().when(this.updateChannelRepository).updateAll(channelsAfterCompute);
 		doNothing().when(this.eventPublisher).publish(any());
 
-		given(this.streamRepository.computeAll(channels)).willReturn(channelsAfterCompute);
 
 		// When
 		this.startupService.run();
@@ -69,7 +74,7 @@ class DefaultStartupServiceTests {
 		then(this.findChannelRepository).should().findAllEnabled();
 		then(this.chatRepository).should().joinAll(channels);
 		then(this.chatRepository).should().reconnect();
-		then(this.streamRepository).should().computeAll(channels);
+		then(this.streamRepository).should().computeOnline(channels);
 		then(this.eventPublisher).should().publish(any());
 		verifyNoMoreInteractions(this.authenticationRepository, this.findChannelRepository, this.chatRepository, this.streamRepository, this.eventPublisher);
 	}

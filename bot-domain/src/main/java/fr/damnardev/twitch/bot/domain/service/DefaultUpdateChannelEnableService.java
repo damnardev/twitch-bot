@@ -41,14 +41,14 @@ public class DefaultUpdateChannelEnableService implements UpdateChannelEnableSer
 		}
 		var channel = optionalChannel.get();
 		channel = channel.toBuilder().enabled(form.enabled()).online(false).build();
-		this.updateChannelRepository.update(channel);
 		if (channel.enabled()) {
-			channel = this.streamRepository.compute(channel);
+			channel = this.streamRepository.computeOnline(channel);
 			this.chatRepository.join(channel);
 		}
 		else {
 			this.chatRepository.leave(channel);
 		}
+		this.updateChannelRepository.update(channel);
 		var event = ChannelUpdatedEvent.builder().channel(channel).build();
 		this.eventPublisher.publish(event);
 	}

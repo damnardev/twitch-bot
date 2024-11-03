@@ -1,5 +1,7 @@
 package fr.damnardev.twitch.bot.secondary.adapter;
 
+import java.util.Collections;
+
 import fr.damnardev.twitch.bot.database.entity.DbChannel;
 import fr.damnardev.twitch.bot.database.repository.DbChannelRepository;
 import fr.damnardev.twitch.bot.domain.model.Channel;
@@ -44,6 +46,26 @@ class DefaultUpdateChannelRepositoryTests {
 		// Then
 		then(this.channelMapper).should().toEntity(channel);
 		then(this.dbChannelRepository).should().save(dbChannel);
+		verifyNoMoreInteractions(this.channelMapper, this.dbChannelRepository);
+	}
+
+	@Test
+	void updateAll_shouldInvokeSaveAll_whenChannelIsUpdated() {
+		// Given
+		var channel = Channel.builder().id(1L).name("name").online(true).enabled(true).build();
+		var dbChannel = DbChannel.builder().id(1L).name("name").online(true).enabled(true).build();
+		var channels = Collections.singletonList(channel);
+		var dbChannels = Collections.singletonList(dbChannel);
+
+
+		given(this.dbChannelRepository.saveAll(dbChannels)).willReturn(dbChannels);
+
+		// When
+		this.updateChannelRepository.updateAll(channels);
+
+		// Then
+		then(this.channelMapper).should().toEntity(channel);
+		then(this.dbChannelRepository).should().saveAll(dbChannels);
 		verifyNoMoreInteractions(this.channelMapper, this.dbChannelRepository);
 	}
 
