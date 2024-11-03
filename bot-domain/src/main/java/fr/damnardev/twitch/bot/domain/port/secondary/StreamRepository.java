@@ -8,4 +8,6 @@ public interface StreamRepository {
 
 	List<Channel> computeAll(List<Channel> channels);
 
+	Channel compute(Channel channel);
+
 }

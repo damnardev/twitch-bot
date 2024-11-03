@@ -12,7 +12,7 @@ import fr.damnardev.twitch.bot.domain.model.form.UpdateChannelEnabledForm;
 import fr.damnardev.twitch.bot.domain.port.primary.CreateChannelService;
 import fr.damnardev.twitch.bot.domain.port.primary.DeleteChannelService;
 import fr.damnardev.twitch.bot.domain.port.primary.FindAllChannelService;
-import fr.damnardev.twitch.bot.domain.port.primary.UpdateEnableChannelService;
+import fr.damnardev.twitch.bot.domain.port.primary.UpdateChannelEnableService;
 import fr.damnardev.twitch.bot.primary.javafx.adapter.ApplicationStartedEventListener;
 import fr.damnardev.twitch.bot.primary.javafx.wrapper.ChannelWrapper;
 import javafx.fxml.FXML;
@@ -43,17 +43,11 @@ public class ChannelManagementController {
 
 	private final FindAllChannelService findAllChannelService;
 
-	private final UpdateEnableChannelService updateEnableChannelService;
+	private final UpdateChannelEnableService updateChannelEnableService;
 
 	private final DeleteChannelService deleteChannelService;
 
 	private final ThreadPoolTaskExecutor executor;
-
-	@FXML
-	public TableColumn<ChannelWrapper, String> columnDeleted;
-
-	@FXML
-	public TableColumn<ChannelWrapper, Boolean> columnEnabled;
 
 	@FXML
 	public TableColumn<ChannelWrapper, String> columnName;
@@ -62,7 +56,17 @@ public class ChannelManagementController {
 	public TableColumn<ChannelWrapper, Number> columnId;
 
 	@FXML
+	public TableColumn<ChannelWrapper, Boolean> columnEnabled;
+
+	@FXML
+	public TableColumn<ChannelWrapper, Boolean> columnOnline;
+
+	@FXML
+	public TableColumn<ChannelWrapper, String> columnDeleted;
+
+	@FXML
 	public TableView<ChannelWrapper> tableView;
+
 
 	@FXML
 	private TextField textFieldChannelName;
@@ -73,9 +77,9 @@ public class ChannelManagementController {
 		this.columnName.setCellValueFactory((cell) -> cell.getValue().nameProperty());
 		this.columnEnabled.setCellValueFactory((cell) -> cell.getValue().enabledProperty());
 		this.columnEnabled.setCellFactory(CheckBoxTableCell.forTableColumn(this.columnEnabled));
-
+		this.columnOnline.setCellValueFactory((cell) -> cell.getValue().onlineProperty());
+		this.columnOnline.setCellFactory(CheckBoxTableCell.forTableColumn(this.columnEnabled));
 		this.columnDeleted.setCellFactory(this::deletedCellFactory);
-
 		refresh();
 	}
 
@@ -133,7 +137,7 @@ public class ChannelManagementController {
 		var channelWrapper = new ChannelWrapper(channel);
 		channelWrapper.enabledProperty().addListener((observable, oldValue, newValue) -> {
 			var form = UpdateChannelEnabledForm.builder().id(channel.id()).name(channel.name()).enabled(newValue).build();
-			this.updateEnableChannelService.updateEnabled(form);
+			this.updateChannelEnableService.updateEnabled(form);
 		});
 		return channelWrapper;
 	}
@@ -158,6 +162,7 @@ public class ChannelManagementController {
 		var channel = event.getChannel();
 		var wrapper = this.tableView.getItems().stream().filter((w) -> w.idProperty().getValue().equals(channel.id())).findFirst().orElseThrow();
 		wrapper.enabledProperty().set(channel.enabled());
+		wrapper.onlineProperty().set(channel.online());
 	}
 
 	public void onChannelDeletedEvent(ChannelDeletedEvent event) {

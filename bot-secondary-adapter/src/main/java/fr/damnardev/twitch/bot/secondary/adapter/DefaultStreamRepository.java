@@ -10,6 +10,7 @@ import com.github.twitch4j.helix.domain.Stream;
 import com.github.twitch4j.helix.domain.StreamList;
 import fr.damnardev.twitch.bot.database.entity.DbChannel;
 import fr.damnardev.twitch.bot.database.repository.DbChannelRepository;
+import fr.damnardev.twitch.bot.domain.exception.FatalException;
 import fr.damnardev.twitch.bot.domain.model.Channel;
 import fr.damnardev.twitch.bot.domain.port.secondary.StreamRepository;
 import fr.damnardev.twitch.bot.secondary.mapper.ChannelMapper;
@@ -49,6 +50,20 @@ public class DefaultStreamRepository implements StreamRepository {
 		channels = dbChannels.stream().map(this.channelMapper::toModel).toList();
 		log.info("Channels status computed");
 		return channels;
+	}
+
+	@Override
+	@Transactional
+	public Channel compute(Channel channel) {
+		log.info("Computing status for channel: {}", channel);
+		var dbChannel = this.dbChannelRepository.findById(channel.id()).orElseThrow(() -> new FatalException("Channel not found"));
+		var onLiveMap = getOnLive(Collections.singletonList(dbChannel.getName()));
+		var status = onLiveMap.getOrDefault(dbChannel.getName(), false);
+		dbChannel.setOnline(status);
+		dbChannel = this.dbChannelRepository.saveAndFlush(dbChannel);
+		channel = this.channelMapper.toModel(dbChannel);
+		log.info("Status computed for channel: {}", channel);
+		return channel;
 	}
 
 	private Map<String, Boolean> getOnLive(List<String> channels) {
