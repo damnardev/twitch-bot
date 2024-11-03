@@ -1,6 +1,7 @@
 package fr.damnardev.twitch.bot.primary.javafx.adapter;
 
 import java.io.IOException;
+import java.net.URL;
 import java.util.Objects;
 
 import fr.damnardev.twitch.bot.domain.exception.FatalException;
@@ -47,6 +48,8 @@ public class ApplicationStartedEventListener {
 	private void createWindow() throws IOException {
 		var stage = new Stage();
 		var scene = loadScene();
+		URL resource = getClass().getResource("/fr/damnardev/twitch/bot/primary/javafx/view/main.css");
+		scene.getStylesheets().add(resource.toExternalForm());
 		stage.setScene(scene);
 		setupStage(stage);
 	}
