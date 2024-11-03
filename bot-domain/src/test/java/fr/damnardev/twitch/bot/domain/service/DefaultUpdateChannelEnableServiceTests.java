@@ -109,9 +109,9 @@ class DefaultUpdateChannelEnableServiceTests {
 		var event = ChannelUpdatedEvent.builder().channel(updatedChannel_02).build();
 
 		given(this.findChannelRepository.findByName(name)).willReturn(Optional.of(channel));
-		doNothing().when(this.updateChannelRepository).update(updatedChannel_01);
-		given(this.streamRepository.compute(updatedChannel_01)).willReturn(updatedChannel_02);
+		given(this.streamRepository.computeOnline(updatedChannel_01)).willReturn(updatedChannel_02);
 		doNothing().when(this.chatRepository).join(updatedChannel_02);
+		doNothing().when(this.updateChannelRepository).update(updatedChannel_02);
 		doNothing().when(this.eventPublisher).publish(event);
 
 		// When
@@ -120,9 +120,9 @@ class DefaultUpdateChannelEnableServiceTests {
 		// Then
 		then(this.tryService).should().doTry(any(), eq(form));
 		then(this.findChannelRepository).should().findByName(name);
-		then(this.updateChannelRepository).should().update(updatedChannel_01);
-		then(this.streamRepository).should().compute(updatedChannel_01);
+		then(this.streamRepository).should().computeOnline(updatedChannel_01);
 		then(this.chatRepository).should().join(updatedChannel_02);
+		then(this.updateChannelRepository).should().update(updatedChannel_02);
 		then(this.eventPublisher).should().publish(event);
 		verifyNoMoreInteractions(this.tryService, this.findChannelRepository, this.updateChannelRepository, this.chatRepository, this.streamRepository, this.eventPublisher);
 	}
