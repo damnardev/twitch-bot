@@ -14,6 +14,7 @@ import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
@@ -22,8 +23,8 @@ import lombok.ToString;
 @Data
 @Entity
 @NoArgsConstructor
-@Table(name = "t_channel_raid")
-public class DbChannelRaid {
+@Table(name = "t_raid_configuration")
+public class DbRaidConfiguration {
 
 	@Id
 	private Long id;
@@ -32,6 +33,7 @@ public class DbChannelRaid {
 	@JoinColumn(name = "id")
 	@MapsId
 	@ToString.Exclude
+	@EqualsAndHashCode.Exclude
 	private DbChannel channel;
 
 	@Column(name = "twitch_shoutout_enabled")
@@ -44,7 +46,7 @@ public class DbChannelRaid {
 	private boolean raidMessageEnabled;
 
 	@ElementCollection
-	@CollectionTable(name = "t_channel_raid_message", joinColumns = @JoinColumn(name = "channel_raid_id"))
+	@CollectionTable(name = "t_raid_configuration_message", joinColumns = @JoinColumn(name = "raid_configuration_id"))
 	@Column(name = "message")
 	private List<String> messages;
 

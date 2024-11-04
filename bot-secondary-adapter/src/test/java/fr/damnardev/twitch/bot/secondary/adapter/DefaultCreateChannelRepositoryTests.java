@@ -7,6 +7,7 @@ import com.github.twitch4j.helix.domain.User;
 import com.github.twitch4j.helix.domain.UserList;
 import com.netflix.hystrix.HystrixCommand;
 import fr.damnardev.twitch.bot.database.entity.DbChannel;
+import fr.damnardev.twitch.bot.database.entity.DbRaidConfiguration;
 import fr.damnardev.twitch.bot.database.repository.DbChannelRepository;
 import fr.damnardev.twitch.bot.domain.model.Channel;
 import fr.damnardev.twitch.bot.secondary.mapper.ChannelMapper;
@@ -50,6 +51,8 @@ class DefaultCreateChannelRepositoryTests {
 		var userList = mock(UserList.class);
 		var user = mock(User.class);
 		var dbChannel = DbChannel.builder().id(1L).name(name).build();
+		var dbRaidConfiguration = DbRaidConfiguration.builder().channel(dbChannel).build();
+		dbChannel.setRaidConfiguration(dbRaidConfiguration);
 
 		given(this.twitchHelix.getUsers(null, null, Collections.singletonList(name))).willReturn(hystrixCommand);
 		given(hystrixCommand.execute()).willReturn(userList);

@@ -148,6 +148,7 @@ class DefaultAuthenticationRepositoryTests {
 		given(this.provider.getDeviceAccessToken(DEVICE_CODE)).willReturn(deviceTokenResponse);
 		given(deviceTokenResponse.getCredential()).willReturn(newCredential);
 		doNothing().when(this.credential).updateCredential(newCredential);
+		given(this.provider.getAdditionalCredentialInformation(this.credential)).willReturn(Optional.of(this.credential));
 		given(this.credential.getExpiresIn()).willReturn(3600);
 		doNothing().when(this.credential).setExpiresIn(1800);
 		given(this.credential.getRefreshToken()).willReturn(REFRESH_TOKEN);
@@ -167,6 +168,8 @@ class DefaultAuthenticationRepositoryTests {
 		then(deviceTokenResponse).should().getCredential();
 		then(this.credential).should().updateCredential(newCredential);
 		then(this.credential).should().getExpiresIn();
+		then(this.provider).should().getAdditionalCredentialInformation(this.credential);
+		then(this.credential).should().updateCredential(this.credential);
 		then(this.credential).should().setExpiresIn(1800);
 		then(this.credential).should().getRefreshToken();
 		then(this.dbCredentialRepository).should().save(dbCredential);
@@ -184,6 +187,7 @@ class DefaultAuthenticationRepositoryTests {
 		var dbCredential = DbCredential.builder().refreshToken(REFRESH_TOKEN).build();
 
 		given(this.provider.renew(this.credential)).willReturn(true);
+		given(this.provider.getAdditionalCredentialInformation(this.credential)).willReturn(Optional.of(this.credential));
 		given(this.credential.getExpiresIn()).willReturn(3600);
 		doNothing().when(this.credential).setExpiresIn(1800);
 		given(this.credential.getRefreshToken()).willReturn(REFRESH_TOKEN);
@@ -194,6 +198,8 @@ class DefaultAuthenticationRepositoryTests {
 
 		// Then
 		then(this.provider).should().renew(this.credential);
+		then(this.provider).should().getAdditionalCredentialInformation(this.credential);
+		then(this.credential).should().updateCredential(this.credential);
 		then(this.credential).should().getExpiresIn();
 		then(this.credential).should().setExpiresIn(1800);
 		then(this.credential).should().getRefreshToken();

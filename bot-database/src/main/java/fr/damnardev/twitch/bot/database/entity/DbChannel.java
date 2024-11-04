@@ -36,9 +36,9 @@ public class DbChannel {
 	private boolean enabled;
 
 	@OneToMany(cascade = CascadeType.REMOVE, mappedBy = "channel")
-	private List<DbChannelCommand> dbChannelCommand;
+	private List<DbChannelCommand> commands;
 
-	@OneToOne(cascade = CascadeType.REMOVE, mappedBy = "channel")
-	private DbChannelRaid dbChannelRaid;
+	@OneToOne(cascade = CascadeType.ALL, mappedBy = "channel")
+	private DbRaidConfiguration raidConfiguration;
 
 }
