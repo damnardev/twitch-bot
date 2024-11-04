@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @RequiredArgsConstructor
 @Service
@@ -19,6 +20,7 @@ public class DefaultFindRaidConfigurationRepository implements FindRaidConfigura
 	private final DbRaidConfigurationRepository dbRaidConfigurationRepository;
 
 	@Override
+	@Transactional(readOnly = true)
 	public Optional<RaidConfiguration> findByChannelName(String name) {
 		return this.dbRaidConfigurationRepository.findByChannelName(name).map(this::toModel);
 	}
