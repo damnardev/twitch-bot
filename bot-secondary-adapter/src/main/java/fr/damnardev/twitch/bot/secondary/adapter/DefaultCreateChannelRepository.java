@@ -13,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @RequiredArgsConstructor
 @Service
@@ -26,6 +27,7 @@ public class DefaultCreateChannelRepository implements CreateChannelRepository {
 	private final ChannelMapper channelMapper;
 
 	@Override
+	@Transactional
 	public Channel save(Channel channel) {
 		log.info("Creating channel {}", channel.name());
 		var user = this.twitchHelix.getUsers(null, null, Collections.singletonList(channel.name())).execute().getUsers().getFirst();

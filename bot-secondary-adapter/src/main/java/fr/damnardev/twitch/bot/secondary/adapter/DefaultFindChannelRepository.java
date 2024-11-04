@@ -29,11 +29,13 @@ public class DefaultFindChannelRepository implements FindChannelRepository {
 	}
 
 	@Override
+	@Transactional(readOnly = true)
 	public Optional<Channel> findByName(String name) {
 		return this.dbChannelRepository.findByName(name).map(this.channelMapper::toModel);
 	}
 
 	@Override
+	@Transactional(readOnly = true)
 	public List<Channel> findAll() {
 		return this.dbChannelRepository.findAll().stream().map(this.channelMapper::toModel).toList();
 	}
