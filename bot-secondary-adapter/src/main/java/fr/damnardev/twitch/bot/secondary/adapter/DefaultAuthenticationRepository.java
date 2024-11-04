@@ -41,6 +41,7 @@ public class DefaultAuthenticationRepository implements AuthenticationRepository
 		log.info("Renewing token");
 		if (this.provider.renew(this.credential) || generateDeviceToken()) {
 			log.info("Token renewed");
+			this.credential.updateCredential(this.provider.getAdditionalCredentialInformation(this.credential).orElseThrow());
 			this.credential.setExpiresIn(this.credential.getExpiresIn() - 1800);
 			var refreshToken = DbCredential.builder().refreshToken(this.credential.getRefreshToken()).build();
 			this.dbCredentialRepository.save(refreshToken);

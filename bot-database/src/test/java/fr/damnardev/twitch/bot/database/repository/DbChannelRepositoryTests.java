@@ -27,7 +27,7 @@ class DbChannelRepositoryTests {
 		var expected_01 = DbChannel.builder().id(1L).name("channel_01").enabled(true).online(true).build();
 		var expected_03 = DbChannel.builder().id(3L).name("channel_03").enabled(true).build();
 		assertThat(result).isNotNull().hasSize(2)
-				.usingRecursiveFieldByFieldElementComparatorIgnoringFields("dbChannelCommand", "dbChannelRaid")
+				.usingRecursiveFieldByFieldElementComparatorIgnoringFields("commands", "raidConfiguration")
 				.contains(expected_01, expected_03);
 	}
 
@@ -40,7 +40,7 @@ class DbChannelRepositoryTests {
 		// Then
 		var expected = DbChannel.builder().id(1L).name("channel_01").enabled(true).online(true).build();
 		assertThat(result).isPresent().get()
-				.usingRecursiveComparison().ignoringFields("dbChannelCommand", "dbChannelRaid")
+				.usingRecursiveComparison().ignoringFields("commands", "raidConfiguration")
 				.isEqualTo(expected);
 	}
 
