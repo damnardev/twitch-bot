@@ -58,6 +58,7 @@ class DefaultCreateChannelRepositoryTests {
 		given(hystrixCommand.execute()).willReturn(userList);
 		given(userList.getUsers()).willReturn(Collections.singletonList(user));
 		given(user.getId()).willReturn("1");
+		given(user.getDisplayName()).willReturn(name);
 		given(this.dbChannelRepository.save(dbChannel)).willReturn(dbChannel);
 
 		// When
@@ -68,6 +69,7 @@ class DefaultCreateChannelRepositoryTests {
 		then(hystrixCommand).should().execute();
 		then(userList).should().getUsers();
 		then(user).should().getId();
+		then(user).should().getDisplayName();
 		then(this.channelMapper).should().toModel(dbChannel);
 		then(this.dbChannelRepository).should().save(dbChannel);
 		then(this.channelMapper).should().toModel(dbChannel);

@@ -71,9 +71,9 @@ class ChannelRaidEventConsumerTests {
 		var model = ChannelRaidEventForm.builder().id(2L).name("channel").raiderId(1L).raiderName("raider").build();
 
 		doNothing().when(this.executor).execute(captor.capture());
-		given(event.getFromBroadcasterUserName()).willReturn("raider");
+		given(event.getFromBroadcasterUserLogin()).willReturn("raider");
 		given(event.getFromBroadcasterUserId()).willReturn("1");
-		given(event.getToBroadcasterUserName()).willReturn("channel");
+		given(event.getToBroadcasterUserLogin()).willReturn("channel");
 		given(event.getToBroadcasterUserId()).willReturn("2");
 		doNothing().when(this.handler).process(model);
 
@@ -83,10 +83,10 @@ class ChannelRaidEventConsumerTests {
 		// Then
 		then(this.executor).should().execute(captor.capture());
 		captor.getValue().run();
-		then(event).should().getFromBroadcasterUserName();
+		then(event).should().getFromBroadcasterUserLogin();
 		then(event).should().getFromBroadcasterUserId();
-		then(event).should().getToBroadcasterUserName();
 		then(event).should().getToBroadcasterUserId();
+		then(event).should().getToBroadcasterUserLogin();
 		then(this.handler).should().process(model);
 		verifyNoMoreInteractions(this.executor, this.twitchClient, this.handler, event, channel);
 	}

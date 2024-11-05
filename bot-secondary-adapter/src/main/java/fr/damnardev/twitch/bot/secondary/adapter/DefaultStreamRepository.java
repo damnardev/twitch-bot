@@ -50,7 +50,7 @@ public class DefaultStreamRepository implements StreamRepository {
 	}
 
 	private Map<String, Boolean> getOnLive(List<String> channels) {
-		return callStreamApi(channels).getStreams().stream().collect(Collectors.toMap(Stream::getUserLogin, (stream) -> stream.getType().equalsIgnoreCase(STATUS)));
+		return callStreamApi(channels).getStreams().stream().collect(Collectors.toMap(Stream::getUserName, (stream) -> stream.getType().equalsIgnoreCase(STATUS)));
 	}
 
 	private StreamList callStreamApi(List<String> channels) {
