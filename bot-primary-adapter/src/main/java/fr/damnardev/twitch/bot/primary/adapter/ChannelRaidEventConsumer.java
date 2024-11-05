@@ -18,9 +18,9 @@ public class ChannelRaidEventConsumer extends AbstractChannelEventConsumer<Chann
 	@Override
 	protected ChannelRaidEventForm toModel(ChannelRaidEvent event) {
 		var id = Long.parseLong(event.getToBroadcasterUserId());
-		var name = event.getToBroadcasterUserName();
+		var name = event.getToBroadcasterUserLogin();
 		var raiderId = Long.parseLong(event.getFromBroadcasterUserId());
-		var raiderName = event.getFromBroadcasterUserName();
+		var raiderName = event.getFromBroadcasterUserLogin();
 		return ChannelRaidEventForm.builder().id(id).name(name).raiderId(raiderId).raiderName(raiderName).build();
 	}
 

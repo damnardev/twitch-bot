@@ -16,7 +16,7 @@ public interface DbChannelRepository extends JpaRepository<DbChannel, Long> {
 	@Query("SELECT c FROM DbChannel c WHERE c.enabled = true")
 	List<DbChannel> findAllEnabled();
 
-	@Query("SELECT c FROM DbChannel c WHERE c.name = :name")
+	@Query("SELECT c FROM DbChannel c WHERE upper(c.name) = upper(:name)")
 	Optional<DbChannel> findByName(@Param("name") String name);
 
 }

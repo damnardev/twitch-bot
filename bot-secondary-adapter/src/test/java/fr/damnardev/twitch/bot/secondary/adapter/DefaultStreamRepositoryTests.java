@@ -59,7 +59,7 @@ class DefaultStreamRepositoryTests {
 		given(this.twitchHelix.getStreams(null, null, null, null, null, null, null, names)).willReturn(hystrixCommand);
 		given(hystrixCommand.execute()).willReturn(streamList);
 		given(streamList.getStreams()).willReturn(Collections.singletonList(stream_02));
-		given(stream_02.getUserLogin()).willReturn("channel_02");
+		given(stream_02.getUserName()).willReturn("channel_02");
 		given(stream_02.getType()).willReturn("live");
 
 		// When
@@ -69,7 +69,7 @@ class DefaultStreamRepositoryTests {
 		then(this.twitchHelix).should().getStreams(null, null, null, null, null, null, null, names);
 		then(hystrixCommand).should().execute();
 		then(streamList).should().getStreams();
-		then(stream_02).should().getUserLogin();
+		then(stream_02).should().getUserName();
 		then(stream_02).should().getType();
 		verifyNoMoreInteractions(this.twitchHelix, hystrixCommand, streamList, stream_02);
 
@@ -90,7 +90,7 @@ class DefaultStreamRepositoryTests {
 		given(this.twitchHelix.getStreams(null, null, null, null, null, null, null, names)).willReturn(hystrixCommand);
 		given(hystrixCommand.execute()).willReturn(streamList);
 		given(streamList.getStreams()).willReturn(Collections.singletonList(stream));
-		given(stream.getUserLogin()).willReturn("channel");
+		given(stream.getUserName()).willReturn("channel");
 		given(stream.getType()).willReturn("live");
 
 		// When
@@ -100,7 +100,7 @@ class DefaultStreamRepositoryTests {
 		then(this.twitchHelix).should().getStreams(null, null, null, null, null, null, null, names);
 		then(hystrixCommand).should().execute();
 		then(streamList).should().getStreams();
-		then(stream).should().getUserLogin();
+		then(stream).should().getUserName();
 		then(stream).should().getType();
 		verifyNoMoreInteractions(this.twitchHelix, hystrixCommand, streamList, stream);
 
