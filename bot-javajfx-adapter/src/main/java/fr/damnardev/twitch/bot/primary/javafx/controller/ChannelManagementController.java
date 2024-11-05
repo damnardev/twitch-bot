@@ -19,6 +19,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.CheckBoxTableCell;
@@ -73,6 +74,44 @@ public class ChannelManagementController {
 
 	@FXML
 	public void initialize() {
+		setupTableView();
+		setupColumn();
+		refresh();
+	}
+
+	private void setupTableView() {
+		this.tableView.getSortOrder().add(this.columnId);
+		this.tableView.sort();
+		this.tableView.setSelectionModel(null);
+		this.tableView.setRowFactory((table) -> new TableRow<>() {
+			@Override
+			protected void updateItem(ChannelWrapper item, boolean empty) {
+				super.updateItem(item, empty);
+				if (item != null) {
+					item.enabledProperty().addListener((observable, oldValue, newValue) -> this.updateRowColor(this.getItem()));
+					item.onlineProperty().addListener((observable, oldValue, newValue) -> this.updateRowColor(this.getItem()));
+				}
+				updateRowColor(item);
+			}
+
+			private void updateRowColor(ChannelWrapper item) {
+				if (item == null) {
+					setStyle("");
+				}
+				else if (item.enabledProperty().get() && !item.onlineProperty().get()) {
+					setStyle("-fx-background-color: lightcoral;");
+				}
+				else if (item.enabledProperty().get() && item.onlineProperty().get()) {
+					setStyle("-fx-background-color: lightgreen;");
+				}
+				else {
+					setStyle("");
+				}
+			}
+		});
+	}
+
+	private void setupColumn() {
 		this.columnId.setCellValueFactory((cell) -> cell.getValue().idProperty());
 		this.columnName.setCellValueFactory((cell) -> cell.getValue().nameProperty());
 		this.columnEnabled.setCellValueFactory((cell) -> cell.getValue().enabledProperty());
@@ -80,7 +119,6 @@ public class ChannelManagementController {
 		this.columnOnline.setCellValueFactory((cell) -> cell.getValue().onlineProperty());
 		this.columnOnline.setCellFactory(CheckBoxTableCell.forTableColumn(this.columnEnabled));
 		this.columnDeleted.setCellFactory(this::deletedCellFactory);
-		refresh();
 	}
 
 	@SuppressWarnings("java:S110")

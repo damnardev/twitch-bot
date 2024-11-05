@@ -1,3 +1,7 @@
 * {
     -fx-font-size: 1.2em;
 }
+
+.table-row-cell:even {
+    -fx-background-color: #c8c8c8;
+}
