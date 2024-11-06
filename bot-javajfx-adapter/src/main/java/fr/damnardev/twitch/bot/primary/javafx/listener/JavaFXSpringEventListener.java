@@ -5,8 +5,10 @@ import fr.damnardev.twitch.bot.domain.model.event.ChannelDeletedEvent;
 import fr.damnardev.twitch.bot.domain.model.event.ChannelFindEvent;
 import fr.damnardev.twitch.bot.domain.model.event.ChannelUpdatedEvent;
 import fr.damnardev.twitch.bot.domain.model.event.ErrorEvent;
+import fr.damnardev.twitch.bot.domain.model.event.RaidConfigurationFindEvent;
 import fr.damnardev.twitch.bot.primary.javafx.adapter.ApplicationStartedEventListener;
 import fr.damnardev.twitch.bot.primary.javafx.controller.ChannelManagementController;
+import fr.damnardev.twitch.bot.primary.javafx.controller.RaidConfigurationController;
 import javafx.application.Platform;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -23,9 +25,16 @@ public class JavaFXSpringEventListener {
 
 	private final ChannelManagementController channelManagementController;
 
+	private final RaidConfigurationController raidConfigurationController;
+
 	@EventListener
 	public void onChannelFindEvent(ChannelFindEvent event) {
 		Platform.runLater(() -> this.channelManagementController.onChannelFindEvent(event));
+	}
+
+	@EventListener
+	public void onRaidConfigurationFindEvent(RaidConfigurationFindEvent event) {
+		Platform.runLater(() -> this.raidConfigurationController.onRaidConfigurationFindEvent(event));
 	}
 
 	@EventListener

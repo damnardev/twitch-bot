@@ -3,13 +3,16 @@
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TabPane?>
 <?import javafx.scene.layout.VBox?>
-<VBox xmlns:fx="http://javafx.com/fxml/1" maxHeight="1.7976931348623157E308"
-	  maxWidth="1.7976931348623157E308" prefHeight="600" prefWidth="600"
-	  xmlns="http://javafx.com/javafx/17.0.12">
+<VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308"
+	  prefHeight="600" prefWidth="600" xmlns="http://javafx.com/javafx/17.0.12"
+	  xmlns:fx="http://javafx.com/fxml/1">
 
 	<TabPane VBox.vgrow="ALWAYS">
-		<Tab text="Channel Management" closable="false">
+		<Tab closable="false" text="Channel Management">
 			<fx:include source="channelPane.fxml"/>
+		</Tab>
+		<Tab closable="false" text="Raid Configuration">
+			<fx:include source="raidConfiguration.fxml"/>
 		</Tab>
 	</TabPane>
 
