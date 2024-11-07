@@ -142,6 +142,7 @@ public class ChannelManagementController {
 						ChannelManagementController.this.deleteChannelService.delete(form);
 					}));
 					this.button.setMaxWidth(Double.MAX_VALUE);
+					this.button.setMaxHeight(Double.MAX_VALUE);
 					setGraphic(this.button);
 				}
 			}

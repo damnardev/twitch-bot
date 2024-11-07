@@ -1,16 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.layout.Pane?>
-<Pane fx:controller="fr.damnardev.twitch.bot.primary.javafx.controller.StatusController"
-	  prefHeight="30" prefWidth="600" xmlns="http://javafx.com/javafx/17.0.12"
-	  xmlns:fx="http://javafx.com/fxml/1">
+<?import javafx.scene.layout.VBox?>
+<VBox fx:controller="fr.damnardev.twitch.bot.primary.javafx.controller.StatusController" prefHeight="30" prefWidth="600" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1">
 
-	<Label fx:id="labelStatus" maxWidth="Infinity">
-		<padding>
-			<Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
-		</padding>
-	</Label>
+	<Label VBox.vgrow="ALWAYS" fx:id="labelStatus" maxHeight="Infinity" maxWidth="Infinity" styleClass="app-padding" />
 
-</Pane>
+</VBox>

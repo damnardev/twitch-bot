@@ -3,9 +3,7 @@
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TabPane?>
 <?import javafx.scene.layout.VBox?>
-<VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308"
-	  prefHeight="600" prefWidth="600" xmlns="http://javafx.com/javafx/17.0.12"
-	  xmlns:fx="http://javafx.com/fxml/1">
+<VBox maxHeight="Infinity" maxWidth="Infinity" prefHeight="600" prefWidth="600" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1">
 
 	<TabPane VBox.vgrow="ALWAYS">
 		<Tab closable="false" text="Channel Management">
@@ -16,6 +14,6 @@
 		</Tab>
 	</TabPane>
 
-	<fx:include source="statusPane.fxml"/>
+	<fx:include minHeight="30" source="statusPane.fxml" />
 
 </VBox>
