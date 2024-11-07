@@ -1,5 +1,28 @@
 * {
     -fx-font-size: 1.2em;
+    -fx-cell-size: 38;
+}
+
+.app-spacing {
+    -fx-spacing: 5;
+}
+
+.cell-id {
+    -fx-alignment: CENTER-RIGHT;
+    -fx-padding: 5 10 5 5;
+}
+
+.cell-button {
+    -fx-padding: 0 0 0 0;
+}
+
+.cell-name {
+    -fx-alignment: CENTER-LEFT;
+    -fx-padding: 5 5 5 10;
+}
+
+.app-padding {
+    -fx-padding: 5 5 5 5;
 }
 
 .table-row-cell:even {

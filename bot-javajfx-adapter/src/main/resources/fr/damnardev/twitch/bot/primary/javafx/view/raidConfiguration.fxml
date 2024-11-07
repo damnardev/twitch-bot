@@ -3,24 +3,22 @@
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.layout.VBox?>
-<VBox fx:controller="fr.damnardev.twitch.bot.primary.javafx.controller.RaidConfigurationController" maxHeight="1.7976931348623157E308"
-	  maxWidth="1.7976931348623157E308" prefHeight="500" prefWidth="600"
-	  xmlns="http://javafx.com/javafx/17.0.12"
-	  xmlns:fx="http://javafx.com/fxml/1">
+<VBox fx:controller="fr.damnardev.twitch.bot.primary.javafx.controller.RaidConfigurationController"
+	  maxHeight="Infinity" maxWidth="Infinity" prefHeight="500" prefWidth="600"
+	  xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1">
 
 	<TableView VBox.vgrow="ALWAYS" editable="true" fx:id="tableViewRaidConfiguration">
 		<columns>
-			<TableColumn editable="false" fx:id="columnId" maxWidth="100" minWidth="100"
-						 prefWidth="-1.0" style="-fx-alignment: CENTER-RIGHT" text="Id"/>
-			<TableColumn editable="false" fx:id="columnName"
-						 maxWidth="1.7976931348623157E308" prefWidth="-1.0"
-						 style="-fx-alignment: CENTER-LEFT" text="Name"/>
-			<TableColumn fx:id="columnTwitchShoutoutEnabled" maxWidth="150" minWidth="150"
-						 prefWidth="-1.0" text="Twitch Shoutout"/>
-			<TableColumn fx:id="columnWizebotShoutoutEnabled" maxWidth="150" minWidth="150"
-						 prefWidth="-1.0" text="Wizebot Shoutout"/>
+			<TableColumn editable="false" fx:id="columnId" maxWidth="150" minWidth="150"
+						 styleClass="cell-id" text="Id"/>
+			<TableColumn editable="false" fx:id="columnName" maxWidth="Infinity"
+						 styleClass="cell-name" text="Name"/>
+			<TableColumn fx:id="columnTwitchShoutoutEnabled" maxWidth="150"
+						 minWidth="150" styleClass="cell-button" text="Twitch Shoutout"/>
+			<TableColumn fx:id="columnWizebotShoutoutEnabled" maxWidth="150"
+						 minWidth="150" text="Wizebot Shoutout"/>
 			<TableColumn fx:id="columnRaidMessageEnabled" maxWidth="150" minWidth="150"
-						 prefWidth="-1.0" text="Raid Message"/>
+						 text="Raid Message"/>
 		</columns>
 		<columnResizePolicy>
 			<TableView fx:constant="CONSTRAINED_RESIZE_POLICY"/>
