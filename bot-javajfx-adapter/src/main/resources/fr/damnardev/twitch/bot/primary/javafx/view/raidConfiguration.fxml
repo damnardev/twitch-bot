@@ -1,28 +1,37 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.layout.VBox?>
-<VBox fx:controller="fr.damnardev.twitch.bot.primary.javafx.controller.RaidConfigurationController"
-	  maxHeight="Infinity" maxWidth="Infinity" prefHeight="500" prefWidth="600"
-	  xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1">
+<VBox fx:controller="fr.damnardev.twitch.bot.primary.javafx.controller.RaidConfigurationController" maxHeight="Infinity" maxWidth="Infinity" prefHeight="500" prefWidth="600" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1">
 
 	<TableView VBox.vgrow="ALWAYS" editable="true" fx:id="tableViewRaidConfiguration">
 		<columns>
-			<TableColumn editable="false" fx:id="columnId" maxWidth="150" minWidth="150"
-						 styleClass="cell-id" text="Id"/>
-			<TableColumn editable="false" fx:id="columnName" maxWidth="Infinity"
-						 styleClass="cell-name" text="Name"/>
-			<TableColumn fx:id="columnTwitchShoutoutEnabled" maxWidth="150"
-						 minWidth="150" styleClass="cell-button" text="Twitch Shoutout"/>
-			<TableColumn fx:id="columnWizebotShoutoutEnabled" maxWidth="150"
-						 minWidth="150" text="Wizebot Shoutout"/>
-			<TableColumn fx:id="columnRaidMessageEnabled" maxWidth="150" minWidth="150"
-						 text="Raid Message"/>
+			<TableColumn editable="false" fx:id="columnId" maxWidth="150" minWidth="150" styleClass="cell-id" text="Id" />
+			<TableColumn editable="false" fx:id="columnName" maxWidth="Infinity" styleClass="cell-name" text="Name" />
+			<TableColumn fx:id="columnTwitchShoutoutEnabled" maxWidth="150" minWidth="150" styleClass="cell-button" text="Twitch Shoutout" />
+			<TableColumn fx:id="columnWizebotShoutoutEnabled" maxWidth="150" minWidth="150" text="Wizebot Shoutout" />
+			<TableColumn fx:id="columnRaidMessageEnabled" maxWidth="150" minWidth="150" text="Raid Message" />
 		</columns>
 		<columnResizePolicy>
-			<TableView fx:constant="CONSTRAINED_RESIZE_POLICY"/>
+			<TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
 		</columnResizePolicy>
+      <VBox.margin>
+         <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+      </VBox.margin>
+	</TableView>
+
+	<TableView VBox.vgrow="ALWAYS" editable="true" fx:id="tableViewMessage">
+		<columns>
+			<TableColumn editable="false" fx:id="columnMessage" maxWidth="Infinity" styleClass="cell-name" text="Message" />
+		</columns>
+		<columnResizePolicy>
+			<TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+		</columnResizePolicy>
+      <VBox.margin>
+         <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+      </VBox.margin>
 	</TableView>
 
 </VBox>

@@ -4,6 +4,7 @@ import fr.damnardev.twitch.bot.domain.model.RaidConfiguration;
 import fr.damnardev.twitch.bot.domain.model.event.RaidConfigurationFindEvent;
 import fr.damnardev.twitch.bot.domain.port.primary.FindAllRaidConfigurationService;
 import fr.damnardev.twitch.bot.primary.javafx.adapter.ApplicationStartedEventListener;
+import fr.damnardev.twitch.bot.primary.javafx.wrapper.RaidConfigurationMessageWrapper;
 import fr.damnardev.twitch.bot.primary.javafx.wrapper.RaidConfigurationWrapper;
 import javafx.fxml.FXML;
 import javafx.scene.control.TableColumn;
@@ -47,7 +48,10 @@ public class RaidConfigurationController {
 	public TableColumn<RaidConfigurationWrapper, Boolean> columnRaidMessageEnabled;
 
 	@FXML
-	public TableColumn<RaidConfigurationWrapper, String> columnRaidDeleted;
+	public TableColumn<RaidConfigurationMessageWrapper, String> columnMessage;
+
+	@FXML
+	public TableView<RaidConfigurationMessageWrapper> tableViewMessage;
 
 	@FXML
 	public void initialize() {
@@ -59,6 +63,12 @@ public class RaidConfigurationController {
 	private void setupTableView() {
 		this.tableViewRaidConfiguration.getSortOrder().add(this.columnId);
 		this.tableViewRaidConfiguration.sort();
+		this.tableViewRaidConfiguration.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+			if (newValue != null) {
+				this.tableViewMessage.getItems().clear();
+				this.tableViewMessage.getItems().addAll(newValue.getMessages());
+			}
+		});
 	}
 
 	private void setupColumn() {
@@ -70,6 +80,7 @@ public class RaidConfigurationController {
 		this.columnWizebotShoutoutEnabled.setCellFactory(CheckBoxTableCell.forTableColumn(this.columnWizebotShoutoutEnabled));
 		this.columnRaidMessageEnabled.setCellValueFactory((cell) -> cell.getValue().raidMessageEnabledProperty());
 		this.columnRaidMessageEnabled.setCellFactory(CheckBoxTableCell.forTableColumn(this.columnRaidMessageEnabled));
+		this.columnMessage.setCellValueFactory((cell) -> cell.getValue().messageProperty());
 	}
 
 	private void refresh() {

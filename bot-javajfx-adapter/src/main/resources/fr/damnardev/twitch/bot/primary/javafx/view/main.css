@@ -28,3 +28,19 @@
 .table-row-cell:even {
     -fx-background-color: #c8c8c8;
 }
+
+.table-row-cell:selected {
+    -fx-background-color: #4a90e2;
+}
+
+.table-row-cell:hover {
+    -fx-background-color: rgba(74, 144, 226, 0.25);
+    -fx-text-fill: black;
+}
+
+.table-view {
+    -fx-border-color: #d3d3d3;
+    -fx-border-width: 1px;
+    -fx-border-style: solid;
+    -fx-background-insets: 0;
+}
