@@ -1,10 +1,17 @@
 * {
+    -default-height: 38;
+    -default-spacing: 5;
     -fx-font-size: 1.2em;
-    -fx-cell-size: 38;
+    -fx-cell-size: -default-height;
+}
+
+.default-height {
+    -fx-min-height: -default-height;
+    -fx-max-height: -default-height;
 }
 
 .app-spacing {
-    -fx-spacing: 5;
+    -fx-spacing: -default-spacing;
 }
 
 .cell-id {
@@ -13,7 +20,7 @@
 }
 
 .cell-button {
-    -fx-padding: 0 0 0 0;
+    -fx-padding: 0;
 }
 
 .cell-name {
@@ -22,25 +29,31 @@
 }
 
 .app-padding {
-    -fx-padding: 5 5 5 5;
+    -fx-padding: -default-spacing;
 }
 
-.table-row-cell:even {
-    -fx-background-color: #c8c8c8;
-}
-
-.table-row-cell:selected {
-    -fx-background-color: #4a90e2;
-}
-
-.table-row-cell:hover {
-    -fx-background-color: rgba(74, 144, 226, 0.25);
-    -fx-text-fill: black;
-}
+/* Setting table view */
 
 .table-view {
     -fx-border-color: #d3d3d3;
-    -fx-border-width: 1px;
-    -fx-border-style: solid;
-    -fx-background-insets: 0;
+    -fx-selection-bar: #6fa9e84d; /* cell separator */
+    -fx-selection-bar-non-focused: #6fa9e84d; /* cell separator */
+}
+
+.table-row-cell:even {
+    -fx-background-color: #d3d3d3;
+}
+
+.table-row-cell:hover, .table-row-cell:selected {
+    -fx-background-color: #6fa9e880;
+    -fx-text-fill: black;
+}
+
+.table-row-cell:selected .text {
+    -fx-fill: black;
+}
+
+.table-row-cell .check-box .box, .table-row-cell:selected .check-box .box {
+    -fx-background-color: white;
+    -fx-border-color: #d3d3d3;
 }

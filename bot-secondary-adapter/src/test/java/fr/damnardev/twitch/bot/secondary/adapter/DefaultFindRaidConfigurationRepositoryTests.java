@@ -1,5 +1,6 @@
 package fr.damnardev.twitch.bot.secondary.adapter;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Optional;
 
@@ -110,7 +111,7 @@ class DefaultFindRaidConfigurationRepositoryTests {
 		verifyNoMoreInteractions(this.dbRaidConfigurationRepository);
 
 		var raidConfiguration = RaidConfiguration.builder().id(1L).name(name).raidMessageEnabled(raidMessageEnabled)
-				.wizebotShoutoutEnabled(wizebotShoutoutEnabled).twitchShoutoutEnabled(twitchShoutoutEnabled).build();
+				.wizebotShoutoutEnabled(wizebotShoutoutEnabled).twitchShoutoutEnabled(twitchShoutoutEnabled).messages(new ArrayList<>()).build();
 		assertThat(result).isNotNull().hasSize(1).contains(raidConfiguration);
 	}
 
