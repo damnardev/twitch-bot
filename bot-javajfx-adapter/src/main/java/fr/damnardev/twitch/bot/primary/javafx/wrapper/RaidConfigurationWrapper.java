@@ -1,6 +1,7 @@
 package fr.damnardev.twitch.bot.primary.javafx.wrapper;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import fr.damnardev.twitch.bot.domain.model.RaidConfiguration;
 import javafx.beans.property.SimpleBooleanProperty;
@@ -21,8 +22,9 @@ public class RaidConfigurationWrapper {
 
 	private final SimpleBooleanProperty raidMessageEnabled;
 
+	@SuppressWarnings("java:S6204")
 	public RaidConfigurationWrapper(RaidConfiguration raidConfiguration) {
-		this.messages = raidConfiguration.messages().stream().map(RaidConfigurationMessageWrapper::new).toList();
+		this.messages = raidConfiguration.messages().stream().map(RaidConfigurationMessageWrapper::new).collect(Collectors.toList());
 		this.id = new SimpleLongProperty(raidConfiguration.id());
 		this.name = new SimpleStringProperty(raidConfiguration.name());
 		this.twitchShoutoutEnabled = new SimpleBooleanProperty(raidConfiguration.twitchShoutoutEnabled());
