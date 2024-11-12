@@ -4,12 +4,16 @@ import fr.damnardev.twitch.bot.domain.model.RaidConfiguration;
 import fr.damnardev.twitch.bot.domain.model.event.RaidConfigurationFindEvent;
 import fr.damnardev.twitch.bot.domain.model.event.RaidConfigurationUpdatedEvent;
 import fr.damnardev.twitch.bot.domain.model.form.CreateRaidConfigurationMessageForm;
+import fr.damnardev.twitch.bot.domain.model.form.DeleteRaidConfigurationMessageForm;
 import fr.damnardev.twitch.bot.domain.port.primary.CreateRaidConfigurationMessageService;
+import fr.damnardev.twitch.bot.domain.port.primary.DeleteRaidConfigurationMessageService;
 import fr.damnardev.twitch.bot.domain.port.primary.FindAllRaidConfigurationService;
 import fr.damnardev.twitch.bot.primary.javafx.adapter.ApplicationStartedEventListener;
 import fr.damnardev.twitch.bot.primary.javafx.wrapper.RaidConfigurationMessageWrapper;
 import fr.damnardev.twitch.bot.primary.javafx.wrapper.RaidConfigurationWrapper;
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
+import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
@@ -37,6 +41,8 @@ public class RaidConfigurationController {
 
 	private final CreateRaidConfigurationMessageService createRaidConfigurationMessageService;
 
+	private final DeleteRaidConfigurationMessageService deleteRaidConfigurationMessageService;
+
 	@FXML
 	public TableView<RaidConfigurationWrapper> tableViewRaidConfiguration;
 
@@ -60,6 +66,9 @@ public class RaidConfigurationController {
 
 	@FXML
 	public TableView<RaidConfigurationMessageWrapper> tableViewMessage;
+
+	@FXML
+	public TableColumn<RaidConfigurationMessageWrapper, String> columnDeleted;
 
 	@FXML
 	public TextField textFieldMessage;
@@ -92,6 +101,38 @@ public class RaidConfigurationController {
 		this.columnRaidMessageEnabled.setCellValueFactory((cell) -> cell.getValue().raidMessageEnabledProperty());
 		this.columnRaidMessageEnabled.setCellFactory(CheckBoxTableCell.forTableColumn(this.columnRaidMessageEnabled));
 		this.columnMessage.setCellValueFactory((cell) -> cell.getValue().messageProperty());
+		this.columnDeleted.setCellFactory(this::deletedCellFactory);
+	}
+
+	@SuppressWarnings("java:S110")
+	private TableCell<RaidConfigurationMessageWrapper, String> deletedCellFactory(TableColumn<RaidConfigurationMessageWrapper, String> column) {
+		return new TableCell<>() {
+
+			final Button button = new Button("Delete");
+
+			@Override
+			protected void updateItem(String item, boolean empty) {
+				super.updateItem(item, empty);
+				if (empty) {
+					setText(null);
+					setGraphic(null);
+				}
+				else {
+					var configuration = getTableView().getItems().get(getIndex());
+					this.button.setOnMouseClicked((event) -> RaidConfigurationController.this.executor.execute(() -> {
+						log.info("Try to delete message: {}", configuration);
+						var form = DeleteRaidConfigurationMessageForm.builder()
+								.id(configuration.idProperty().get())
+								.name(configuration.nameProperty().get())
+								.message(configuration.messageProperty().get()).build();
+						RaidConfigurationController.this.deleteRaidConfigurationMessageService.delete(form);
+					}));
+					this.button.setMaxWidth(Double.MAX_VALUE);
+					this.button.setMaxHeight(Double.MAX_VALUE);
+					setGraphic(this.button);
+				}
+			}
+		};
 	}
 
 	private void refresh() {
@@ -138,12 +179,16 @@ public class RaidConfigurationController {
 		return this.tableViewRaidConfiguration.getItems().stream().filter((wrapper) -> wrapper.idProperty().get() == event.getRaidConfiguration().id()).findFirst().orElseThrow();
 	}
 
-	private void updateRaidConfigurationMessage(RaidConfigurationUpdatedEvent event, RaidConfigurationWrapper raidConfiguration) {
-		raidConfiguration.getMessages().clear();
-		event.getRaidConfiguration().messages().forEach((message) -> raidConfiguration.getMessages().add(new RaidConfigurationMessageWrapper(message)));
+	private void updateRaidConfigurationMessage(RaidConfigurationUpdatedEvent event, RaidConfigurationWrapper configuration) {
+		configuration.getMessages().clear();
+		event.getRaidConfiguration().messages()
+				.forEach((message) -> {
+					RaidConfigurationMessageWrapper e = new RaidConfigurationMessageWrapper(configuration.idProperty().get(), configuration.nameProperty().get(), message);
+					configuration.getMessages().add(e);
+				});
 		this.tableViewMessage.getItems().clear();
-		this.tableViewMessage.getItems().addAll(raidConfiguration.getMessages());
-		this.statusController.setLabelText("Message added for the users " + event.getRaidConfiguration().name(), false);
+		this.tableViewMessage.getItems().addAll(configuration.getMessages());
+		this.statusController.setLabelText("Raid configuration users " + event.getRaidConfiguration().name(), false);
 	}
 
 }

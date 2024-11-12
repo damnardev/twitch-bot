@@ -29,6 +29,7 @@
 		<TableView VBox.vgrow="ALWAYS" editable="true" fx:id="tableViewMessage" maxWidth="Infinity">
 			<columns>
 				<TableColumn editable="false" fx:id="columnMessage" maxWidth="Infinity" styleClass="cell-name" text="Message" />
+				<TableColumn editable="false" fx:id="columnDeleted" maxWidth="150" minWidth="150" sortable="false" styleClass="cell-button" />
 			</columns>
 			<columnResizePolicy>
 				<TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />

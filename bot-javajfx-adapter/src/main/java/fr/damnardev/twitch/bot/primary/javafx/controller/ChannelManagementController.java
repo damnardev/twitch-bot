@@ -83,6 +83,7 @@ public class ChannelManagementController {
 		this.tableView.getSortOrder().add(this.columnId);
 		this.tableView.sort();
 		this.tableView.setSelectionModel(null);
+		//TODO: move into separate class
 		this.tableView.setRowFactory((table) -> new TableRow<>() {
 			@Override
 			protected void updateItem(ChannelWrapper item, boolean empty) {
@@ -94,6 +95,7 @@ public class ChannelManagementController {
 				updateRowColor(item);
 			}
 
+			//TODO: move style to css
 			private void updateRowColor(ChannelWrapper item) {
 				if (item == null) {
 					setStyle("");
@@ -121,6 +123,7 @@ public class ChannelManagementController {
 		this.columnDeleted.setCellFactory(this::deletedCellFactory);
 	}
 
+	//TODO: move to separate class
 	@SuppressWarnings("java:S110")
 	private TableCell<ChannelWrapper, String> deletedCellFactory(TableColumn<ChannelWrapper, String> column) {
 		return new TableCell<>() {
