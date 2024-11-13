@@ -1,6 +1,7 @@
 package fr.damnardev.twitch.bot.primary.javafx.controller;
 
 import fr.damnardev.twitch.bot.domain.model.RaidConfiguration;
+import fr.damnardev.twitch.bot.domain.model.event.ChannelDeletedEvent;
 import fr.damnardev.twitch.bot.domain.model.event.RaidConfigurationFindEvent;
 import fr.damnardev.twitch.bot.domain.model.event.RaidConfigurationUpdatedEvent;
 import fr.damnardev.twitch.bot.domain.model.form.CreateRaidConfigurationMessageForm;
@@ -189,6 +190,13 @@ public class RaidConfigurationController {
 		this.tableViewMessage.getItems().clear();
 		this.tableViewMessage.getItems().addAll(configuration.getMessages());
 		this.statusController.setLabelText("Raid configuration users " + event.getRaidConfiguration().name(), false);
+	}
+
+	public void onChannelDeletedEvent(ChannelDeletedEvent event) {
+		if (event.hasError()) {
+			return;
+		}
+		this.tableViewRaidConfiguration.getItems().removeIf((w) -> w.idProperty().getValue().equals(event.getChannel().id()));
 	}
 
 }

@@ -213,8 +213,8 @@ public class ChannelManagementController {
 			this.statusController.setLabelText(ERROR_STR.formatted(event.getError()), true);
 			return;
 		}
+		this.tableView.getItems().removeIf((w) -> w.idProperty().getValue().equals(event.getChannel().id()));
 		this.statusController.setLabelText("Channel deleted: " + event.getChannel(), false);
-		refresh();
 	}
 
 	public void onErrorEvent(ErrorEvent event) {
