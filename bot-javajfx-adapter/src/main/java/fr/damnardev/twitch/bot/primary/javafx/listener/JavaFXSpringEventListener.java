@@ -46,6 +46,7 @@ public class JavaFXSpringEventListener {
 	@EventListener
 	public void onChannelDeletedEvent(ChannelDeletedEvent event) {
 		Platform.runLater(() -> this.channelManagementController.onChannelDeletedEvent(event));
+		Platform.runLater(() -> this.raidConfigurationController.onChannelDeletedEvent(event));
 	}
 
 	@EventListener
