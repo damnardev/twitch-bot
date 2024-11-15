@@ -1,7 +1,9 @@
 package fr.damnardev.twitch.bot.primary.javafx.controller;
 
 import fr.damnardev.twitch.bot.domain.model.RaidConfiguration;
+import fr.damnardev.twitch.bot.domain.model.event.ChannelCreatedEvent;
 import fr.damnardev.twitch.bot.domain.model.event.ChannelDeletedEvent;
+import fr.damnardev.twitch.bot.domain.model.event.RaidConfigurationFindAllEvent;
 import fr.damnardev.twitch.bot.domain.model.event.RaidConfigurationFindEvent;
 import fr.damnardev.twitch.bot.domain.model.event.RaidConfigurationUpdatedEvent;
 import fr.damnardev.twitch.bot.domain.model.form.CreateRaidConfigurationMessageForm;
@@ -9,6 +11,7 @@ import fr.damnardev.twitch.bot.domain.model.form.DeleteRaidConfigurationMessageF
 import fr.damnardev.twitch.bot.domain.port.primary.CreateRaidConfigurationMessageService;
 import fr.damnardev.twitch.bot.domain.port.primary.DeleteRaidConfigurationMessageService;
 import fr.damnardev.twitch.bot.domain.port.primary.FindAllRaidConfigurationService;
+import fr.damnardev.twitch.bot.domain.port.primary.FindRaidConfigurationService;
 import fr.damnardev.twitch.bot.primary.javafx.adapter.ApplicationStartedEventListener;
 import fr.damnardev.twitch.bot.primary.javafx.wrapper.RaidConfigurationMessageWrapper;
 import fr.damnardev.twitch.bot.primary.javafx.wrapper.RaidConfigurationWrapper;
@@ -35,6 +38,8 @@ public class RaidConfigurationController {
 	public static final String ERROR_STR = "Error: %s";
 
 	private final FindAllRaidConfigurationService findAllRaidConfigurationService;
+
+	private final FindRaidConfigurationService findRaidConfigurationService;
 
 	private final StatusController statusController;
 
@@ -140,11 +145,18 @@ public class RaidConfigurationController {
 		this.executor.execute(this.findAllRaidConfigurationService::findAll);
 	}
 
-	public void onRaidConfigurationFindEvent(RaidConfigurationFindEvent event) {
+	public void onRaidConfigurationFindAllEvent(RaidConfigurationFindAllEvent event) {
 		log.info("Configurations found: {}", event);
 		var wrappers = event.getConfigurations().stream().map(this::buildWrapper).toList();
 		this.tableViewRaidConfiguration.getItems().clear();
 		this.tableViewRaidConfiguration.getItems().addAll(wrappers);
+		this.tableViewRaidConfiguration.sort();
+	}
+
+	public void onRaidConfigurationFindEvent(RaidConfigurationFindEvent event) {
+		log.info("Configuration found: {}", event);
+		var wrapper = buildWrapper(event.getConfiguration());
+		this.tableViewRaidConfiguration.getItems().add(wrapper);
 		this.tableViewRaidConfiguration.sort();
 	}
 
@@ -197,6 +209,13 @@ public class RaidConfigurationController {
 			return;
 		}
 		this.tableViewRaidConfiguration.getItems().removeIf((w) -> w.idProperty().getValue().equals(event.getChannel().id()));
+	}
+
+	public void onChannelCreatedEvent(ChannelCreatedEvent event) {
+		if (event.hasError()) {
+			return;
+		}
+		this.executor.execute(() -> this.findRaidConfigurationService.findByChannelName(event.getChannel().name()));
 	}
 
 }

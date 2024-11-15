@@ -5,6 +5,7 @@ import fr.damnardev.twitch.bot.domain.model.event.ChannelDeletedEvent;
 import fr.damnardev.twitch.bot.domain.model.event.ChannelFindEvent;
 import fr.damnardev.twitch.bot.domain.model.event.ChannelUpdatedEvent;
 import fr.damnardev.twitch.bot.domain.model.event.ErrorEvent;
+import fr.damnardev.twitch.bot.domain.model.event.RaidConfigurationFindAllEvent;
 import fr.damnardev.twitch.bot.domain.model.event.RaidConfigurationFindEvent;
 import fr.damnardev.twitch.bot.domain.model.event.RaidConfigurationUpdatedEvent;
 import fr.damnardev.twitch.bot.primary.javafx.adapter.ApplicationStartedEventListener;
@@ -36,6 +37,7 @@ public class JavaFXSpringEventListener {
 	@EventListener
 	public void onChannelCreatedEvent(ChannelCreatedEvent event) {
 		Platform.runLater(() -> this.channelManagementController.onChannelCreatedEvent(event));
+		Platform.runLater(() -> this.raidConfigurationController.onChannelCreatedEvent(event));
 	}
 
 	@EventListener
@@ -47,6 +49,11 @@ public class JavaFXSpringEventListener {
 	public void onChannelDeletedEvent(ChannelDeletedEvent event) {
 		Platform.runLater(() -> this.channelManagementController.onChannelDeletedEvent(event));
 		Platform.runLater(() -> this.raidConfigurationController.onChannelDeletedEvent(event));
+	}
+
+	@EventListener
+	public void onRaidConfigurationFindAllEvent(RaidConfigurationFindAllEvent event) {
+		Platform.runLater(() -> this.raidConfigurationController.onRaidConfigurationFindAllEvent(event));
 	}
 
 	@EventListener
