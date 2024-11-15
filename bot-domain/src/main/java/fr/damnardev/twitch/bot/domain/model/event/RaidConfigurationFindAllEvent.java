@@ -1,5 +1,7 @@
 package fr.damnardev.twitch.bot.domain.model.event;
 
+import java.util.List;
+
 import fr.damnardev.twitch.bot.domain.model.RaidConfiguration;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
@@ -9,14 +11,14 @@ import lombok.Value;
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
 @Value
-public class RaidConfigurationFindEvent extends Event {
+public class RaidConfigurationFindAllEvent extends Event {
 
-	RaidConfiguration configuration;
+	List<RaidConfiguration> configurations;
 
 	@Builder
-	public RaidConfigurationFindEvent(RaidConfiguration configuration, String error) {
+	public RaidConfigurationFindAllEvent(List<RaidConfiguration> configurations, String error) {
 		super(error);
-		this.configuration = configuration;
+		this.configurations = configurations;
 	}
 
 }

@@ -4,7 +4,7 @@ import java.util.Collections;
 
 import fr.damnardev.twitch.bot.domain.model.RaidConfiguration;
 import fr.damnardev.twitch.bot.domain.model.event.ErrorEvent;
-import fr.damnardev.twitch.bot.domain.model.event.RaidConfigurationFindEvent;
+import fr.damnardev.twitch.bot.domain.model.event.RaidConfigurationFindAllEvent;
 import fr.damnardev.twitch.bot.domain.port.secondary.EventPublisher;
 import fr.damnardev.twitch.bot.domain.port.secondary.FindRaidConfigurationRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -67,7 +67,7 @@ class DefaultFindAllRaidConfigurationServiceTests {
 		// Given
 		var configuration = RaidConfiguration.builder().build();
 		var configurations = Collections.singletonList(configuration);
-		var event = RaidConfigurationFindEvent.builder().configurations(configurations).build();
+		var event = RaidConfigurationFindAllEvent.builder().configurations(configurations).build();
 
 		given(this.findRaidConfigurationRepository.findAll()).willReturn(configurations);
 		doNothing().when(this.eventPublisher).publish(event);

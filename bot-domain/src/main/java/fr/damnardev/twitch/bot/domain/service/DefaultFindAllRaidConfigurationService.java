@@ -1,7 +1,7 @@
 package fr.damnardev.twitch.bot.domain.service;
 
 import fr.damnardev.twitch.bot.domain.DomainService;
-import fr.damnardev.twitch.bot.domain.model.event.RaidConfigurationFindEvent;
+import fr.damnardev.twitch.bot.domain.model.event.RaidConfigurationFindAllEvent;
 import fr.damnardev.twitch.bot.domain.port.primary.FindAllRaidConfigurationService;
 import fr.damnardev.twitch.bot.domain.port.secondary.EventPublisher;
 import fr.damnardev.twitch.bot.domain.port.secondary.FindRaidConfigurationRepository;
@@ -24,7 +24,7 @@ public class DefaultFindAllRaidConfigurationService implements FindAllRaidConfig
 
 	private void doInternal() {
 		var configurations = this.findRaidConfigurationRepository.findAll();
-		var event = RaidConfigurationFindEvent.builder().configurations(configurations).build();
+		var event = RaidConfigurationFindAllEvent.builder().configurations(configurations).build();
 		this.eventPublisher.publish(event);
 	}
 

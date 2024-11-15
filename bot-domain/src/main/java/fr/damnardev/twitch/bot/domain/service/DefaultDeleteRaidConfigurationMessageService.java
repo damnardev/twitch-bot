@@ -16,13 +16,10 @@ public class DefaultDeleteRaidConfigurationMessageService extends AbstractRaidCo
 
 	private final UpdateRaidConfigurationRepository updateRaidConfigurationRepository;
 
-	private final EventPublisher eventPublisher;
-
 	public DefaultDeleteRaidConfigurationMessageService(FindChannelRepository findChannelRepository, FindRaidConfigurationRepository findRaidConfigurationRepository, EventPublisher eventPublisher, DefaultTryService tryService, UpdateRaidConfigurationRepository updateRaidConfigurationRepository) {
 		super(findChannelRepository, findRaidConfigurationRepository, eventPublisher);
 		this.tryService = tryService;
 		this.updateRaidConfigurationRepository = updateRaidConfigurationRepository;
-		this.eventPublisher = eventPublisher;
 	}
 
 	@Override
