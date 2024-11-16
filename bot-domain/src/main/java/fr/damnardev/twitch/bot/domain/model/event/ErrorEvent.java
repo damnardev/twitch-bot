@@ -8,14 +8,19 @@ import lombok.Value;
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
 @Value
-public class ErrorEvent extends Event {
+public class ErrorEvent extends Event<Void> {
 
 	Exception exception;
 
 	@Builder
-	public ErrorEvent(Exception exception, String error) {
-		super(error);
+	public ErrorEvent(Exception exception) {
+		super();
 		this.exception = exception;
+	}
+
+	@Override
+	public boolean hasError() {
+		return true;
 	}
 
 }

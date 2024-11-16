@@ -22,7 +22,6 @@ import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.BDDMockito.doNothing;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.mock;
 import static org.mockito.BDDMockito.then;
@@ -147,10 +146,8 @@ class DefaultAuthenticationRepositoryTests {
 		given(deviceAuthorization.getDeviceCode()).willReturn(DEVICE_CODE);
 		given(this.provider.getDeviceAccessToken(DEVICE_CODE)).willReturn(deviceTokenResponse);
 		given(deviceTokenResponse.getCredential()).willReturn(newCredential);
-		doNothing().when(this.credential).updateCredential(newCredential);
 		given(this.provider.getAdditionalCredentialInformation(this.credential)).willReturn(Optional.of(this.credential));
 		given(this.credential.getExpiresIn()).willReturn(3600);
-		doNothing().when(this.credential).setExpiresIn(1800);
 		given(this.credential.getRefreshToken()).willReturn(REFRESH_TOKEN);
 		given(this.dbCredentialRepository.save(dbCredential)).willReturn(dbCredential);
 
@@ -189,7 +186,6 @@ class DefaultAuthenticationRepositoryTests {
 		given(this.provider.renew(this.credential)).willReturn(true);
 		given(this.provider.getAdditionalCredentialInformation(this.credential)).willReturn(Optional.of(this.credential));
 		given(this.credential.getExpiresIn()).willReturn(3600);
-		doNothing().when(this.credential).setExpiresIn(1800);
 		given(this.credential.getRefreshToken()).willReturn(REFRESH_TOKEN);
 		given(this.dbCredentialRepository.save(dbCredential)).willReturn(dbCredential);
 

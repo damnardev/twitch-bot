@@ -29,7 +29,7 @@
 }
 
 .app-padding {
-    -fx-padding: -default-spacing;
+    -fx-padding: 5 5 5 5;
 }
 
 /* Setting table view */

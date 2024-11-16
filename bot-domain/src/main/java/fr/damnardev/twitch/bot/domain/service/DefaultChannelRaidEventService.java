@@ -1,17 +1,17 @@
 package fr.damnardev.twitch.bot.domain.service;
 
 import fr.damnardev.twitch.bot.domain.DomainService;
+import fr.damnardev.twitch.bot.domain.exception.BusinessException;
 import fr.damnardev.twitch.bot.domain.model.Message;
 import fr.damnardev.twitch.bot.domain.model.Shoutout;
-import fr.damnardev.twitch.bot.domain.model.event.ChannelRaidEvent;
 import fr.damnardev.twitch.bot.domain.model.form.ChannelRaidEventForm;
 import fr.damnardev.twitch.bot.domain.port.primary.ChannelRaidEventService;
 import fr.damnardev.twitch.bot.domain.port.primary.RandomService;
 import fr.damnardev.twitch.bot.domain.port.secondary.EventPublisher;
-import fr.damnardev.twitch.bot.domain.port.secondary.FindChannelRepository;
-import fr.damnardev.twitch.bot.domain.port.secondary.FindRaidConfigurationRepository;
 import fr.damnardev.twitch.bot.domain.port.secondary.MessageRepository;
 import fr.damnardev.twitch.bot.domain.port.secondary.ShoutoutRepository;
+import fr.damnardev.twitch.bot.domain.port.secondary.channel.FindChannelRepository;
+import fr.damnardev.twitch.bot.domain.port.secondary.raid.FindRaidConfigurationRepository;
 import lombok.RequiredArgsConstructor;
 
 @DomainService
@@ -38,18 +38,14 @@ public class DefaultChannelRaidEventService implements ChannelRaidEventService {
 	}
 
 	private void doInternal(ChannelRaidEventForm form) {
-		var optionalChannel = this.findChannelRepository.findByName(form.name());
+		var optionalChannel = this.findChannelRepository.findByName(form.channelName());
 		if (optionalChannel.isEmpty()) {
-			var event = ChannelRaidEvent.builder().error("Channel not found").build();
-			this.eventPublisher.publish(event);
-			return;
+			throw new BusinessException("Channel not found");
 		}
 		var channel = optionalChannel.get();
 		var optionalRaidConfiguration = this.findRaidConfigurationRepository.findByChannelName(channel.name());
 		if (optionalRaidConfiguration.isEmpty()) {
-			var event = ChannelRaidEvent.builder().error("Channel Raid Configuration not found").build();
-			this.eventPublisher.publish(event);
-			return;
+			throw new BusinessException("Channel Raid Configuration not found");
 		}
 		var channelRaidConfiguration = optionalRaidConfiguration.get();
 		if (channelRaidConfiguration.raidMessageEnabled()) {

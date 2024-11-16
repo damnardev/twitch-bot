@@ -11,7 +11,6 @@ import org.mockito.quality.Strictness;
 
 import org.springframework.context.ApplicationEventPublisher;
 
-import static org.mockito.BDDMockito.doNothing;
 import static org.mockito.BDDMockito.then;
 import static org.mockito.BDDMockito.verifyNoMoreInteractions;
 
@@ -29,8 +28,6 @@ class DefaultEventPublisherTests {
 	void publish_shouldInvokePublish_whenCalled() {
 		// Given
 		var event = ApplicationStartedEvent.builder().build();
-
-		doNothing().when(this.publisher).publishEvent(event);
 
 		// When
 		this.eventPublisher.publish(event);

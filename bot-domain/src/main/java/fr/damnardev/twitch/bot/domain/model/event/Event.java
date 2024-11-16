@@ -6,23 +6,24 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 
 @EqualsAndHashCode
-public abstract class Event {
+@Getter
+public abstract class Event<T> {
 
 	@EqualsAndHashCode.Exclude
-	@Getter
 	private final UUID id;
 
-	@EqualsAndHashCode.Include
-	@Getter
-	private final String error;
+	private final T value;
 
-	protected Event(String error) {
+	protected Event() {
 		this.id = UUID.randomUUID();
-		this.error = error;
+		this.value = null;
 	}
 
-	public boolean hasError() {
-		return this.error != null;
+	protected Event(T value) {
+		this.id = UUID.randomUUID();
+		this.value = value;
 	}
+
+	public abstract boolean hasError();
 
 }

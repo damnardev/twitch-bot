@@ -14,7 +14,6 @@ import org.mockito.quality.Strictness;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 
 import static org.mockito.BDDMockito.then;
-import static org.mockito.Mockito.doNothing;
 
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.WARN)
@@ -34,8 +33,6 @@ class DefaultMessageRepositoryTests {
 		// Given
 		var captor = ArgumentCaptor.forClass(Runnable.class);
 		var message = Message.builder().channelName("channel").content("content").build();
-
-		doNothing().when(this.executor).execute(captor.capture());
 
 		// When
 		this.messageRepository.sendMessage(message);

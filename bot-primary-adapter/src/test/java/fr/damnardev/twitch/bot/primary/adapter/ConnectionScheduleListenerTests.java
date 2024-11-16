@@ -15,7 +15,6 @@ import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
 import static org.mockito.BDDMockito.verifyNoMoreInteractions;
-import static org.mockito.Mockito.doNothing;
 
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.WARN)
@@ -35,7 +34,6 @@ class ConnectionScheduleListenerTests {
 		// Given
 		var captor = ArgumentCaptor.forClass(Runnable.class);
 
-		doNothing().when(this.executor).execute(captor.capture());
 		given(this.authenticationService.isInitialized()).willReturn(false);
 
 		// When
@@ -53,7 +51,6 @@ class ConnectionScheduleListenerTests {
 		// Given
 		var captor = ArgumentCaptor.forClass(Runnable.class);
 
-		doNothing().when(this.executor).execute(captor.capture());
 		given(this.authenticationService.isInitialized()).willReturn(true);
 
 		// When

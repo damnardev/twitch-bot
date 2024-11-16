@@ -24,7 +24,6 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
-import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 
@@ -71,16 +70,14 @@ class ChannelMessageEventConsumerTests {
 		var event = mock(ChannelMessageEvent.class);
 		var channel = mock(EventChannel.class);
 		var user = mock(EventUser.class);
-		var model = ChannelMessageEventForm.builder().id(1L).name("channel").sender("user").message("message").build();
+		var model = ChannelMessageEventForm.builder().channelId(1L).channelName("channel").sender("user").message("message").build();
 
-		doNothing().when(this.executor).execute(captor.capture());
 		given(event.getChannel()).willReturn(channel);
 		given(channel.getName()).willReturn("channel");
 		given(channel.getId()).willReturn("1");
 		given(event.getUser()).willReturn(user);
 		given(user.getName()).willReturn("user");
 		given(event.getMessage()).willReturn("message");
-		doNothing().when(this.handler).process(model);
 
 		// When
 		this.consumer.process(event);
