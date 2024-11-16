@@ -8,11 +8,16 @@ import lombok.Value;
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
 @Value
-public class ApplicationStartedEvent extends Event {
+public class ApplicationStartedEvent extends Event<Void> {
 
 	@Builder
-	public ApplicationStartedEvent(String error) {
-		super(error);
+	public ApplicationStartedEvent() {
+		super();
+	}
+
+	@Override
+	public boolean hasError() {
+		return false;
 	}
 
 }

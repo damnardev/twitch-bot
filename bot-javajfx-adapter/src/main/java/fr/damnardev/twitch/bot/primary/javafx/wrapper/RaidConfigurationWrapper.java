@@ -24,9 +24,9 @@ public class RaidConfigurationWrapper {
 
 	@SuppressWarnings("java:S6204")
 	public RaidConfigurationWrapper(RaidConfiguration configuration) {
-		this.messages = configuration.messages().stream().map((message) -> new RaidConfigurationMessageWrapper(configuration.id(), configuration.name(), message)).collect(Collectors.toList());
-		this.id = new SimpleLongProperty(configuration.id());
-		this.name = new SimpleStringProperty(configuration.name());
+		this.messages = configuration.messages().stream().map((message) -> new RaidConfigurationMessageWrapper(configuration.channelId(), configuration.channelName(), message)).collect(Collectors.toList());
+		this.id = new SimpleLongProperty(configuration.channelId());
+		this.name = new SimpleStringProperty(configuration.channelName());
 		this.twitchShoutoutEnabled = new SimpleBooleanProperty(configuration.twitchShoutoutEnabled());
 		this.wizebotShoutoutEnabled = new SimpleBooleanProperty(configuration.wizebotShoutoutEnabled());
 		this.raidMessageEnabled = new SimpleBooleanProperty(configuration.raidMessageEnabled());

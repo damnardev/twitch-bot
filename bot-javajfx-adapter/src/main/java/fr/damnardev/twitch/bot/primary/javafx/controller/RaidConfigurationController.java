@@ -3,15 +3,15 @@ package fr.damnardev.twitch.bot.primary.javafx.controller;
 import fr.damnardev.twitch.bot.domain.model.RaidConfiguration;
 import fr.damnardev.twitch.bot.domain.model.event.ChannelCreatedEvent;
 import fr.damnardev.twitch.bot.domain.model.event.ChannelDeletedEvent;
-import fr.damnardev.twitch.bot.domain.model.event.RaidConfigurationFindAllEvent;
-import fr.damnardev.twitch.bot.domain.model.event.RaidConfigurationFindEvent;
+import fr.damnardev.twitch.bot.domain.model.event.RaidConfigurationFetchedAllEvent;
+import fr.damnardev.twitch.bot.domain.model.event.RaidConfigurationFetchedEvent;
 import fr.damnardev.twitch.bot.domain.model.event.RaidConfigurationUpdatedEvent;
 import fr.damnardev.twitch.bot.domain.model.form.CreateRaidConfigurationMessageForm;
 import fr.damnardev.twitch.bot.domain.model.form.DeleteRaidConfigurationMessageForm;
-import fr.damnardev.twitch.bot.domain.port.primary.CreateRaidConfigurationMessageService;
-import fr.damnardev.twitch.bot.domain.port.primary.DeleteRaidConfigurationMessageService;
-import fr.damnardev.twitch.bot.domain.port.primary.FindAllRaidConfigurationService;
-import fr.damnardev.twitch.bot.domain.port.primary.FindRaidConfigurationService;
+import fr.damnardev.twitch.bot.domain.port.primary.raid.CreateRaidConfigurationMessageService;
+import fr.damnardev.twitch.bot.domain.port.primary.raid.DeleteRaidConfigurationMessageService;
+import fr.damnardev.twitch.bot.domain.port.primary.raid.FetchAllRaidConfigurationService;
+import fr.damnardev.twitch.bot.domain.port.primary.raid.FetchRaidConfigurationService;
 import fr.damnardev.twitch.bot.primary.javafx.adapter.ApplicationStartedEventListener;
 import fr.damnardev.twitch.bot.primary.javafx.wrapper.RaidConfigurationMessageWrapper;
 import fr.damnardev.twitch.bot.primary.javafx.wrapper.RaidConfigurationWrapper;
@@ -35,11 +35,9 @@ import org.springframework.stereotype.Component;
 @ConditionalOnBean(ApplicationStartedEventListener.class)
 public class RaidConfigurationController {
 
-	public static final String ERROR_STR = "Error: %s";
+	private final FetchAllRaidConfigurationService fetchAllRaidConfigurationService;
 
-	private final FindAllRaidConfigurationService findAllRaidConfigurationService;
-
-	private final FindRaidConfigurationService findRaidConfigurationService;
+	private final FetchRaidConfigurationService fetchRaidConfigurationService;
 
 	private final StatusController statusController;
 
@@ -127,11 +125,8 @@ public class RaidConfigurationController {
 					var configuration = getTableView().getItems().get(getIndex());
 					this.button.setOnMouseClicked((event) -> RaidConfigurationController.this.executor.execute(() -> {
 						log.info("Try to delete message: {}", configuration);
-						var form = DeleteRaidConfigurationMessageForm.builder()
-								.id(configuration.idProperty().get())
-								.name(configuration.nameProperty().get())
-								.message(configuration.messageProperty().get()).build();
-						RaidConfigurationController.this.deleteRaidConfigurationMessageService.delete(form);
+						var form = DeleteRaidConfigurationMessageForm.builder().channelId(configuration.idProperty().get()).channelName(configuration.nameProperty().get()).message(configuration.messageProperty().get()).build();
+						RaidConfigurationController.this.deleteRaidConfigurationMessageService.process(form);
 					}));
 					this.button.setMaxWidth(Double.MAX_VALUE);
 					this.button.setMaxHeight(Double.MAX_VALUE);
@@ -142,20 +137,20 @@ public class RaidConfigurationController {
 	}
 
 	private void refresh() {
-		this.executor.execute(this.findAllRaidConfigurationService::findAll);
+		this.executor.execute(this.fetchAllRaidConfigurationService::process);
 	}
 
-	public void onRaidConfigurationFindAllEvent(RaidConfigurationFindAllEvent event) {
+	public void onRaidConfigurationFindAllEvent(RaidConfigurationFetchedAllEvent event) {
 		log.info("Configurations found: {}", event);
-		var wrappers = event.getConfigurations().stream().map(this::buildWrapper).toList();
+		var wrappers = event.getValue().stream().map(this::buildWrapper).toList();
 		this.tableViewRaidConfiguration.getItems().clear();
 		this.tableViewRaidConfiguration.getItems().addAll(wrappers);
 		this.tableViewRaidConfiguration.sort();
 	}
 
-	public void onRaidConfigurationFindEvent(RaidConfigurationFindEvent event) {
+	public void onRaidConfigurationFindEvent(RaidConfigurationFetchedEvent event) {
 		log.info("Configuration found: {}", event);
-		var wrapper = buildWrapper(event.getConfiguration());
+		var wrapper = buildWrapper(event.getValue());
 		this.tableViewRaidConfiguration.getItems().add(wrapper);
 		this.tableViewRaidConfiguration.sort();
 	}
@@ -167,55 +162,50 @@ public class RaidConfigurationController {
 	public void onButtonAdd() {
 		var message = this.textFieldMessage.getText();
 		if (message.isBlank()) {
-			this.statusController.setLabelText("Channel name is empty", true);
+			this.statusController.setLabelText("Channel channelName is empty", true);
 			return;
 		}
 		log.info("Try to add message: {}", message);
 		var raidConfiguration = this.tableViewRaidConfiguration.getFocusModel().getFocusedItem();
 		var channelId = raidConfiguration.idProperty().get();
 		var channelName = raidConfiguration.nameProperty().get();
-		var form = CreateRaidConfigurationMessageForm.builder().id(channelId).name(channelName).message(message).build();
-		this.executor.execute(() -> this.createRaidConfigurationMessageService.save(form));
+		var form = CreateRaidConfigurationMessageForm.builder().channelId(channelId).channelName(channelName).message(message).build();
+		this.executor.execute(() -> this.createRaidConfigurationMessageService.process(form));
 	}
 
 	public void onRaidConfigurationUpdatedEvent(RaidConfigurationUpdatedEvent event) {
 		log.info("Configuration updated: {}", event);
-		if (event.hasError()) {
-			this.statusController.setLabelText(ERROR_STR.formatted(event.getError()), true);
-			return;
-		}
 		var raidConfiguration = getRaidConfiguration(event);
 		updateRaidConfigurationMessage(event, raidConfiguration);
 	}
 
 	private RaidConfigurationWrapper getRaidConfiguration(RaidConfigurationUpdatedEvent event) {
-		return this.tableViewRaidConfiguration.getItems().stream().filter((wrapper) -> wrapper.idProperty().get() == event.getRaidConfiguration().id()).findFirst().orElseThrow();
+		return this.tableViewRaidConfiguration.getItems().stream().filter((wrapper) -> wrapper.idProperty().get() == event.getValue().channelId()).findFirst().orElseThrow();
 	}
 
 	private void updateRaidConfigurationMessage(RaidConfigurationUpdatedEvent event, RaidConfigurationWrapper configuration) {
 		configuration.getMessages().clear();
-		event.getRaidConfiguration().messages()
-				.forEach((message) -> {
-					RaidConfigurationMessageWrapper e = new RaidConfigurationMessageWrapper(configuration.idProperty().get(), configuration.nameProperty().get(), message);
-					configuration.getMessages().add(e);
-				});
+		event.getValue().messages().forEach((message) -> {
+			RaidConfigurationMessageWrapper e = new RaidConfigurationMessageWrapper(configuration.idProperty().get(), configuration.nameProperty().get(), message);
+			configuration.getMessages().add(e);
+		});
 		this.tableViewMessage.getItems().clear();
 		this.tableViewMessage.getItems().addAll(configuration.getMessages());
-		this.statusController.setLabelText("Raid configuration users " + event.getRaidConfiguration().name(), false);
+		this.statusController.setLabelText("Raid configuration users " + event.getValue().channelName(), false);
 	}
 
 	public void onChannelDeletedEvent(ChannelDeletedEvent event) {
 		if (event.hasError()) {
 			return;
 		}
-		this.tableViewRaidConfiguration.getItems().removeIf((w) -> w.idProperty().getValue().equals(event.getChannel().id()));
+		this.tableViewRaidConfiguration.getItems().removeIf((w) -> w.idProperty().getValue().equals(event.getValue().id()));
 	}
 
 	public void onChannelCreatedEvent(ChannelCreatedEvent event) {
 		if (event.hasError()) {
 			return;
 		}
-		this.executor.execute(() -> this.findRaidConfigurationService.findByChannelName(event.getChannel().name()));
+		this.executor.execute(() -> this.fetchRaidConfigurationService.process(event.getValue().name()));
 	}
 
 }

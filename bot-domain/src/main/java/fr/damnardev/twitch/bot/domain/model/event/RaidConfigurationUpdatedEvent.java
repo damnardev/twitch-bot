@@ -9,14 +9,16 @@ import lombok.Value;
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
 @Value
-public class RaidConfigurationUpdatedEvent extends Event {
-
-	RaidConfiguration raidConfiguration;
+public class RaidConfigurationUpdatedEvent extends Event<RaidConfiguration> {
 
 	@Builder
-	public RaidConfigurationUpdatedEvent(RaidConfiguration raidConfiguration, String error) {
-		super(error);
-		this.raidConfiguration = raidConfiguration;
+	public RaidConfigurationUpdatedEvent(RaidConfiguration raidConfiguration) {
+		super(raidConfiguration);
+	}
+
+	@Override
+	public boolean hasError() {
+		return false;
 	}
 
 }

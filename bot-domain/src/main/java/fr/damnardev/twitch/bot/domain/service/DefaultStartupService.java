@@ -6,9 +6,9 @@ import fr.damnardev.twitch.bot.domain.port.primary.StartupService;
 import fr.damnardev.twitch.bot.domain.port.secondary.AuthenticationRepository;
 import fr.damnardev.twitch.bot.domain.port.secondary.ChatRepository;
 import fr.damnardev.twitch.bot.domain.port.secondary.EventPublisher;
-import fr.damnardev.twitch.bot.domain.port.secondary.FindChannelRepository;
 import fr.damnardev.twitch.bot.domain.port.secondary.StreamRepository;
-import fr.damnardev.twitch.bot.domain.port.secondary.UpdateChannelRepository;
+import fr.damnardev.twitch.bot.domain.port.secondary.channel.FindChannelRepository;
+import fr.damnardev.twitch.bot.domain.port.secondary.channel.UpdateChannelRepository;
 import lombok.RequiredArgsConstructor;
 
 @DomainService

@@ -2,15 +2,16 @@ package fr.damnardev.twitch.bot.primary.javafx.listener;
 
 import fr.damnardev.twitch.bot.domain.model.event.ChannelCreatedEvent;
 import fr.damnardev.twitch.bot.domain.model.event.ChannelDeletedEvent;
-import fr.damnardev.twitch.bot.domain.model.event.ChannelFindEvent;
+import fr.damnardev.twitch.bot.domain.model.event.ChannelFetchedAllEvent;
 import fr.damnardev.twitch.bot.domain.model.event.ChannelUpdatedEvent;
 import fr.damnardev.twitch.bot.domain.model.event.ErrorEvent;
-import fr.damnardev.twitch.bot.domain.model.event.RaidConfigurationFindAllEvent;
-import fr.damnardev.twitch.bot.domain.model.event.RaidConfigurationFindEvent;
+import fr.damnardev.twitch.bot.domain.model.event.RaidConfigurationFetchedAllEvent;
+import fr.damnardev.twitch.bot.domain.model.event.RaidConfigurationFetchedEvent;
 import fr.damnardev.twitch.bot.domain.model.event.RaidConfigurationUpdatedEvent;
 import fr.damnardev.twitch.bot.primary.javafx.adapter.ApplicationStartedEventListener;
 import fr.damnardev.twitch.bot.primary.javafx.controller.ChannelManagementController;
 import fr.damnardev.twitch.bot.primary.javafx.controller.RaidConfigurationController;
+import fr.damnardev.twitch.bot.primary.javafx.controller.StatusController;
 import javafx.application.Platform;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -29,8 +30,10 @@ public class JavaFXSpringEventListener {
 
 	private final RaidConfigurationController raidConfigurationController;
 
+	private final StatusController statusController;
+
 	@EventListener
-	public void onChannelFindEvent(ChannelFindEvent event) {
+	public void onChannelFindEvent(ChannelFetchedAllEvent event) {
 		Platform.runLater(() -> this.channelManagementController.onChannelFindEvent(event));
 	}
 
@@ -52,12 +55,12 @@ public class JavaFXSpringEventListener {
 	}
 
 	@EventListener
-	public void onRaidConfigurationFindAllEvent(RaidConfigurationFindAllEvent event) {
+	public void onRaidConfigurationFindAllEvent(RaidConfigurationFetchedAllEvent event) {
 		Platform.runLater(() -> this.raidConfigurationController.onRaidConfigurationFindAllEvent(event));
 	}
 
 	@EventListener
-	public void onRaidConfigurationFindEvent(RaidConfigurationFindEvent event) {
+	public void onRaidConfigurationFindEvent(RaidConfigurationFetchedEvent event) {
 		Platform.runLater(() -> this.raidConfigurationController.onRaidConfigurationFindEvent(event));
 	}
 
@@ -68,7 +71,7 @@ public class JavaFXSpringEventListener {
 
 	@EventListener
 	public void onErrorEvent(ErrorEvent event) {
-		Platform.runLater(() -> this.channelManagementController.onErrorEvent(event));
+		Platform.runLater(() -> this.statusController.onErrorEvent(event));
 	}
 
 }

@@ -1,11 +1,11 @@
 package fr.damnardev.twitch.bot.domain.service;
 
 import fr.damnardev.twitch.bot.domain.DomainService;
-import fr.damnardev.twitch.bot.domain.model.event.ChannelRaidEvent;
+import fr.damnardev.twitch.bot.domain.exception.BusinessException;
 import fr.damnardev.twitch.bot.domain.model.form.ChannelMessageEventForm;
 import fr.damnardev.twitch.bot.domain.port.primary.ChannelMessageEventService;
 import fr.damnardev.twitch.bot.domain.port.secondary.EventPublisher;
-import fr.damnardev.twitch.bot.domain.port.secondary.FindChannelRepository;
+import fr.damnardev.twitch.bot.domain.port.secondary.channel.FindChannelRepository;
 import lombok.RequiredArgsConstructor;
 
 @DomainService
@@ -24,10 +24,9 @@ public class DefaultChannelMessageEventService implements ChannelMessageEventSer
 	}
 
 	private void doInternal(ChannelMessageEventForm form) {
-		var optionalChannel = this.findChannelRepository.findByName(form.name());
+		var optionalChannel = this.findChannelRepository.findByName(form.channelName());
 		if (optionalChannel.isEmpty()) {
-			var event = ChannelRaidEvent.builder().error("Channel not found").build();
-			this.eventPublisher.publish(event);
+			throw new BusinessException("Channel not found");
 		}
 	}
 

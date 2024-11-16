@@ -16,7 +16,6 @@ import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
-import static org.mockito.Mockito.doNothing;
 
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.WARN)
@@ -41,7 +40,6 @@ class DefaultShoutoutRepositoryTests {
 		var shoutout = Shoutout.builder().channelId(1L).raiderId(2L).build();
 
 		given(this.credential.getUserId()).willReturn("user");
-		doNothing().when(this.executor).execute(captor.capture());
 
 		// When
 		this.shoutoutRepository.sendShoutout(shoutout);

@@ -19,7 +19,9 @@ public class ChannelMessageEventConsumer extends AbstractChannelEventConsumer<Ch
 	protected ChannelMessageEventForm toModel(ChannelMessageEvent event) {
 		var eventUser = event.getUser();
 		var eventChannel = event.getChannel();
-		return ChannelMessageEventForm.builder().id(Long.parseLong(eventChannel.getId())).name(eventChannel.getName()).sender(eventUser.getName()).message(event.getMessage()).build();
+		var channelId = Long.parseLong(eventChannel.getId());
+		var channelName = eventChannel.getName();
+		return ChannelMessageEventForm.builder().channelId(channelId).channelName(channelName).sender(eventUser.getName()).message(event.getMessage()).build();
 	}
 
 }

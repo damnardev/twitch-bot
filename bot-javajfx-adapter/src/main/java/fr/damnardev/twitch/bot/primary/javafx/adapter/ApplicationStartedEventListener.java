@@ -21,7 +21,7 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 @Service
 @Slf4j
-//@ConditionalOnProperty(name = "javafx.enabled", havingValue = "true")
+//@ConditionalOnProperty(channelName = "javafx.enabled", havingValue = "true")
 public class ApplicationStartedEventListener {
 
 	private final ConfigurableApplicationContext springContext;

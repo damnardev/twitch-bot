@@ -6,9 +6,9 @@ import fr.damnardev.twitch.bot.domain.model.Channel;
 import fr.damnardev.twitch.bot.domain.port.secondary.AuthenticationRepository;
 import fr.damnardev.twitch.bot.domain.port.secondary.ChatRepository;
 import fr.damnardev.twitch.bot.domain.port.secondary.EventPublisher;
-import fr.damnardev.twitch.bot.domain.port.secondary.FindChannelRepository;
 import fr.damnardev.twitch.bot.domain.port.secondary.StreamRepository;
-import fr.damnardev.twitch.bot.domain.port.secondary.UpdateChannelRepository;
+import fr.damnardev.twitch.bot.domain.port.secondary.channel.FindChannelRepository;
+import fr.damnardev.twitch.bot.domain.port.secondary.channel.UpdateChannelRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -18,7 +18,6 @@ import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
 
 import static org.mockito.BDDMockito.any;
-import static org.mockito.BDDMockito.doNothing;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
 import static org.mockito.BDDMockito.verifyNoMoreInteractions;
@@ -51,7 +50,7 @@ class DefaultStartupServiceTests {
 	@Test
 	void run_shouldRenewAuthenticationAndInitializeStreams() {
 		// Given
-		var channel = Channel.builder().id(1L).name("name").enabled(true).online(false).build();
+		var channel = Channel.builder().id(1L).name("channelName").enabled(true).online(false).build();
 		var channels = Collections.singletonList(channel);
 
 		var channelAfterCompute = channel.toBuilder().online(true).build();
@@ -59,12 +58,7 @@ class DefaultStartupServiceTests {
 
 		given(this.authenticationRepository.renew()).willReturn(true);
 		given(this.findChannelRepository.findAllEnabled()).willReturn(channels);
-		doNothing().when(this.chatRepository).joinAll(channels);
-		doNothing().when(this.chatRepository).reconnect();
 		given(this.streamRepository.computeOnline(channels)).willReturn(channelsAfterCompute);
-		doNothing().when(this.updateChannelRepository).updateAll(channelsAfterCompute);
-		doNothing().when(this.eventPublisher).publish(any());
-
 
 		// When
 		this.startupService.run();

@@ -14,7 +14,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
 
-import static org.mockito.BDDMockito.doNothing;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
 import static org.mockito.BDDMockito.verifyNoMoreInteractions;
@@ -35,7 +34,6 @@ class DefaultChatRepositoryTests {
 	@Test
 	void reconnect_shouldInvokeReconnect_whenCalled() {
 		// Given
-		doNothing().when(this.twitchChat).reconnect();
 
 		// When
 		this.chatRepository.reconnect();
@@ -60,8 +58,6 @@ class DefaultChatRepositoryTests {
 		var channel_01 = Channel.builder().id(1L).name("channel_01").enabled(true).build();
 		var channel_02 = Channel.builder().id(2L).name("channel_02").enabled(true).build();
 
-		doNothing().when(this.twitchChat).joinChannel(channel_01.name());
-		doNothing().when(this.twitchChat).joinChannel(channel_02.name());
 		given(this.twitchClientHelper.enableStreamEventListener(channel_01.id().toString(), channel_01.name())).willReturn(false);
 		given(this.twitchClientHelper.enableStreamEventListener(channel_02.id().toString(), channel_02.name())).willReturn(false);
 
@@ -81,7 +77,6 @@ class DefaultChatRepositoryTests {
 		// Given
 		var channel = Channel.builder().id(1L).name("channel").enabled(true).build();
 
-		doNothing().when(this.twitchChat).joinChannel(channel.name());
 		given(this.twitchClientHelper.enableStreamEventListener(channel.id().toString(), channel.name())).willReturn(false);
 
 		// When
@@ -100,7 +95,6 @@ class DefaultChatRepositoryTests {
 		var channel = Channel.builder().id(1L).name("channel").enabled(true).build();
 
 		given(this.twitchChat.leaveChannel(channel.name())).willReturn(false);
-		doNothing().when(this.twitchClientHelper).disableStreamEventListener(channel.name());
 
 		// When
 		this.chatRepository.leave(channel);

@@ -12,7 +12,6 @@ import org.mockito.quality.Strictness;
 
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 
-import static org.mockito.BDDMockito.doNothing;
 import static org.mockito.BDDMockito.then;
 import static org.mockito.BDDMockito.verifyNoMoreInteractions;
 
@@ -33,9 +32,6 @@ class ApplicationStartupListenerTests {
 	void run_shouldInvokeStartupServiceRun_whenCalled() {
 		// Given
 		var captor = ArgumentCaptor.forClass(Runnable.class);
-
-		doNothing().when(this.executor).execute(captor.capture());
-		doNothing().when(this.startupService).run();
 
 		// When
 		this.applicationStartupListener.run(null);

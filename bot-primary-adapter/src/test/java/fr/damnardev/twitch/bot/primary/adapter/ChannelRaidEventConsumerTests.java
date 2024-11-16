@@ -24,7 +24,6 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.mock;
 import static org.mockito.BDDMockito.then;
 import static org.mockito.BDDMockito.verifyNoMoreInteractions;
-import static org.mockito.Mockito.doNothing;
 
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.WARN)
@@ -68,14 +67,12 @@ class ChannelRaidEventConsumerTests {
 		var captor = ArgumentCaptor.forClass(Runnable.class);
 		var event = mock(ChannelRaidEvent.class);
 		var channel = mock(EventChannel.class);
-		var model = ChannelRaidEventForm.builder().id(2L).name("channel").raiderId(1L).raiderName("raider").build();
+		var model = ChannelRaidEventForm.builder().channelId(2L).channelName("channel").raiderId(1L).raiderName("raider").build();
 
-		doNothing().when(this.executor).execute(captor.capture());
 		given(event.getFromBroadcasterUserLogin()).willReturn("raider");
 		given(event.getFromBroadcasterUserId()).willReturn("1");
 		given(event.getToBroadcasterUserLogin()).willReturn("channel");
 		given(event.getToBroadcasterUserId()).willReturn("2");
-		doNothing().when(this.handler).process(model);
 
 		// When
 		this.consumer.process(event);
