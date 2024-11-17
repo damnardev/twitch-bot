@@ -35,10 +35,18 @@
 			**/property/*Properties.java,
 		</sonar.coverage.exclusions>
 
+		<spring-boot-dependencies.version>3.3.5</spring-boot-dependencies.version>
+		<twitch4j.version>1.23.0</twitch4j.version>
+		<javafx-controls.version>22.0.2</javafx-controls.version>
+		<jacoco.version>0.8.12</jacoco.version>
+		<liquibase-maven-plugin.version>4.30.0</liquibase-maven-plugin.version>
+		<maven-checkstyle-plugin.version>3.1.1</maven-checkstyle-plugin.version>
+		<checkstyle.version>9.3</checkstyle.version>
+		<spring-javaformat-checkstyle.version>0.0.43</spring-javaformat-checkstyle.version>
+
 		<sonar.language>java</sonar.language>
 		<sonar.projectName>Twitch Bot</sonar.projectName>
 		<aggregate.report.dir>bot-tests/target/site/jacoco-aggregate/jacoco.xml</aggregate.report.dir>
-		<jacoco.version>0.8.12</jacoco.version>
 	</properties>
 
 	<dependencyManagement>
@@ -46,7 +54,7 @@
 			<dependency>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-dependencies</artifactId>
-				<version>3.3.1</version>
+				<version>${spring-boot-dependencies.version}</version>
 				<type>pom</type>
 				<scope>import</scope>
 			</dependency>
@@ -54,18 +62,18 @@
 			<dependency>
 				<groupId>com.github.twitch4j</groupId>
 				<artifactId>twitch4j</artifactId>
-				<version>1.22.0</version>
+				<version>${twitch4j.version}</version>
 			</dependency>
 
 			<dependency>
 				<groupId>org.openjfx</groupId>
 				<artifactId>javafx-controls</artifactId>
-				<version>22.0.1</version>
+				<version>${javafx-controls.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>org.openjfx</groupId>
 				<artifactId>javafx-fxml</artifactId>
-				<version>22.0.1</version>
+				<version>${javafx-controls.version}</version>
 			</dependency>
 
 			<dependency>
@@ -102,7 +110,7 @@
 				<plugin>
 					<groupId>org.liquibase</groupId>
 					<artifactId>liquibase-maven-plugin</artifactId>
-					<version>4.27.0</version>
+					<version>${liquibase-maven-plugin.version}</version>
 				</plugin>
 			</plugins>
 		</pluginManagement>
@@ -111,17 +119,17 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-checkstyle-plugin</artifactId>
-				<version>3.1.1</version>
+				<version>${maven-checkstyle-plugin.version}</version>
 				<dependencies>
 					<dependency>
 						<groupId>com.puppycrawl.tools</groupId>
 						<artifactId>checkstyle</artifactId>
-						<version>9.3</version>
+						<version>${checkstyle.version}</version>
 					</dependency>
 					<dependency>
 						<groupId>io.spring.javaformat</groupId>
 						<artifactId>spring-javaformat-checkstyle</artifactId>
-						<version>0.0.43</version>
+						<version>${spring-javaformat-checkstyle.version}</version>
 					</dependency>
 				</dependencies>
 				<executions>
