@@ -6,19 +6,19 @@
 	<property name="WARN_LOG" value="logs/warn.log"/>
 	<property name="WARN_LOG_HISTORY" value="logs/warn.%d{yyyy-MM-dd}.%i.log"/>
 
-	<appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+	<appender class="ch.qos.logback.core.ConsoleAppender" name="CONSOLE">
 		<encoder>
 			<pattern>%d{ISO8601} | %-20thread{20} | %highlight(%-5level) | %-70logger{70} | %msg%n%throwable</pattern>
 		</encoder>
 	</appender>
 
-	<appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+	<appender class="ch.qos.logback.core.rolling.RollingFileAppender" name="FILE">
 		<file>${HOME_LOG}</file>
 		<append>true</append>
 		<immediateFlush>true</immediateFlush>
 		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
 			<fileNamePattern>${HOME_LOG_HISTORY}</fileNamePattern>
-			<timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+			<timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFileNamingAndTriggeringPolicy">
 				<maxFileSize>1MB</maxFileSize>
 			</timeBasedFileNamingAndTriggeringPolicy>
 			<maxHistory>30</maxHistory>
@@ -28,13 +28,13 @@
 		</encoder>
 	</appender>
 
-	<appender name="FILE_WARN" class="ch.qos.logback.core.rolling.RollingFileAppender">
+	<appender class="ch.qos.logback.core.rolling.RollingFileAppender" name="FILE_WARN">
 		<file>${WARN_LOG}</file>
 		<append>true</append>
 		<immediateFlush>true</immediateFlush>
 		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
 			<fileNamePattern>${WARN_LOG_HISTORY}</fileNamePattern>
-			<timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+			<timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFileNamingAndTriggeringPolicy">
 				<maxFileSize>1MB</maxFileSize>
 			</timeBasedFileNamingAndTriggeringPolicy>
 			<maxHistory>30</maxHistory>
