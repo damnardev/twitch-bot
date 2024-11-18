@@ -8,10 +8,12 @@ import fr.damnardev.twitch.bot.domain.model.event.RaidConfigurationFetchedEvent;
 import fr.damnardev.twitch.bot.domain.model.event.RaidConfigurationUpdatedEvent;
 import fr.damnardev.twitch.bot.domain.model.form.CreateRaidConfigurationMessageForm;
 import fr.damnardev.twitch.bot.domain.model.form.DeleteRaidConfigurationMessageForm;
+import fr.damnardev.twitch.bot.domain.model.form.UpdateRaidConfigurationForm;
 import fr.damnardev.twitch.bot.domain.port.primary.raid.CreateRaidConfigurationMessageService;
 import fr.damnardev.twitch.bot.domain.port.primary.raid.DeleteRaidConfigurationMessageService;
 import fr.damnardev.twitch.bot.domain.port.primary.raid.FetchAllRaidConfigurationService;
 import fr.damnardev.twitch.bot.domain.port.primary.raid.FetchRaidConfigurationService;
+import fr.damnardev.twitch.bot.domain.port.primary.raid.UpdateRaidConfigurationService;
 import fr.damnardev.twitch.bot.primary.javafx.adapter.ApplicationStartedEventListener;
 import fr.damnardev.twitch.bot.primary.javafx.wrapper.RaidConfigurationMessageWrapper;
 import fr.damnardev.twitch.bot.primary.javafx.wrapper.RaidConfigurationWrapper;
@@ -46,6 +48,8 @@ public class RaidConfigurationController {
 	private final CreateRaidConfigurationMessageService createRaidConfigurationMessageService;
 
 	private final DeleteRaidConfigurationMessageService deleteRaidConfigurationMessageService;
+
+	private final UpdateRaidConfigurationService updateRaidConfigurationService;
 
 	@FXML
 	public TableView<RaidConfigurationWrapper> tableViewRaidConfiguration;
@@ -155,8 +159,14 @@ public class RaidConfigurationController {
 		this.tableViewRaidConfiguration.sort();
 	}
 
-	private RaidConfigurationWrapper buildWrapper(RaidConfiguration configuration) {
-		return new RaidConfigurationWrapper(configuration);
+	private RaidConfigurationWrapper buildWrapper(RaidConfiguration raidConfiguration) {
+		var raidConfigurationWrapper = new RaidConfigurationWrapper(raidConfiguration);
+		raidConfigurationWrapper.wizebotShoutoutEnabledProperty().addListener((observable, oldValue, newValue) -> {
+			var form = UpdateRaidConfigurationForm.builder().channelId(raidConfiguration.channelId())
+					.channelName(raidConfiguration.channelName()).wizebotShoutoutEnabled(newValue).build();
+			this.updateRaidConfigurationService.process(form);
+		});
+		return raidConfigurationWrapper;
 	}
 
 	public void onButtonAdd() {
