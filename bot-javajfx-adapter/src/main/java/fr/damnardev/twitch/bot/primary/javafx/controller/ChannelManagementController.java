@@ -16,12 +16,15 @@ import fr.damnardev.twitch.bot.primary.javafx.adapter.ApplicationStartedEventLis
 import fr.damnardev.twitch.bot.primary.javafx.wrapper.ChannelWrapper;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.CheckBoxTableCell;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -78,8 +81,6 @@ public class ChannelManagementController {
 
 	private void setupTableView() {
 		this.tableView.getSortOrder().add(this.columnId);
-		this.tableView.sort();
-		this.tableView.setSelectionModel(null);
 		//TODO: move into separate class
 		this.tableView.setRowFactory((table) -> new TableRow<>() {
 			@Override
@@ -114,10 +115,24 @@ public class ChannelManagementController {
 		this.columnId.setCellValueFactory((cell) -> cell.getValue().idProperty());
 		this.columnName.setCellValueFactory((cell) -> cell.getValue().nameProperty());
 		this.columnEnabled.setCellValueFactory((cell) -> cell.getValue().enabledProperty());
-		this.columnEnabled.setCellFactory(CheckBoxTableCell.forTableColumn(this.columnEnabled));
+		this.columnEnabled.setCellFactory(this::checkBoxTableCell);
 		this.columnOnline.setCellValueFactory((cell) -> cell.getValue().onlineProperty());
-		this.columnOnline.setCellFactory(CheckBoxTableCell.forTableColumn(this.columnEnabled));
+		this.columnOnline.setCellFactory(this::checkBoxTableCell);
 		this.columnDeleted.setCellFactory(this::deletedCellFactory);
+	}
+
+	private CheckBoxTableCell<ChannelWrapper, Boolean> checkBoxTableCell(TableColumn<ChannelWrapper, Boolean> column) {
+		return new CheckBoxTableCell<>() {
+
+			@Override
+			public void updateItem(Boolean item, boolean b) {
+				super.updateItem(item, b);
+
+				if (!b && getGraphic() instanceof CheckBox checkBox) {
+					checkBox.setFocusTraversable(false);
+				}
+			}
+		};
 	}
 
 	//TODO: move to separate class
@@ -143,6 +158,7 @@ public class ChannelManagementController {
 					}));
 					this.button.setMaxWidth(Double.MAX_VALUE);
 					this.button.setMaxHeight(Double.MAX_VALUE);
+					this.button.setFocusTraversable(false);
 					setGraphic(this.button);
 				}
 			}
@@ -151,6 +167,27 @@ public class ChannelManagementController {
 
 	private void refresh() {
 		this.executor.execute(this.fetchAllChannelService::process);
+	}
+
+	public void onEnter() {
+		this.onButtonAdd();
+	}
+
+	public void onKeyPressed(KeyEvent keyEvent) {
+		if (keyEvent.getCode().equals(KeyCode.DELETE)) {
+			var selectedItem = this.tableView.getSelectionModel().getSelectedItem();
+			if (selectedItem != null) {
+				log.info("Try to delete channel: {}", selectedItem);
+				var form = DeleteChannelForm.builder().id(selectedItem.idProperty().getValue()).name(selectedItem.nameProperty().getValue()).build();
+				this.executor.execute(() -> this.deleteChannelService.process(form));
+			}
+		}
+		else if (keyEvent.getCode().equals(KeyCode.E)) {
+			var selectedItem = this.tableView.getSelectionModel().getSelectedItem();
+			if (selectedItem != null) {
+				selectedItem.enabledProperty().set(!selectedItem.enabledProperty().get());
+			}
+		}
 	}
 
 	public void onButtonAdd() {
@@ -185,6 +222,7 @@ public class ChannelManagementController {
 		log.info("Channel created: {}", event.getValue());
 		this.tableView.getItems().add(buildWrapper(event.getValue()));
 		this.tableView.sort();
+		this.tableView.refresh();
 		this.statusController.setLabelText("Channel created: " + event.getValue(), false);
 	}
 
@@ -199,6 +237,8 @@ public class ChannelManagementController {
 	public void onChannelDeletedEvent(ChannelDeletedEvent event) {
 		log.info("Channel deleted: {}", event.getValue());
 		this.tableView.getItems().removeIf((w) -> w.idProperty().getValue().equals(event.getValue().id()));
+		this.tableView.sort();
+		this.tableView.refresh();
 		this.statusController.setLabelText("Channel deleted: " + event.getValue(), false);
 	}
 
