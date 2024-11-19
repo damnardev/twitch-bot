@@ -57,3 +57,11 @@
     -fx-background-color: white;
     -fx-border-color: #d3d3d3;
 }
+
+.table-row-cell.ChannelEnabled {
+    -fx-background-color: lightcoral;
+}
+
+.table-row-cell.ChannelOnline {
+    -fx-background-color: lightgreen;
+}
