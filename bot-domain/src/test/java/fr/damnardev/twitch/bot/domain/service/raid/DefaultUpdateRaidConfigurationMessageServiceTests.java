@@ -121,7 +121,61 @@ class DefaultUpdateRaidConfigurationMessageServiceTests {
 		var channel = Channel.builder().name(channelName).build();
 
 		var raidConfiguration = RaidConfiguration.builder().wizebotShoutoutEnabled(value).build();
-		var updatedRaidConfiguration = RaidConfiguration.builder().wizebotShoutoutEnabled(value).wizebotShoutoutEnabled(expectedValue).build();
+		var updatedRaidConfiguration = RaidConfiguration.builder().wizebotShoutoutEnabled(expectedValue).build();
+		var event = RaidConfigurationUpdatedEvent.builder().raidConfiguration(updatedRaidConfiguration).build();
+
+		given(this.findChannelRepository.findByName(channelName)).willReturn(Optional.of(channel));
+		given(this.findRaidConfigurationRepository.findByChannelName(channelName)).willReturn(Optional.of(raidConfiguration));
+
+		// When
+		this.updateRaidConfigurationMessageService.process(form);
+
+		// Then
+		then(this.tryService).should().doTry(any(), eq(form));
+		then(this.findChannelRepository).should().findByName(channelName);
+		then(this.findRaidConfigurationRepository).should().findByChannelName(channelName);
+		then(this.updateRaidConfigurationRepository).should().update(updatedRaidConfiguration);
+		then(this.eventPublisher).should().publish(event);
+		verifyNoMoreInteractions(this.tryService, this.findChannelRepository, this.findRaidConfigurationRepository, this.updateRaidConfigurationRepository, this.eventPublisher);
+	}
+
+	@ParameterizedTest
+	@MethodSource("provideBoolean")
+	void process_shouldUpdateAndPublishEvent_whenRaidConfigurationFoundAndTwitchShoutoutUpdated(Boolean value, Boolean newValue, Boolean expectedValue) {
+		// Given
+		var channelName = "channelName";
+		var form = UpdateRaidConfigurationForm.builder().channelName(channelName).twitchShoutoutEnabled(newValue).build();
+		var channel = Channel.builder().name(channelName).build();
+
+		var raidConfiguration = RaidConfiguration.builder().twitchShoutoutEnabled(value).build();
+		var updatedRaidConfiguration = RaidConfiguration.builder().twitchShoutoutEnabled(expectedValue).build();
+		var event = RaidConfigurationUpdatedEvent.builder().raidConfiguration(updatedRaidConfiguration).build();
+
+		given(this.findChannelRepository.findByName(channelName)).willReturn(Optional.of(channel));
+		given(this.findRaidConfigurationRepository.findByChannelName(channelName)).willReturn(Optional.of(raidConfiguration));
+
+		// When
+		this.updateRaidConfigurationMessageService.process(form);
+
+		// Then
+		then(this.tryService).should().doTry(any(), eq(form));
+		then(this.findChannelRepository).should().findByName(channelName);
+		then(this.findRaidConfigurationRepository).should().findByChannelName(channelName);
+		then(this.updateRaidConfigurationRepository).should().update(updatedRaidConfiguration);
+		then(this.eventPublisher).should().publish(event);
+		verifyNoMoreInteractions(this.tryService, this.findChannelRepository, this.findRaidConfigurationRepository, this.updateRaidConfigurationRepository, this.eventPublisher);
+	}
+
+	@ParameterizedTest
+	@MethodSource("provideBoolean")
+	void process_shouldUpdateAndPublishEvent_whenRaidConfigurationFoundAndRaidMessageUpdated(Boolean value, Boolean newValue, Boolean expectedValue) {
+		// Given
+		var channelName = "channelName";
+		var form = UpdateRaidConfigurationForm.builder().channelName(channelName).raidMessageEnabled(newValue).build();
+		var channel = Channel.builder().name(channelName).build();
+
+		var raidConfiguration = RaidConfiguration.builder().raidMessageEnabled(value).build();
+		var updatedRaidConfiguration = RaidConfiguration.builder().raidMessageEnabled(expectedValue).build();
 		var event = RaidConfigurationUpdatedEvent.builder().raidConfiguration(updatedRaidConfiguration).build();
 
 		given(this.findChannelRepository.findByName(channelName)).willReturn(Optional.of(channel));

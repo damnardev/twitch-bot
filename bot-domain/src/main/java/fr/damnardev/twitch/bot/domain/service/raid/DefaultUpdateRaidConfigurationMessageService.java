@@ -36,6 +36,12 @@ public class DefaultUpdateRaidConfigurationMessageService extends AbstractRaidCo
 		if (form.wizebotShoutoutEnabled() != null) {
 			raidConfiguration = raidConfiguration.toBuilder().wizebotShoutoutEnabled(form.wizebotShoutoutEnabled()).build();
 		}
+		if (form.twitchShoutoutEnabled() != null) {
+			raidConfiguration = raidConfiguration.toBuilder().twitchShoutoutEnabled(form.twitchShoutoutEnabled()).build();
+		}
+		if (form.raidMessageEnabled() != null) {
+			raidConfiguration = raidConfiguration.toBuilder().raidMessageEnabled(form.raidMessageEnabled()).build();
+		}
 		this.updateRaidConfigurationRepository.update(raidConfiguration);
 		var event = RaidConfigurationUpdatedEvent.builder().raidConfiguration(raidConfiguration).build();
 		this.eventPublisher.publish(event);
