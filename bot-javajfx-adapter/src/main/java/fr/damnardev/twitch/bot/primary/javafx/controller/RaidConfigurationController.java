@@ -166,6 +166,16 @@ public class RaidConfigurationController {
 					.channelName(raidConfiguration.channelName()).wizebotShoutoutEnabled(newValue).build();
 			this.updateRaidConfigurationService.process(form);
 		});
+		raidConfigurationWrapper.twitchShoutoutEnabledProperty().addListener((observable, oldValue, newValue) -> {
+			var form = UpdateRaidConfigurationForm.builder().channelId(raidConfiguration.channelId())
+					.channelName(raidConfiguration.channelName()).twitchShoutoutEnabled(newValue).build();
+			this.updateRaidConfigurationService.process(form);
+		});
+		raidConfigurationWrapper.raidMessageEnabledProperty().addListener((observable, oldValue, newValue) -> {
+			var form = UpdateRaidConfigurationForm.builder().channelId(raidConfiguration.channelId())
+					.channelName(raidConfiguration.channelName()).raidMessageEnabled(newValue).build();
+			this.updateRaidConfigurationService.process(form);
+		});
 		return raidConfigurationWrapper;
 	}
 
