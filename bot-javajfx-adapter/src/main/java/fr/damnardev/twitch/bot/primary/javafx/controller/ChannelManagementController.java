@@ -144,7 +144,7 @@ public class ChannelManagementController {
 	private void onButtonDelete(ChannelWrapper channel) {
 		log.info("Try to delete channel: {}", channel);
 		var form = DeleteChannelForm.builder().id(channel.idProperty().getValue()).name(channel.nameProperty().getValue()).build();
-		ChannelManagementController.this.executor.execute(() -> ChannelManagementController.this.deleteChannelService.process(form));
+		this.executor.execute(() -> ChannelManagementController.this.deleteChannelService.process(form));
 	}
 
 	public void onChannelFindEvent(ChannelFetchedAllEvent event) {

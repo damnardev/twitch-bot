@@ -15,15 +15,17 @@ import fr.damnardev.twitch.bot.domain.port.primary.raid.FetchAllRaidConfiguratio
 import fr.damnardev.twitch.bot.domain.port.primary.raid.FetchRaidConfigurationService;
 import fr.damnardev.twitch.bot.domain.port.primary.raid.UpdateRaidConfigurationService;
 import fr.damnardev.twitch.bot.primary.javafx.adapter.ApplicationStartedEventListener;
+import fr.damnardev.twitch.bot.primary.javafx.control.UnfocusableButtonTableCell;
+import fr.damnardev.twitch.bot.primary.javafx.control.UnfocusableCheckBoxTableCell;
 import fr.damnardev.twitch.bot.primary.javafx.wrapper.RaidConfigurationMessageWrapper;
 import fr.damnardev.twitch.bot.primary.javafx.wrapper.RaidConfigurationWrapper;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
-import javafx.scene.control.cell.CheckBoxTableCell;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -103,60 +105,24 @@ public class RaidConfigurationController {
 		this.columnId.setCellValueFactory((cell) -> cell.getValue().idProperty());
 		this.columnName.setCellValueFactory((cell) -> cell.getValue().nameProperty());
 		this.columnTwitchShoutoutEnabled.setCellValueFactory((cell) -> cell.getValue().twitchShoutoutEnabledProperty());
-		this.columnTwitchShoutoutEnabled.setCellFactory(CheckBoxTableCell.forTableColumn(this.columnTwitchShoutoutEnabled));
+		this.columnTwitchShoutoutEnabled.setCellFactory((_) -> new UnfocusableCheckBoxTableCell<>());
 		this.columnWizebotShoutoutEnabled.setCellValueFactory((cell) -> cell.getValue().wizebotShoutoutEnabledProperty());
-		this.columnWizebotShoutoutEnabled.setCellFactory(CheckBoxTableCell.forTableColumn(this.columnWizebotShoutoutEnabled));
+		this.columnWizebotShoutoutEnabled.setCellFactory((_) -> new UnfocusableCheckBoxTableCell<>());
 		this.columnRaidMessageEnabled.setCellValueFactory((cell) -> cell.getValue().raidMessageEnabledProperty());
-		this.columnRaidMessageEnabled.setCellFactory(CheckBoxTableCell.forTableColumn(this.columnRaidMessageEnabled));
+		this.columnRaidMessageEnabled.setCellFactory((_) -> new UnfocusableCheckBoxTableCell<>());
 		this.columnMessage.setCellValueFactory((cell) -> cell.getValue().messageProperty());
-		this.columnDeleted.setCellFactory(this::deletedCellFactory);
-	}
-
-	@SuppressWarnings("java:S110")
-	private TableCell<RaidConfigurationMessageWrapper, String> deletedCellFactory(TableColumn<RaidConfigurationMessageWrapper, String> column) {
-		return new TableCell<>() {
-
-			final Button button = new Button("Delete");
-
-			@Override
-			protected void updateItem(String item, boolean empty) {
-				super.updateItem(item, empty);
-				if (empty) {
-					setText(null);
-					setGraphic(null);
-				}
-				else {
-					var configuration = getTableView().getItems().get(getIndex());
-					this.button.setOnMouseClicked((event) -> RaidConfigurationController.this.executor.execute(() -> {
-						log.info("Try to delete message: {}", configuration);
-						var form = DeleteRaidConfigurationMessageForm.builder().channelId(configuration.idProperty().get()).channelName(configuration.nameProperty().get()).message(configuration.messageProperty().get()).build();
-						RaidConfigurationController.this.deleteRaidConfigurationMessageService.process(form);
-					}));
-					this.button.setMaxWidth(Double.MAX_VALUE);
-					this.button.setMaxHeight(Double.MAX_VALUE);
-					setGraphic(this.button);
-				}
-			}
-		};
+		this.columnDeleted.setCellFactory((_) -> new UnfocusableButtonTableCell<>(this::onButtonDelete));
 	}
 
 	private void refresh() {
 		this.executor.execute(this.fetchAllRaidConfigurationService::process);
 	}
 
-	public void onRaidConfigurationFindAllEvent(RaidConfigurationFetchedAllEvent event) {
-		log.info("Configurations found: {}", event);
-		var wrappers = event.getValue().stream().map(this::buildWrapper).toList();
-		this.tableViewRaidConfiguration.getItems().clear();
-		this.tableViewRaidConfiguration.getItems().addAll(wrappers);
+	private void sort() {
 		this.tableViewRaidConfiguration.sort();
-	}
-
-	public void onRaidConfigurationFindEvent(RaidConfigurationFetchedEvent event) {
-		log.info("Configuration found: {}", event);
-		var wrapper = buildWrapper(event.getValue());
-		this.tableViewRaidConfiguration.getItems().add(wrapper);
-		this.tableViewRaidConfiguration.sort();
+		this.tableViewRaidConfiguration.refresh();
+		this.tableViewMessage.sort();
+		this.tableViewMessage.refresh();
 	}
 
 	private RaidConfigurationWrapper buildWrapper(RaidConfiguration raidConfiguration) {
@@ -179,6 +145,10 @@ public class RaidConfigurationController {
 		return raidConfigurationWrapper;
 	}
 
+	public void onEnterKeyPressed(ActionEvent actionEvent) {
+		onButtonAdd();
+	}
+
 	public void onButtonAdd() {
 		var message = this.textFieldMessage.getText();
 		if (message.isBlank()) {
@@ -191,6 +161,52 @@ public class RaidConfigurationController {
 		var channelName = raidConfiguration.nameProperty().get();
 		var form = CreateRaidConfigurationMessageForm.builder().channelId(channelId).channelName(channelName).message(message).build();
 		this.executor.execute(() -> this.createRaidConfigurationMessageService.process(form));
+	}
+
+	public void onKeyPressed(KeyEvent keyEvent) {
+		if (keyEvent.getCode().equals(KeyCode.DELETE) && this.tableViewMessage.isFocused()) {
+			var selectedItem = this.tableViewMessage.getSelectionModel().getSelectedItem();
+			if (selectedItem != null) {
+				onButtonDelete(selectedItem);
+			}
+		}
+		if (this.tableViewRaidConfiguration.isFocused()) {
+			var selectedItem = this.tableViewRaidConfiguration.getSelectionModel().getSelectedItem();
+			if (selectedItem != null) {
+				if (keyEvent.getCode().equals(KeyCode.E)) {
+					selectedItem.wizebotShoutoutEnabledProperty().set(!selectedItem.wizebotShoutoutEnabledProperty().get());
+				}
+				if (keyEvent.getCode().equals(KeyCode.T)) {
+					selectedItem.twitchShoutoutEnabledProperty().set(!selectedItem.twitchShoutoutEnabledProperty().get());
+				}
+				if (keyEvent.getCode().equals(KeyCode.R)) {
+					selectedItem.raidMessageEnabledProperty().set(!selectedItem.raidMessageEnabledProperty().get());
+				}
+			}
+		}
+	}
+
+	private void onButtonDelete(RaidConfigurationMessageWrapper message) {
+		log.info("Try to delete message: {}", message);
+		var form = DeleteRaidConfigurationMessageForm.builder().channelId(message.idProperty().get())
+				.channelName(message.nameProperty().get())
+				.message(message.messageProperty().get()).build();
+		this.executor.execute(() -> RaidConfigurationController.this.deleteRaidConfigurationMessageService.process(form));
+	}
+
+	public void onRaidConfigurationFindAllEvent(RaidConfigurationFetchedAllEvent event) {
+		log.info("Configurations found: {}", event);
+		var wrappers = event.getValue().stream().map(this::buildWrapper).toList();
+		this.tableViewRaidConfiguration.getItems().clear();
+		this.tableViewRaidConfiguration.getItems().addAll(wrappers);
+		sort();
+	}
+
+	public void onRaidConfigurationFindEvent(RaidConfigurationFetchedEvent event) {
+		log.info("Configuration found: {}", event);
+		var wrapper = buildWrapper(event.getValue());
+		this.tableViewRaidConfiguration.getItems().add(wrapper);
+		sort();
 	}
 
 	public void onRaidConfigurationUpdatedEvent(RaidConfigurationUpdatedEvent event) {
@@ -214,18 +230,12 @@ public class RaidConfigurationController {
 		this.statusController.setLabelText("Raid configuration users " + event.getValue().channelName(), false);
 	}
 
-	public void onChannelDeletedEvent(ChannelDeletedEvent event) {
-		if (event.hasError()) {
-			return;
-		}
-		this.tableViewRaidConfiguration.getItems().removeIf((w) -> w.idProperty().getValue().equals(event.getValue().id()));
+	public void onChannelCreatedEvent(ChannelCreatedEvent event) {
+		this.executor.execute(() -> this.fetchRaidConfigurationService.process(event.getValue().name()));
 	}
 
-	public void onChannelCreatedEvent(ChannelCreatedEvent event) {
-		if (event.hasError()) {
-			return;
-		}
-		this.executor.execute(() -> this.fetchRaidConfigurationService.process(event.getValue().name()));
+	public void onChannelDeletedEvent(ChannelDeletedEvent event) {
+		this.tableViewRaidConfiguration.getItems().removeIf((w) -> w.idProperty().getValue().equals(event.getValue().id()));
 	}
 
 }

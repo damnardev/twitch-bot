@@ -30,9 +30,6 @@ public class ChannelWrapperTableRow extends TableRow<ChannelWrapper> {
 		else if (item.enabledProperty().get() && item.onlineProperty().get()) {
 			getStyleClass().add(ONLINE_STYLE);
 		}
-		else {
-			setStyle("");
-		}
 	}
 
 }
