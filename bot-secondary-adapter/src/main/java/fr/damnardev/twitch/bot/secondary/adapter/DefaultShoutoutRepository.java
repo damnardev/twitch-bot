@@ -24,7 +24,7 @@ public class DefaultShoutoutRepository implements ShoutoutRepository {
 	@Override
 	public void sendShoutout(Shoutout shoutout) {
 		log.info("Sending shoutout {}", shoutout);
-		this.executor.execute(() -> this.twitchHelix.sendShoutout(null, shoutout.channelId().toString(), shoutout.raiderId().toString(), this.credential.getUserId()));
+		this.executor.execute(() -> this.twitchHelix.sendShoutout(null, shoutout.channelId().toString(), shoutout.raiderId().toString(), this.credential.getUserId()).execute());
 	}
 
 }
