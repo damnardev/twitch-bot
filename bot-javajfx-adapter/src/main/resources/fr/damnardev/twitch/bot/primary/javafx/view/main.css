@@ -65,3 +65,7 @@
 .table-row-cell.ChannelOnline {
     -fx-background-color: lightgreen;
 }
+
+.label.Error {
+    -fx-text-fill: red;
+}
