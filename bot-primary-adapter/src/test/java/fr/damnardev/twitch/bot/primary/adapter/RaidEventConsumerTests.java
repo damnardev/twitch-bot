@@ -3,7 +3,9 @@ package fr.damnardev.twitch.bot.primary.adapter;
 import com.github.philippheuer.events4j.core.EventManager;
 import com.github.philippheuer.events4j.simple.SimpleEventHandler;
 import com.github.twitch4j.TwitchClient;
+import com.github.twitch4j.chat.events.channel.RaidEvent;
 import com.github.twitch4j.common.events.domain.EventChannel;
+import com.github.twitch4j.common.events.domain.EventUser;
 import com.github.twitch4j.eventsub.events.ChannelRaidEvent;
 import fr.damnardev.twitch.bot.domain.model.form.ChannelRaidEventForm;
 import fr.damnardev.twitch.bot.domain.port.primary.ChannelRaidEventService;
@@ -24,13 +26,14 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.mock;
 import static org.mockito.BDDMockito.then;
 import static org.mockito.BDDMockito.verifyNoMoreInteractions;
+import static org.mockito.Mockito.times;
 
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.WARN)
-class ChannelRaidEventConsumerTests {
+class RaidEventConsumerTests {
 
 	@InjectMocks
-	private ChannelRaidEventConsumer consumer;
+	private RaidEventConsumer consumer;
 
 	@Mock
 	private ThreadPoolTaskExecutor executor;
@@ -57,7 +60,7 @@ class ChannelRaidEventConsumerTests {
 		// Then
 		then(this.twitchClient).should().getEventManager();
 		then(eventManager).should().getEventHandler(SimpleEventHandler.class);
-		then(eventHandler).should().onEvent(eq(ChannelRaidEvent.class), any());
+		then(eventHandler).should().onEvent(eq(RaidEvent.class), any());
 		verifyNoMoreInteractions(this.executor, this.twitchClient, this.handler, eventManager, eventHandler);
 	}
 
@@ -65,14 +68,12 @@ class ChannelRaidEventConsumerTests {
 	void process_shouldExecuteHandler_whenCalled() {
 		// Given
 		var captor = ArgumentCaptor.forClass(Runnable.class);
-		var event = mock(ChannelRaidEvent.class);
+		var event = mock(RaidEvent.class);
 		var channel = mock(EventChannel.class);
 		var model = ChannelRaidEventForm.builder().channelId(2L).channelName("channel").raiderId(1L).raiderName("raider").build();
 
-		given(event.getFromBroadcasterUserLogin()).willReturn("raider");
-		given(event.getFromBroadcasterUserId()).willReturn("1");
-		given(event.getToBroadcasterUserLogin()).willReturn("channel");
-		given(event.getToBroadcasterUserId()).willReturn("2");
+		given(event.getChannel()).willReturn(new EventChannel("2", "channel"));
+		given(event.getRaider()).willReturn(new EventUser("1", "raider"));
 
 		// When
 		this.consumer.process(event);
@@ -80,10 +81,8 @@ class ChannelRaidEventConsumerTests {
 		// Then
 		then(this.executor).should().execute(captor.capture());
 		captor.getValue().run();
-		then(event).should().getFromBroadcasterUserLogin();
-		then(event).should().getFromBroadcasterUserId();
-		then(event).should().getToBroadcasterUserId();
-		then(event).should().getToBroadcasterUserLogin();
+		then(event).should(times(2)).getChannel();
+		then(event).should(times(2)).getRaider();
 		then(this.handler).should().process(model);
 		verifyNoMoreInteractions(this.executor, this.twitchClient, this.handler, event, channel);
 	}
