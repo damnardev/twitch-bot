@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<HBox fx:controller="fr.damnardev.twitch.bot.primary.javafx.controller.LogManagementController" maxHeight="Infinity" maxWidth="Infinity" prefHeight="500" prefWidth="600" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1">
+
+	<TableView HBox.hgrow="ALWAYS" editable="true" fx:id="tableView" maxWidth="Infinity">
+		<columns>
+			<TableColumn editable="false" fx:id="columnTime" maxWidth="Infinity" minWidth="200" styleClass="cell-name" text="Timestamp" />
+			<TableColumn editable="false" fx:id="columnThread" maxWidth="Infinity" minWidth="200" styleClass="cell-name" text="Thread" />
+			<TableColumn editable="false" fx:id="columnLevel" maxWidth="Infinity" minWidth="100" styleClass="cell-level" text="Level" />
+			<TableColumn editable="false" fx:id="columnLogger" maxWidth="Infinity" minWidth="300" styleClass="cell-name" text="Logger" />
+			<TableColumn editable="false" fx:id="columnMessage" maxWidth="Infinity" minWidth="900" styleClass="cell-name" text="Message" />
+		</columns>
+	</TableView>
+
+	<VBox maxWidth="300" minWidth="300" styleClass="app-padding, app-spacing">
+		<Label contentDisplay="CENTER" text="Filter" />
+		<TextField HBox.hgrow="ALWAYS" fx:id="textFieldFilter"  onKeyPressed="#onKeyPressed" styleClass="default-height" />
+      <Separator prefWidth="200.0" />
+		<Button alignment="CENTER" fx:id="buttonAction" maxWidth="150" minWidth="150" onAction="#onButtonAction" styleClass="default-height" text="Action" />
+		<Button alignment="CENTER" maxWidth="150" minWidth="150" onAction="#onButtonClear" styleClass="default-height" text="Clear" />
+	</VBox>
+
+</HBox>

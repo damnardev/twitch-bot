@@ -28,6 +28,11 @@
     -fx-padding: 5 5 5 10;
 }
 
+.cell-level {
+    -fx-alignment: CENTER;
+    -fx-padding: 5 5 5 5;
+}
+
 .app-padding {
     -fx-padding: 5 5 5 5;
 }

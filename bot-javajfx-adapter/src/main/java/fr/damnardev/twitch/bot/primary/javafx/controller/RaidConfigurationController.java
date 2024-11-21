@@ -195,7 +195,7 @@ public class RaidConfigurationController {
 	}
 
 	public void onRaidConfigurationFindAllEvent(RaidConfigurationFetchedAllEvent event) {
-		log.info("Configurations found: {}", event);
+		log.info("Configurations found [size]: {}", event.getValue().size());
 		var wrappers = event.getValue().stream().map(this::buildWrapper).toList();
 		this.tableViewRaidConfiguration.getItems().clear();
 		this.tableViewRaidConfiguration.getItems().addAll(wrappers);

@@ -148,7 +148,7 @@ public class ChannelManagementController {
 	}
 
 	public void onChannelFindEvent(ChannelFetchedAllEvent event) {
-		log.info("Channels found: {}", event.getValue());
+		log.info("Channels found [size]: {}", event.getValue().size());
 		var wrappers = event.getValue().stream().map(this::buildWrapper).toList();
 		this.tableView.getItems().clear();
 		this.tableView.getItems().addAll(wrappers);
