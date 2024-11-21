@@ -23,7 +23,7 @@ import org.springframework.stereotype.Component;
 @Slf4j
 @ConditionalOnBean(ApplicationStartedEventListener.class)
 public class LogManagementController {
-	
+
 	@FXML
 	public TableView<LoggerWrapper> tableView;
 
