@@ -7,7 +7,6 @@ import fr.damnardev.twitch.bot.domain.model.Shoutout;
 import fr.damnardev.twitch.bot.domain.model.form.ChannelRaidEventForm;
 import fr.damnardev.twitch.bot.domain.port.primary.ChannelRaidEventService;
 import fr.damnardev.twitch.bot.domain.port.primary.RandomService;
-import fr.damnardev.twitch.bot.domain.port.secondary.EventPublisher;
 import fr.damnardev.twitch.bot.domain.port.secondary.MessageRepository;
 import fr.damnardev.twitch.bot.domain.port.secondary.ShoutoutRepository;
 import fr.damnardev.twitch.bot.domain.port.secondary.channel.FindChannelRepository;
@@ -30,8 +29,6 @@ public class DefaultChannelRaidEventService implements ChannelRaidEventService {
 
 	private final RandomService randomService;
 
-	private final EventPublisher eventPublisher;
-
 	@Override
 	public void process(ChannelRaidEventForm form) {
 		this.tryService.doTry(this::doInternal, form);
@@ -43,6 +40,11 @@ public class DefaultChannelRaidEventService implements ChannelRaidEventService {
 			throw new BusinessException("Channel not found");
 		}
 		var channel = optionalChannel.get();
+
+		if (channel.isOffline()) {
+			return;
+		}
+
 		var optionalRaidConfiguration = this.findRaidConfigurationRepository.findByChannelName(channel.name());
 		if (optionalRaidConfiguration.isEmpty()) {
 			throw new BusinessException("Channel Raid Configuration not found");

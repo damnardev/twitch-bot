@@ -66,7 +66,7 @@ class DefaultChannelRaidEventServiceTests {
 		this.randomService = new DefaultRandomService(new Random(0));
 		this.tryService = spy(this.tryService);
 		this.randomService = spy(this.randomService);
-		this.channelRaidEventService = new DefaultChannelRaidEventService(this.tryService, this.findChannelRepository, this.findRaidConfigurationRepository, this.messageRepository, this.shoutoutRepository, this.randomService, this.eventPublisher);
+		this.channelRaidEventService = new DefaultChannelRaidEventService(this.tryService, this.findChannelRepository, this.findRaidConfigurationRepository, this.messageRepository, this.shoutoutRepository, this.randomService);
 	}
 
 	@Test
@@ -93,12 +93,31 @@ class DefaultChannelRaidEventServiceTests {
 				.hasMessage("Channel not found");
 	}
 
+	@ParameterizedTest
+	@CsvSource({ "false,false", "false,true", "true,false" })
+	void process_shouldPublishEvent_whenChannelOffline(boolean enabled, boolean online) {
+		// Given
+		var channelName = "channelName";
+		var form = ChannelRaidEventForm.builder().channelName(channelName).build();
+		var captor = ArgumentCaptor.forClass(ErrorEvent.class);
+
+		given(this.findChannelRepository.findByName(channelName)).willReturn(Optional.of(Channel.builder().name(channelName).enabled(enabled).online(online).build()));
+
+		// When
+		this.channelRaidEventService.process(form);
+
+		// Then
+		then(this.tryService).should().doTry(any(), eq(form));
+		then(this.findChannelRepository).should().findByName(channelName);
+		verifyNoMoreInteractions(this.tryService, this.findChannelRepository, this.findRaidConfigurationRepository, this.messageRepository, this.shoutoutRepository, this.randomService, this.eventPublisher);
+	}
+
 	@Test
 	void process_shouldPublishEvent_whenRaidConfigurationNotFound() {
 		// Given
 		var channelName = "channelName";
 		var form = ChannelRaidEventForm.builder().channelName(channelName).build();
-		var channel = Channel.builder().name(channelName).build();
+		var channel = Channel.builder().name(channelName).enabled(true).online(true).build();
 		var captor = ArgumentCaptor.forClass(ErrorEvent.class);
 
 		given(this.findChannelRepository.findByName(channelName)).willReturn(Optional.of(channel));
@@ -126,7 +145,7 @@ class DefaultChannelRaidEventServiceTests {
 		// Given
 		var channelName = "channelName";
 		var form = ChannelRaidEventForm.builder().channelId(1L).channelName(channelName).raiderId(2L).raiderName("raiderName").build();
-		var channel = Channel.builder().name(channelName).build();
+		var channel = Channel.builder().name(channelName).enabled(true).online(true).build();
 		var messages = Collections.singletonList("hi %s");
 		var configuration = RaidConfiguration.builder().raidMessageEnabled(raidMessageEnabled).wizebotShoutoutEnabled(wizebotShoutoutEnabled).twitchShoutoutEnabled(twitchShoutoutEnabled).messages(messages).build();
 
