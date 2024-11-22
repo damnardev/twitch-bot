@@ -1,7 +1,10 @@
 package fr.damnardev.twitch.bot.secondary.adapter;
 
+import java.util.concurrent.TimeUnit;
+
 import com.github.philippheuer.credentialmanager.domain.OAuth2Credential;
 import com.github.twitch4j.helix.TwitchHelix;
+import fr.damnardev.twitch.bot.domain.exception.FatalException;
 import fr.damnardev.twitch.bot.domain.model.Shoutout;
 import fr.damnardev.twitch.bot.domain.port.secondary.ShoutoutRepository;
 import lombok.RequiredArgsConstructor;
@@ -24,7 +27,16 @@ public class DefaultShoutoutRepository implements ShoutoutRepository {
 	@Override
 	public void sendShoutout(Shoutout shoutout) {
 		log.info("Sending shoutout {}", shoutout);
-		this.executor.execute(() -> this.twitchHelix.sendShoutout(null, shoutout.channelId().toString(), shoutout.raiderId().toString(), this.credential.getUserId()).execute());
+		this.executor.execute(() -> {
+			try {
+				TimeUnit.SECONDS.sleep(2);
+			}
+			catch (InterruptedException ex) {
+				Thread.currentThread().interrupt();
+				throw new FatalException(ex);
+			}
+			this.twitchHelix.sendShoutout(null, shoutout.channelId().toString(), shoutout.raiderId().toString(), this.credential.getUserId()).execute();
+		});
 	}
 
 }

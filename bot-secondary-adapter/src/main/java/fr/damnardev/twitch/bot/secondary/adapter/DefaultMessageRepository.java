@@ -1,6 +1,9 @@
 package fr.damnardev.twitch.bot.secondary.adapter;
 
+import java.util.concurrent.TimeUnit;
+
 import com.github.twitch4j.chat.TwitchChat;
+import fr.damnardev.twitch.bot.domain.exception.FatalException;
 import fr.damnardev.twitch.bot.domain.model.Message;
 import fr.damnardev.twitch.bot.domain.port.secondary.MessageRepository;
 import lombok.RequiredArgsConstructor;
@@ -21,7 +24,16 @@ public class DefaultMessageRepository implements MessageRepository {
 	@Override
 	public void sendMessage(Message message) {
 		log.info("Sending message {}", message);
-		this.executor.execute(() -> this.twitchChat.sendMessage(message.channelName(), message.content()));
+		this.executor.execute(() -> {
+			try {
+				TimeUnit.SECONDS.sleep(2);
+			}
+			catch (InterruptedException ex) {
+				Thread.currentThread().interrupt();
+				throw new FatalException(ex);
+			}
+			this.twitchChat.sendMessage(message.channelName(), message.content());
+		});
 	}
 
 }
