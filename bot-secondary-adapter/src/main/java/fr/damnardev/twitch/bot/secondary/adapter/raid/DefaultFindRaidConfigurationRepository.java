@@ -6,6 +6,7 @@ import java.util.Optional;
 
 import fr.damnardev.twitch.bot.database.entity.DbRaidConfiguration;
 import fr.damnardev.twitch.bot.database.repository.DbRaidConfigurationRepository;
+import fr.damnardev.twitch.bot.domain.model.Channel;
 import fr.damnardev.twitch.bot.domain.model.RaidConfiguration;
 import fr.damnardev.twitch.bot.domain.port.secondary.raid.FindRaidConfigurationRepository;
 import lombok.RequiredArgsConstructor;
@@ -31,8 +32,8 @@ public class DefaultFindRaidConfigurationRepository implements FindRaidConfigura
 
 	@Override
 	@Transactional(readOnly = true)
-	public Optional<RaidConfiguration> findByChannelName(String name) {
-		return this.dbRaidConfigurationRepository.findByChannelName(name).map(this::toModel);
+	public Optional<RaidConfiguration> findByChannel(Channel channel) {
+		return this.dbRaidConfigurationRepository.findByChannelName(channel.name()).map(this::toModel);
 	}
 
 	@Override

@@ -96,7 +96,7 @@ class DefaultCreateRaidConfigurationMessageServiceTests {
 		var captor = ArgumentCaptor.forClass(ErrorEvent.class);
 
 		given(this.findChannelRepository.findByName(channelName)).willReturn(Optional.of(channel));
-		given(this.findRaidConfigurationRepository.findByChannelName(channelName)).willReturn(Optional.empty());
+		given(this.findRaidConfigurationRepository.findByChannel(channel)).willReturn(Optional.empty());
 
 		// When
 		this.createRaidConfigurationMessageService.process(form);
@@ -104,7 +104,7 @@ class DefaultCreateRaidConfigurationMessageServiceTests {
 		// Then
 		then(this.tryService).should().doTry(any(), eq(form));
 		then(this.findChannelRepository).should().findByName(channelName);
-		then(this.findRaidConfigurationRepository).should().findByChannelName(channelName);
+		then(this.findRaidConfigurationRepository).should().findByChannel(channel);
 		then(this.eventPublisher).should().publish(captor.capture());
 		verifyNoMoreInteractions(this.tryService, this.findChannelRepository, this.findRaidConfigurationRepository, this.updateRaidConfigurationRepository, this.eventPublisher);
 
@@ -125,7 +125,7 @@ class DefaultCreateRaidConfigurationMessageServiceTests {
 		var event = RaidConfigurationUpdatedEvent.builder().raidConfiguration(updateConfiguration).build();
 
 		given(this.findChannelRepository.findByName(channelName)).willReturn(Optional.of(channel));
-		given(this.findRaidConfigurationRepository.findByChannelName(channelName)).willReturn(Optional.of(configuration));
+		given(this.findRaidConfigurationRepository.findByChannel(channel)).willReturn(Optional.of(configuration));
 
 		// When
 		this.createRaidConfigurationMessageService.process(form);
@@ -133,7 +133,7 @@ class DefaultCreateRaidConfigurationMessageServiceTests {
 		// Then
 		then(this.tryService).should().doTry(any(), eq(form));
 		then(this.findChannelRepository).should().findByName(channelName);
-		then(this.findRaidConfigurationRepository).should().findByChannelName(channelName);
+		then(this.findRaidConfigurationRepository).should().findByChannel(channel);
 		then(this.updateRaidConfigurationRepository).should().update(updateConfiguration);
 		then(this.eventPublisher).should().publish(event);
 		verifyNoMoreInteractions(this.tryService, this.findChannelRepository, this.findRaidConfigurationRepository, this.updateRaidConfigurationRepository, this.eventPublisher);

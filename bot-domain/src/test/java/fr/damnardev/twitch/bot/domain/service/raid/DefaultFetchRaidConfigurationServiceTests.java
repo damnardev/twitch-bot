@@ -103,7 +103,7 @@ class DefaultFetchRaidConfigurationServiceTests {
 		var captor = ArgumentCaptor.forClass(ErrorEvent.class);
 
 		given(this.findChannelRepository.findByName(channelName)).willReturn(Optional.of(channel));
-		given(this.findRaidConfigurationRepository.findByChannelName(channelName)).willReturn(Optional.empty());
+		given(this.findRaidConfigurationRepository.findByChannel(channel)).willReturn(Optional.empty());
 
 		// When
 		this.findRaidConfigurationService.process(channelName);
@@ -111,7 +111,7 @@ class DefaultFetchRaidConfigurationServiceTests {
 		// Then
 		then(this.tryService).should().doTry(any(), eq(channelName));
 		then(this.findChannelRepository).should().findByName(channelName);
-		then(this.findRaidConfigurationRepository).should().findByChannelName(channelName);
+		then(this.findRaidConfigurationRepository).should().findByChannel(channel);
 		then(this.eventPublisher).should().publish(captor.capture());
 		verifyNoMoreInteractions(this.tryService, this.findChannelRepository, this.findRaidConfigurationRepository, this.eventPublisher);
 
@@ -133,7 +133,7 @@ class DefaultFetchRaidConfigurationServiceTests {
 		var event = RaidConfigurationFetchedEvent.builder().raidConfiguration(raidConfiguration).build();
 
 		given(this.findChannelRepository.findByName(channelName)).willReturn(Optional.of(channel));
-		given(this.findRaidConfigurationRepository.findByChannelName(channelName)).willReturn(Optional.of(raidConfiguration));
+		given(this.findRaidConfigurationRepository.findByChannel(channel)).willReturn(Optional.of(raidConfiguration));
 
 		// When
 		this.findRaidConfigurationService.process(channelName);
@@ -141,7 +141,7 @@ class DefaultFetchRaidConfigurationServiceTests {
 		// Then
 		then(this.tryService).should().doTry(any(), eq(channelName));
 		then(this.findChannelRepository).should().findByName(channelName);
-		then(this.findRaidConfigurationRepository).should().findByChannelName(channelName);
+		then(this.findRaidConfigurationRepository).should().findByChannel(channel);
 		then(this.eventPublisher).should().publish(event);
 		verifyNoMoreInteractions(this.tryService, this.findChannelRepository, this.findRaidConfigurationRepository, this.eventPublisher);
 	}

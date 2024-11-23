@@ -121,7 +121,7 @@ class DefaultChannelRaidEventServiceTests {
 		var captor = ArgumentCaptor.forClass(ErrorEvent.class);
 
 		given(this.findChannelRepository.findByName(channelName)).willReturn(Optional.of(channel));
-		given(this.findRaidConfigurationRepository.findByChannelName(channelName)).willReturn(Optional.empty());
+		given(this.findRaidConfigurationRepository.findByChannel(channel)).willReturn(Optional.empty());
 
 		// When
 		this.channelRaidEventService.process(form);
@@ -129,7 +129,7 @@ class DefaultChannelRaidEventServiceTests {
 		// Then
 		then(this.tryService).should().doTry(any(), eq(form));
 		then(this.findChannelRepository).should().findByName(channelName);
-		then(this.findRaidConfigurationRepository).should().findByChannelName(channelName);
+		then(this.findRaidConfigurationRepository).should().findByChannel(channel);
 		then(this.eventPublisher).should().publish(captor.capture());
 		verifyNoMoreInteractions(this.tryService, this.findChannelRepository, this.findRaidConfigurationRepository, this.messageRepository, this.shoutoutRepository, this.randomService, this.eventPublisher);
 
@@ -154,7 +154,7 @@ class DefaultChannelRaidEventServiceTests {
 		var expectedShoutout = Shoutout.builder().raiderId(form.raiderId()).raiderName(form.raiderName()).channelId(channel.id()).channelName(channelName).build();
 
 		given(this.findChannelRepository.findByName(channelName)).willReturn(Optional.of(channel));
-		given(this.findRaidConfigurationRepository.findByChannelName(channelName)).willReturn(Optional.of(configuration));
+		given(this.findRaidConfigurationRepository.findByChannel(channel)).willReturn(Optional.of(configuration));
 
 		// When
 		this.channelRaidEventService.process(form);
@@ -162,7 +162,7 @@ class DefaultChannelRaidEventServiceTests {
 		// Then
 		then(this.tryService).should().doTry(any(), eq(form));
 		then(this.findChannelRepository).should().findByName(channelName);
-		then(this.findRaidConfigurationRepository).should().findByChannelName(channelName);
+		then(this.findRaidConfigurationRepository).should().findByChannel(channel);
 		if (raidMessageEnabled) {
 			then(this.randomService).should().getRandom(messages);
 			then(this.messageRepository).should().sendMessage(expectedMessageHi);

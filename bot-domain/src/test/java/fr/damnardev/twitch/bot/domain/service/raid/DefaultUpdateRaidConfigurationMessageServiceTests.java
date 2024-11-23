@@ -96,7 +96,7 @@ class DefaultUpdateRaidConfigurationMessageServiceTests {
 		var captor = ArgumentCaptor.forClass(ErrorEvent.class);
 
 		given(this.findChannelRepository.findByName(channelName)).willReturn(Optional.of(channel));
-		given(this.findRaidConfigurationRepository.findByChannelName(channelName)).willReturn(Optional.empty());
+		given(this.findRaidConfigurationRepository.findByChannel(channel)).willReturn(Optional.empty());
 
 		// When
 		this.updateRaidConfigurationMessageService.process(form);
@@ -104,7 +104,7 @@ class DefaultUpdateRaidConfigurationMessageServiceTests {
 		// Then
 		then(this.tryService).should().doTry(any(), eq(form));
 		then(this.findChannelRepository).should().findByName(channelName);
-		then(this.findRaidConfigurationRepository).should().findByChannelName(channelName);
+		then(this.findRaidConfigurationRepository).should().findByChannel(channel);
 		then(this.eventPublisher).should().publish(captor.capture());
 		verifyNoMoreInteractions(this.tryService, this.findChannelRepository, this.findRaidConfigurationRepository, this.updateRaidConfigurationRepository, this.eventPublisher);
 
@@ -125,7 +125,7 @@ class DefaultUpdateRaidConfigurationMessageServiceTests {
 		var event = RaidConfigurationUpdatedEvent.builder().raidConfiguration(updatedRaidConfiguration).build();
 
 		given(this.findChannelRepository.findByName(channelName)).willReturn(Optional.of(channel));
-		given(this.findRaidConfigurationRepository.findByChannelName(channelName)).willReturn(Optional.of(raidConfiguration));
+		given(this.findRaidConfigurationRepository.findByChannel(channel)).willReturn(Optional.of(raidConfiguration));
 
 		// When
 		this.updateRaidConfigurationMessageService.process(form);
@@ -133,7 +133,7 @@ class DefaultUpdateRaidConfigurationMessageServiceTests {
 		// Then
 		then(this.tryService).should().doTry(any(), eq(form));
 		then(this.findChannelRepository).should().findByName(channelName);
-		then(this.findRaidConfigurationRepository).should().findByChannelName(channelName);
+		then(this.findRaidConfigurationRepository).should().findByChannel(channel);
 		then(this.updateRaidConfigurationRepository).should().update(updatedRaidConfiguration);
 		then(this.eventPublisher).should().publish(event);
 		verifyNoMoreInteractions(this.tryService, this.findChannelRepository, this.findRaidConfigurationRepository, this.updateRaidConfigurationRepository, this.eventPublisher);
@@ -152,7 +152,7 @@ class DefaultUpdateRaidConfigurationMessageServiceTests {
 		var event = RaidConfigurationUpdatedEvent.builder().raidConfiguration(updatedRaidConfiguration).build();
 
 		given(this.findChannelRepository.findByName(channelName)).willReturn(Optional.of(channel));
-		given(this.findRaidConfigurationRepository.findByChannelName(channelName)).willReturn(Optional.of(raidConfiguration));
+		given(this.findRaidConfigurationRepository.findByChannel(channel)).willReturn(Optional.of(raidConfiguration));
 
 		// When
 		this.updateRaidConfigurationMessageService.process(form);
@@ -160,7 +160,7 @@ class DefaultUpdateRaidConfigurationMessageServiceTests {
 		// Then
 		then(this.tryService).should().doTry(any(), eq(form));
 		then(this.findChannelRepository).should().findByName(channelName);
-		then(this.findRaidConfigurationRepository).should().findByChannelName(channelName);
+		then(this.findRaidConfigurationRepository).should().findByChannel(channel);
 		then(this.updateRaidConfigurationRepository).should().update(updatedRaidConfiguration);
 		then(this.eventPublisher).should().publish(event);
 		verifyNoMoreInteractions(this.tryService, this.findChannelRepository, this.findRaidConfigurationRepository, this.updateRaidConfigurationRepository, this.eventPublisher);
@@ -179,7 +179,7 @@ class DefaultUpdateRaidConfigurationMessageServiceTests {
 		var event = RaidConfigurationUpdatedEvent.builder().raidConfiguration(updatedRaidConfiguration).build();
 
 		given(this.findChannelRepository.findByName(channelName)).willReturn(Optional.of(channel));
-		given(this.findRaidConfigurationRepository.findByChannelName(channelName)).willReturn(Optional.of(raidConfiguration));
+		given(this.findRaidConfigurationRepository.findByChannel(channel)).willReturn(Optional.of(raidConfiguration));
 
 		// When
 		this.updateRaidConfigurationMessageService.process(form);
@@ -187,7 +187,7 @@ class DefaultUpdateRaidConfigurationMessageServiceTests {
 		// Then
 		then(this.tryService).should().doTry(any(), eq(form));
 		then(this.findChannelRepository).should().findByName(channelName);
-		then(this.findRaidConfigurationRepository).should().findByChannelName(channelName);
+		then(this.findRaidConfigurationRepository).should().findByChannel(channel);
 		then(this.updateRaidConfigurationRepository).should().update(updatedRaidConfiguration);
 		then(this.eventPublisher).should().publish(event);
 		verifyNoMoreInteractions(this.tryService, this.findChannelRepository, this.findRaidConfigurationRepository, this.updateRaidConfigurationRepository, this.eventPublisher);
