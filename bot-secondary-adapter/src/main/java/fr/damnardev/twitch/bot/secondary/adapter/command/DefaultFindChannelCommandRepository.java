@@ -7,6 +7,7 @@ import java.util.function.Function;
 
 import fr.damnardev.twitch.bot.database.entity.DbChannelCommand;
 import fr.damnardev.twitch.bot.database.repository.DbChannelCommandRepository;
+import fr.damnardev.twitch.bot.domain.model.Channel;
 import fr.damnardev.twitch.bot.domain.model.Command;
 import fr.damnardev.twitch.bot.domain.port.secondary.command.FindChannelCommandRepository;
 import lombok.RequiredArgsConstructor;
@@ -32,8 +33,8 @@ public class DefaultFindChannelCommandRepository implements FindChannelCommandRe
 
 	@Override
 	@Transactional(readOnly = true)
-	public Map<String, Command> findByChannelName(String name) {
-		return this.dbChannelCommandRepository.findByChannelName(name).stream().map(this::toModel).collect(java.util.stream.Collectors.toMap(Command::name, Function.identity()));
+	public Map<String, Command> findByChannel(Channel channel) {
+		return this.dbChannelCommandRepository.findByChannelName(channel.name()).stream().map(this::toModel).collect(java.util.stream.Collectors.toMap(Command::name, Function.identity()));
 	}
 
 	private Command toModel(DbChannelCommand dbChannelCommand) {

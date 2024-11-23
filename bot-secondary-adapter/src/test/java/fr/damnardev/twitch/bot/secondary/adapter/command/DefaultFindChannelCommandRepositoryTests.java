@@ -5,6 +5,7 @@ import java.util.Collections;
 import fr.damnardev.twitch.bot.database.entity.DbChannel;
 import fr.damnardev.twitch.bot.database.entity.DbChannelCommand;
 import fr.damnardev.twitch.bot.database.repository.DbChannelCommandRepository;
+import fr.damnardev.twitch.bot.domain.model.Channel;
 import fr.damnardev.twitch.bot.domain.model.Command;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -30,14 +31,15 @@ class DefaultFindChannelCommandRepositoryTests {
 	private DbChannelCommandRepository dbChannelCommandRepository;
 
 	@Test
-	void findByChannelName_shouldReturnEmptyMap_whenNameNotFound() {
+	void findByChannel_shouldReturnEmptyMap_whenNameNotFound() {
 		// Given
 		var channelName = "channelName";
+		var channel = Channel.builder().name(channelName).build();
 
 		given(this.dbChannelCommandRepository.findByChannelName(channelName)).willReturn(Collections.emptyList());
 
 		// When
-		var result = this.findChannelCommandRepository.findByChannelName(channelName);
+		var result = this.findChannelCommandRepository.findByChannel(channel);
 
 		// Then
 		then(this.dbChannelCommandRepository).should().findByChannelName(channelName);
@@ -47,9 +49,10 @@ class DefaultFindChannelCommandRepositoryTests {
 	}
 
 	@Test
-	void findByChannelName_shouldReturnMap_whenNameNotFound() {
+	void findByChannel_shouldReturnMap_whenNameNotFound() {
 		// Given
 		var channelName = "channelName";
+		var channel = Channel.builder().name(channelName).build();
 
 		var message = "message";
 		var dbChannelCommand = DbChannelCommand.builder().id(1L)
@@ -59,7 +62,7 @@ class DefaultFindChannelCommandRepositoryTests {
 		given(this.dbChannelCommandRepository.findByChannelName(channelName)).willReturn(Collections.singletonList(dbChannelCommand));
 
 		// When
-		var result = this.findChannelCommandRepository.findByChannelName(channelName);
+		var result = this.findChannelCommandRepository.findByChannel(channel);
 
 		// Then
 		then(this.dbChannelCommandRepository).should().findByChannelName(channelName);

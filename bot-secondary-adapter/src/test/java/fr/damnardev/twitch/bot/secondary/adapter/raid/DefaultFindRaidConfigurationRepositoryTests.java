@@ -7,6 +7,7 @@ import java.util.Optional;
 import fr.damnardev.twitch.bot.database.entity.DbChannel;
 import fr.damnardev.twitch.bot.database.entity.DbRaidConfiguration;
 import fr.damnardev.twitch.bot.database.repository.DbRaidConfigurationRepository;
+import fr.damnardev.twitch.bot.domain.model.Channel;
 import fr.damnardev.twitch.bot.domain.model.RaidConfiguration;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -34,14 +35,15 @@ class DefaultFindRaidConfigurationRepositoryTests {
 	private DbRaidConfigurationRepository dbRaidConfigurationRepository;
 
 	@Test
-	void findByChannelName_shouldReturnOptionalEmpty_whenNameNotFound() {
+	void findByChannel_shouldReturnOptionalEmpty_whenNotFound() {
 		// Given
 		var channelName = "channelName";
+		var channel = Channel.builder().name(channelName).build();
 
 		given(this.dbRaidConfigurationRepository.findByChannelName(channelName)).willReturn(Optional.empty());
 
 		// When
-		var result = this.findRaidConfigurationRepository.findByChannelName(channelName);
+		var result = this.findRaidConfigurationRepository.findByChannel(channel);
 
 		// Then
 		then(this.dbRaidConfigurationRepository).should().findByChannelName(channelName);
@@ -52,9 +54,10 @@ class DefaultFindRaidConfigurationRepositoryTests {
 
 	@ParameterizedTest
 	@CsvSource({ "true,true,true", "true,true,false", "true,false,true", "true,false,false", "false,true,true", "false,true,false", "false,false,true", "false,false,false" })
-	void findByName_shouldReturnChannel_whenNameFound(boolean raidMessageEnabled, boolean wizebotShoutoutEnabled, boolean twitchShoutoutEnabled) {
+	void findByChannel_shouldReturnChannel_whenNameFound(boolean raidMessageEnabled, boolean wizebotShoutoutEnabled, boolean twitchShoutoutEnabled) {
 		// Given
 		var channelName = "channelName";
+		var channel = Channel.builder().name(channelName).build();
 		var message = "message";
 		var dbRaidConfiguration = DbRaidConfiguration.builder().id(1L)
 				.channel(DbChannel.builder().name(channelName).build())
@@ -64,7 +67,7 @@ class DefaultFindRaidConfigurationRepositoryTests {
 		given(this.dbRaidConfigurationRepository.findByChannelName(channelName)).willReturn(Optional.of(dbRaidConfiguration));
 
 		// When
-		var result = this.findRaidConfigurationRepository.findByChannelName(channelName);
+		var result = this.findRaidConfigurationRepository.findByChannel(channel);
 
 		// Then
 		then(this.dbRaidConfigurationRepository).should().findByChannelName(channelName);

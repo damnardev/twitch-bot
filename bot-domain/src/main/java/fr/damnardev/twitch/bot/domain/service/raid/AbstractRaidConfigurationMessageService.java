@@ -23,7 +23,7 @@ public class AbstractRaidConfigurationMessageService {
 		if (optionalChannel.isEmpty()) {
 			throw new BusinessException("Channel not found");
 		}
-		var optionalRaidConfiguration = this.findRaidConfigurationRepository.findByChannelName(name);
+		var optionalRaidConfiguration = this.findRaidConfigurationRepository.findByChannel(optionalChannel.get());
 		if (optionalRaidConfiguration.isEmpty()) {
 			throw new BusinessException("Channel Raid Configuration not found");
 		}
