@@ -1,0 +1,19 @@
+databaseChangeLog:
+  - changeSet:
+      id: 0-0-2-3
+      author: damnardev
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: t_saint_pkey
+                  name: id
+                  type: DATE
+              - column:
+                  name: message
+                  type: VARCHAR(255)
+            tableName: t_saint
+
