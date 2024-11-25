@@ -29,7 +29,7 @@ public class DefaultSaintRepository implements SaintRepository {
 	public Optional<String> find() {
 		try {
 			var date = LocalDate.now();
-			var optionalDbSaint = dbSaintRepository.findById(date);
+			var optionalDbSaint = this.dbSaintRepository.findById(date);
 			if (optionalDbSaint.isPresent()) {
 				return Optional.of(optionalDbSaint.get().getMessage());
 			}
@@ -48,7 +48,7 @@ public class DefaultSaintRepository implements SaintRepository {
 		var bytes = connection.getInputStream().readAllBytes();
 		var string = new String(bytes);
 		var dbSaint = DbSaint.builder().id(date).message(string).build();
-		dbSaintRepository.save(dbSaint);
+		this.dbSaintRepository.save(dbSaint);
 		return Optional.of(string);
 	}
 
