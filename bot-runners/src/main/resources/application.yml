@@ -16,6 +16,8 @@ spring:
 
 
 twitch:
+  saint:
+    url: ${TWITCH_SAINT_URL}
   oauth:
     client_id: ${CLIENT_ID}
     scopes:
