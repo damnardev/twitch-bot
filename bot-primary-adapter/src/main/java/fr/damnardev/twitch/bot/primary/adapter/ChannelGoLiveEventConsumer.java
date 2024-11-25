@@ -2,8 +2,8 @@ package fr.damnardev.twitch.bot.primary.adapter;
 
 import com.github.twitch4j.TwitchClient;
 import com.github.twitch4j.events.ChannelGoLiveEvent;
-import fr.damnardev.twitch.bot.domain.model.form.UpdateChannelForm;
-import fr.damnardev.twitch.bot.domain.port.primary.channel.UpdateChannelService;
+import fr.damnardev.twitch.bot.model.form.UpdateChannelForm;
+import fr.damnardev.twitch.bot.port.primary.channel.UpdateChannelService;
 
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.stereotype.Service;

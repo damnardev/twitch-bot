@@ -7,9 +7,9 @@ import java.util.function.Function;
 
 import fr.damnardev.twitch.bot.database.entity.DbChannelCommand;
 import fr.damnardev.twitch.bot.database.repository.DbChannelCommandRepository;
-import fr.damnardev.twitch.bot.domain.model.Channel;
-import fr.damnardev.twitch.bot.domain.model.Command;
-import fr.damnardev.twitch.bot.domain.port.secondary.command.FindChannelCommandRepository;
+import fr.damnardev.twitch.bot.model.Channel;
+import fr.damnardev.twitch.bot.model.Command;
+import fr.damnardev.twitch.bot.port.secondary.command.FindChannelCommandRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;

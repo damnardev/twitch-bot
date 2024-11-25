@@ -3,9 +3,9 @@ package fr.damnardev.twitch.bot.secondary.adapter;
 import java.util.concurrent.TimeUnit;
 
 import com.github.twitch4j.chat.TwitchChat;
-import fr.damnardev.twitch.bot.domain.exception.FatalException;
-import fr.damnardev.twitch.bot.domain.model.Message;
-import fr.damnardev.twitch.bot.domain.port.secondary.MessageRepository;
+import fr.damnardev.twitch.bot.exception.FatalException;
+import fr.damnardev.twitch.bot.model.Message;
+import fr.damnardev.twitch.bot.port.secondary.MessageRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 

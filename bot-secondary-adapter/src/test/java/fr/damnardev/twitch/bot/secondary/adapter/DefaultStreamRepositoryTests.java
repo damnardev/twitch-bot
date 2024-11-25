@@ -7,7 +7,7 @@ import com.github.twitch4j.helix.TwitchHelix;
 import com.github.twitch4j.helix.domain.Stream;
 import com.github.twitch4j.helix.domain.StreamList;
 import com.netflix.hystrix.HystrixCommand;
-import fr.damnardev.twitch.bot.domain.model.Channel;
+import fr.damnardev.twitch.bot.model.Channel;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;

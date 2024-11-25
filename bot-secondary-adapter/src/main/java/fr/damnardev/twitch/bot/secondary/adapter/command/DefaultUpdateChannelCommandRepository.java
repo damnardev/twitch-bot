@@ -1,8 +1,8 @@
 package fr.damnardev.twitch.bot.secondary.adapter.command;
 
 import fr.damnardev.twitch.bot.database.repository.DbChannelCommandRepository;
-import fr.damnardev.twitch.bot.domain.model.Command;
-import fr.damnardev.twitch.bot.domain.port.secondary.command.UpdateChannelCommandRepository;
+import fr.damnardev.twitch.bot.model.Command;
+import fr.damnardev.twitch.bot.port.secondary.command.UpdateChannelCommandRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 

@@ -1,7 +1,5 @@
 package fr.damnardev.twitch.bot;
 
-import fr.damnardev.twitch.bot.domain.DomainService;
-
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.ComponentScan;

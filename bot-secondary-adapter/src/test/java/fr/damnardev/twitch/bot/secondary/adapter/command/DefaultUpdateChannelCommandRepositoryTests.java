@@ -8,7 +8,7 @@ import java.util.Optional;
 import fr.damnardev.twitch.bot.database.entity.DbChannel;
 import fr.damnardev.twitch.bot.database.entity.DbChannelCommand;
 import fr.damnardev.twitch.bot.database.repository.DbChannelCommandRepository;
-import fr.damnardev.twitch.bot.domain.model.Command;
+import fr.damnardev.twitch.bot.model.Command;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;

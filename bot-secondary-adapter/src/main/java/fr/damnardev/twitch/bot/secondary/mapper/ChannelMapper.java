@@ -1,7 +1,7 @@
 package fr.damnardev.twitch.bot.secondary.mapper;
 
 import fr.damnardev.twitch.bot.database.entity.DbChannel;
-import fr.damnardev.twitch.bot.domain.model.Channel;
+import fr.damnardev.twitch.bot.model.Channel;
 
 import org.springframework.stereotype.Service;
 

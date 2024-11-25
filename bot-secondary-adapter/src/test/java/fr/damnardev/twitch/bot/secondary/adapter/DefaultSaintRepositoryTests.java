@@ -5,7 +5,7 @@ import java.util.Optional;
 
 import fr.damnardev.twitch.bot.database.entity.DbSaint;
 import fr.damnardev.twitch.bot.database.repository.DbSaintRepository;
-import fr.damnardev.twitch.bot.domain.exception.FatalException;
+import fr.damnardev.twitch.bot.exception.FatalException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;

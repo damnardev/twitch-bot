@@ -6,9 +6,9 @@ import java.util.Optional;
 
 import fr.damnardev.twitch.bot.database.entity.DbRaidConfiguration;
 import fr.damnardev.twitch.bot.database.repository.DbRaidConfigurationRepository;
-import fr.damnardev.twitch.bot.domain.model.Channel;
-import fr.damnardev.twitch.bot.domain.model.RaidConfiguration;
-import fr.damnardev.twitch.bot.domain.port.secondary.raid.FindRaidConfigurationRepository;
+import fr.damnardev.twitch.bot.model.Channel;
+import fr.damnardev.twitch.bot.model.RaidConfiguration;
+import fr.damnardev.twitch.bot.port.secondary.raid.FindRaidConfigurationRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;

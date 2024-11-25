@@ -2,8 +2,8 @@ package fr.damnardev.twitch.bot.primary.adapter;
 
 import com.github.twitch4j.TwitchClient;
 import com.github.twitch4j.chat.events.channel.RaidEvent;
-import fr.damnardev.twitch.bot.domain.model.form.ChannelRaidEventForm;
-import fr.damnardev.twitch.bot.domain.port.primary.ChannelRaidEventService;
+import fr.damnardev.twitch.bot.model.form.ChannelRaidEventForm;
+import fr.damnardev.twitch.bot.port.primary.ChannelRaidEventService;
 
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.stereotype.Service;

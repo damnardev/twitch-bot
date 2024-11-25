@@ -4,8 +4,8 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.Objects;
 
-import fr.damnardev.twitch.bot.domain.exception.FatalException;
-import fr.damnardev.twitch.bot.domain.model.event.ApplicationStartedEvent;
+import fr.damnardev.twitch.bot.exception.FatalException;
+import fr.damnardev.twitch.bot.model.event.ApplicationStartedEvent;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;

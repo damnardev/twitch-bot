@@ -10,7 +10,8 @@
 	<packaging>pom</packaging>
 
 	<modules>
-		<module>bot-domain</module>
+		<module>bot-model</module>
+		<module>bot-core</module>
 		<module>bot-secondary-adapter</module>
 		<module>bot-database</module>
 		<module>bot-primary-adapter</module>
@@ -78,7 +79,12 @@
 
 			<dependency>
 				<groupId>fr.damnardev.twitch</groupId>
-				<artifactId>bot-domain</artifactId>
+				<artifactId>bot-model</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>fr.damnardev.twitch</groupId>
+				<artifactId>bot-core</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 			<dependency>
