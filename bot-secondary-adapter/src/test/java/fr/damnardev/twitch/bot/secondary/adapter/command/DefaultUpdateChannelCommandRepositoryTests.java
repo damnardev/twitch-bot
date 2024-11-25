@@ -9,6 +9,7 @@ import fr.damnardev.twitch.bot.database.entity.DbChannel;
 import fr.damnardev.twitch.bot.database.entity.DbChannelCommand;
 import fr.damnardev.twitch.bot.database.repository.DbChannelCommandRepository;
 import fr.damnardev.twitch.bot.model.Command;
+import fr.damnardev.twitch.bot.model.CommandType;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -56,12 +57,9 @@ class DefaultUpdateChannelCommandRepositoryTests {
 		var channelName = "channelName";
 		var name = "!foo";
 		var messages = Collections.singletonList("message1");
-		var command = Command.builder().channelName(channelName).name(name).enabled(true)
-				.cooldown(60).lastExecution(OffsetDateTime.now()).messages(messages).build();
+		var command = Command.builder().channelName(channelName).name(name).type(CommandType.SAINT).enabled(true).cooldown(60).lastExecution(OffsetDateTime.now()).messages(messages).build();
 		var dbMessages = spy(new ArrayList<String>());
-		var dbChannelCommand = DbChannelCommand.builder().id(1L).
-				channel(DbChannel.builder().name(channelName).build())
-				.name(name).enabled(false).cooldown(30).lastExecution(null).messages(dbMessages).build();
+		var dbChannelCommand = DbChannelCommand.builder().id(1L).channel(DbChannel.builder().name(channelName).build()).name(name).enabled(false).cooldown(30).lastExecution(null).messages(dbMessages).build();
 
 		given(this.dbChannelCommandRepository.findByChannelNameAndName(channelName, name)).willReturn(Optional.of(dbChannelCommand));
 
@@ -75,12 +73,8 @@ class DefaultUpdateChannelCommandRepositoryTests {
 		then(dbMessages).should().addAll(messages);
 		verifyNoMoreInteractions(this.dbChannelCommandRepository, dbMessages);
 
-		var expected = DbChannelCommand.builder().id(1L).
-				channel(DbChannel.builder().name(channelName).build())
-				.name(name).enabled(true).cooldown(60).lastExecution(command.lastExecution()).messages(messages).build();
-		assertThat(dbChannelCommand)
-				.usingRecursiveComparison().ignoringFields("channel")
-				.isEqualTo(expected);
+		var expected = DbChannelCommand.builder().id(1L).channel(DbChannel.builder().name(channelName).build()).name(name).type(CommandType.SAINT).enabled(true).cooldown(60).lastExecution(command.lastExecution()).messages(messages).build();
+		assertThat(dbChannelCommand).usingRecursiveComparison().ignoringFields("channel").isEqualTo(expected);
 	}
 
 }

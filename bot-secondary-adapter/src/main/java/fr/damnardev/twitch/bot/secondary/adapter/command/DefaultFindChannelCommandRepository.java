@@ -38,7 +38,7 @@ public class DefaultFindChannelCommandRepository implements FindChannelCommandRe
 	}
 
 	private Command toModel(DbChannelCommand dbChannelCommand) {
-		return Command.builder().channelId(dbChannelCommand.getId()).channelName(dbChannelCommand.getChannel().getName()).name(dbChannelCommand.getName()).enabled(dbChannelCommand.isEnabled()).cooldown(dbChannelCommand.getCooldown()).lastExecution(dbChannelCommand.getLastExecution()).messages(getMessages(dbChannelCommand)).build();
+		return Command.builder().channelId(dbChannelCommand.getId()).channelName(dbChannelCommand.getChannel().getName()).name(dbChannelCommand.getName()).type(dbChannelCommand.getType()).enabled(dbChannelCommand.isEnabled()).cooldown(dbChannelCommand.getCooldown()).lastExecution(dbChannelCommand.getLastExecution()).messages(getMessages(dbChannelCommand)).build();
 
 	}
 

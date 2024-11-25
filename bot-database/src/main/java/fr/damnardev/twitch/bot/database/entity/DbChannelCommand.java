@@ -3,10 +3,13 @@ package fr.damnardev.twitch.bot.database.entity;
 import java.time.OffsetDateTime;
 import java.util.List;
 
+import fr.damnardev.twitch.bot.model.CommandType;
 import jakarta.persistence.CollectionTable;
 import jakarta.persistence.Column;
 import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -52,5 +55,9 @@ public class DbChannelCommand {
 	@CollectionTable(name = "t_channel_command_message", joinColumns = @JoinColumn(name = "channel_command_id"))
 	@Column(name = "message")
 	private List<String> messages;
+
+	@Enumerated(EnumType.STRING)
+	@Column(name = "type")
+	private CommandType type;
 
 }

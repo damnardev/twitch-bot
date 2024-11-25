@@ -4,6 +4,7 @@ package fr.damnardev.twitch.bot.core.service.command;
 import fr.damnardev.twitch.bot.DomainService;
 import fr.damnardev.twitch.bot.model.Channel;
 import fr.damnardev.twitch.bot.model.Command;
+import fr.damnardev.twitch.bot.model.CommandType;
 import fr.damnardev.twitch.bot.model.Message;
 import fr.damnardev.twitch.bot.model.form.ChannelMessageEventForm;
 import fr.damnardev.twitch.bot.port.secondary.MessageRepository;
@@ -27,9 +28,8 @@ public class SaintInterpreter implements CommandInterpreter {
 		}
 	}
 
-	@Override
-	public boolean canInterpret(Channel channel, Command command, ChannelMessageEventForm form) {
-		return command.name().equalsIgnoreCase("saints");
+	public CommandType getCommandTypeInterpreter() {
+		return CommandType.SAINT;
 	}
 
 }

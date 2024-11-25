@@ -7,6 +7,7 @@ import fr.damnardev.twitch.bot.database.entity.DbChannelCommand;
 import fr.damnardev.twitch.bot.database.repository.DbChannelCommandRepository;
 import fr.damnardev.twitch.bot.model.Channel;
 import fr.damnardev.twitch.bot.model.Command;
+import fr.damnardev.twitch.bot.model.CommandType;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -55,9 +56,7 @@ class DefaultFindChannelCommandRepositoryTests {
 		var channel = Channel.builder().name(channelName).build();
 
 		var message = "message";
-		var dbChannelCommand = DbChannelCommand.builder().id(1L)
-				.channel(DbChannel.builder().name(channelName).build())
-				.name("!foo").enabled(true).cooldown(60).lastExecution(null).messages(Collections.singletonList(message)).build();
+		var dbChannelCommand = DbChannelCommand.builder().id(1L).channel(DbChannel.builder().name(channelName).build()).name("!foo").enabled(true).type(CommandType.SAINT).cooldown(60).lastExecution(null).messages(Collections.singletonList(message)).build();
 
 		given(this.dbChannelCommandRepository.findByChannelName(channelName)).willReturn(Collections.singletonList(dbChannelCommand));
 
@@ -68,8 +67,7 @@ class DefaultFindChannelCommandRepositoryTests {
 		then(this.dbChannelCommandRepository).should().findByChannelName(channelName);
 		verifyNoMoreInteractions(this.dbChannelCommandRepository);
 
-		var expected = Command.builder().channelId(1L).channelName(channelName)
-				.name("!foo").enabled(true).cooldown(60).lastExecution(null).messages(Collections.singletonList(message)).build();
+		var expected = Command.builder().channelId(1L).channelName(channelName).name("!foo").type(CommandType.SAINT).enabled(true).cooldown(60).lastExecution(null).messages(Collections.singletonList(message)).build();
 		assertThat(result).isNotEmpty().containsEntry("!foo", expected);
 	}
 
