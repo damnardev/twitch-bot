@@ -52,9 +52,16 @@ public class DefaultChannelMessageEventService implements ChannelMessageEventSer
 		}
 		var channel = optionalChannel.get();
 		if (form.message().startsWith("!")) {
-			form = form.toBuilder().message(form.message().substring(1)).build();
-			var command = this.channelCommandRepository.findByChannel(channel).get(form.message());
-			if (command == null || (command.lastExecution() != null && command.lastExecution().plusSeconds(command.cooldown()).isAfter(OffsetDateTime.now()))) {
+			var split = form.message().substring(1).split(" ", 2);
+			var commandName = split[0];
+			var parameter = (split.length == 2) ? split[1] : "";
+			form = form.toBuilder().message(parameter).build();
+			var optionalCommand = this.channelCommandRepository.findByChannelAndName(channel, commandName);
+			if (optionalCommand.isEmpty()) {
+				return;
+			}
+			var command = optionalCommand.get();
+			if (command.lastExecution() != null && command.lastExecution().plusSeconds(command.cooldown()).isAfter(OffsetDateTime.now())) {
 				return;
 			}
 			this.process(channel, command, form);
