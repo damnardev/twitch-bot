@@ -4,14 +4,13 @@ import java.util.Optional;
 
 import fr.damnardev.twitch.bot.model.Channel;
 import fr.damnardev.twitch.bot.model.Command;
+import fr.damnardev.twitch.bot.model.CommandType;
 import fr.damnardev.twitch.bot.model.Message;
 import fr.damnardev.twitch.bot.model.form.ChannelMessageEventForm;
 import fr.damnardev.twitch.bot.port.secondary.MessageRepository;
 import fr.damnardev.twitch.bot.port.secondary.SaintRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.ValueSource;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -36,33 +35,16 @@ class SaintInterpreterTests {
 	@Mock
 	private SaintRepository saintRepository;
 
-	@ParameterizedTest
-	@ValueSource(strings = { "saint", "saintss", "" })
-	void canInterpret_shouldReturnFalse_whenCommandIsNotSaints(String source) {
-		// Given
-		var command = Command.builder().name("saint").build();
-
-		// When
-		var result = this.saintInterpreter.canInterpret(null, command, null);
-
-		// Then
-		verifyNoMoreInteractions(this.messageRepository, this.saintRepository);
-
-		assertThat(result).isFalse();
-	}
-
 	@Test
-	void canInterpret_shouldReturnTrue_whenCommandIsSaints() {
+	void getCommandTypeInterpreter_shouldReturnCommandTypeSaint() {
 		// Given
-		var command = Command.builder().name("saints").build();
-
 		// When
-		var result = this.saintInterpreter.canInterpret(null, command, null);
+		var result = this.saintInterpreter.getCommandTypeInterpreter();
 
 		// Then
 		verifyNoMoreInteractions(this.messageRepository, this.saintRepository);
 
-		assertThat(result).isTrue();
+		assertThat(result).isEqualTo(CommandType.SAINT);
 	}
 
 	@Test

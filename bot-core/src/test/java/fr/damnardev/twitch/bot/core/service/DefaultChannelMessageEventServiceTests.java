@@ -2,15 +2,14 @@ package fr.damnardev.twitch.bot.core.service;
 
 import java.time.OffsetDateTime;
 import java.util.Collections;
-import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.stream.Stream;
 
 import fr.damnardev.twitch.bot.core.service.command.CommandInterpreter;
 import fr.damnardev.twitch.bot.exception.BusinessException;
 import fr.damnardev.twitch.bot.model.Channel;
 import fr.damnardev.twitch.bot.model.Command;
+import fr.damnardev.twitch.bot.model.CommandType;
 import fr.damnardev.twitch.bot.model.event.ErrorEvent;
 import fr.damnardev.twitch.bot.model.form.ChannelMessageEventForm;
 import fr.damnardev.twitch.bot.port.secondary.EventPublisher;
@@ -35,7 +34,6 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.spy;
 import static org.mockito.BDDMockito.then;
 import static org.mockito.BDDMockito.verifyNoMoreInteractions;
-import static org.mockito.Mockito.mock;
 
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.WARN)
@@ -58,13 +56,15 @@ class DefaultChannelMessageEventServiceTests {
 	private UpdateChannelCommandRepository updateChannelCommandRepository;
 
 	@Mock
-	private List<CommandInterpreter> commandInterpreters;
+	private CommandInterpreter commandInterpreter;
 
 	@BeforeEach
 	void setUp() {
 		this.tryService = new DefaultTryService(this.eventPublisher);
 		this.tryService = spy(this.tryService);
-		this.channelMessageEventService = new DefaultChannelMessageEventService(this.tryService, this.findChannelRepository, this.findChannelCommandRepository, this.updateChannelCommandRepository, this.commandInterpreters);
+		given(this.commandInterpreter.getCommandTypeInterpreter()).willReturn(CommandType.TEXT);
+		var commandInterpreters = Collections.singletonList(this.commandInterpreter);
+		this.channelMessageEventService = new DefaultChannelMessageEventService(this.tryService, this.findChannelRepository, this.findChannelCommandRepository, this.updateChannelCommandRepository, commandInterpreters);
 	}
 
 	@Test
@@ -80,10 +80,11 @@ class DefaultChannelMessageEventServiceTests {
 		this.channelMessageEventService.process(form);
 
 		// Then
+		then(this.commandInterpreter).should().getCommandTypeInterpreter();
 		then(this.tryService).should().doTry(any(), eq(form));
 		then(this.findChannelRepository).should().findByName(channelName);
 		then(this.eventPublisher).should().publish(captor.capture());
-		verifyNoMoreInteractions(this.tryService, this.findChannelRepository, this.eventPublisher, this.findChannelCommandRepository, this.updateChannelCommandRepository, this.commandInterpreters);
+		verifyNoMoreInteractions(this.tryService, this.findChannelRepository, this.eventPublisher, this.findChannelCommandRepository, this.updateChannelCommandRepository, this.commandInterpreter);
 
 		var event = captor.getValue();
 		assertThat(event.getException()).isNotNull().isInstanceOf(BusinessException.class).hasMessage("Channel not found");
@@ -102,9 +103,10 @@ class DefaultChannelMessageEventServiceTests {
 		this.channelMessageEventService.process(form);
 
 		// Then
+		then(this.commandInterpreter).should().getCommandTypeInterpreter();
 		then(this.tryService).should().doTry(any(), eq(form));
 		then(this.findChannelRepository).should().findByName(channelName);
-		verifyNoMoreInteractions(this.tryService, this.findChannelRepository, this.eventPublisher, this.findChannelCommandRepository, this.updateChannelCommandRepository, this.commandInterpreters);
+		verifyNoMoreInteractions(this.tryService, this.findChannelRepository, this.eventPublisher, this.findChannelCommandRepository, this.updateChannelCommandRepository, this.commandInterpreter);
 	}
 
 	@Test
@@ -122,10 +124,11 @@ class DefaultChannelMessageEventServiceTests {
 		this.channelMessageEventService.process(form);
 
 		// Then
+		then(this.commandInterpreter).should().getCommandTypeInterpreter();
 		then(this.tryService).should().doTry(any(), eq(form));
 		then(this.findChannelRepository).should().findByName(channelName);
 		then(this.findChannelCommandRepository).should().findByChannel(channel);
-		verifyNoMoreInteractions(this.tryService, this.findChannelRepository, this.eventPublisher, this.findChannelCommandRepository, this.updateChannelCommandRepository, this.commandInterpreters);
+		verifyNoMoreInteractions(this.tryService, this.findChannelRepository, this.eventPublisher, this.findChannelCommandRepository, this.updateChannelCommandRepository, this.commandInterpreter);
 	}
 
 	@Test
@@ -143,10 +146,11 @@ class DefaultChannelMessageEventServiceTests {
 		this.channelMessageEventService.process(form);
 
 		// Then
+		then(this.commandInterpreter).should().getCommandTypeInterpreter();
 		then(this.tryService).should().doTry(any(), eq(form));
 		then(this.findChannelRepository).should().findByName(channelName);
 		then(this.findChannelCommandRepository).should().findByChannel(channel);
-		verifyNoMoreInteractions(this.tryService, this.findChannelRepository, this.eventPublisher, this.findChannelCommandRepository, this.updateChannelCommandRepository, this.commandInterpreters);
+		verifyNoMoreInteractions(this.tryService, this.findChannelRepository, this.eventPublisher, this.findChannelCommandRepository, this.updateChannelCommandRepository, this.commandInterpreter);
 	}
 
 	@Test
@@ -163,10 +167,11 @@ class DefaultChannelMessageEventServiceTests {
 		this.channelMessageEventService.process(form);
 
 		// Then
+		then(this.commandInterpreter).should().getCommandTypeInterpreter();
 		then(this.tryService).should().doTry(any(), eq(form));
 		then(this.findChannelRepository).should().findByName(channelName);
 		then(this.findChannelCommandRepository).should().findByChannel(channel);
-		verifyNoMoreInteractions(this.tryService, this.findChannelRepository, this.eventPublisher, this.findChannelCommandRepository, this.updateChannelCommandRepository, this.commandInterpreters);
+		verifyNoMoreInteractions(this.tryService, this.findChannelRepository, this.eventPublisher, this.findChannelCommandRepository, this.updateChannelCommandRepository, this.commandInterpreter);
 	}
 
 	@ParameterizedTest
@@ -180,17 +185,16 @@ class DefaultChannelMessageEventServiceTests {
 
 		given(this.findChannelRepository.findByName(channelName)).willReturn(Optional.of(channel));
 		given(this.findChannelCommandRepository.findByChannel(channel)).willReturn(Map.of("foo", command));
-		given(this.commandInterpreters.stream()).willReturn(Stream.empty());
 
 		// When
 		this.channelMessageEventService.process(form);
 
 		// Then
+		then(this.commandInterpreter).should().getCommandTypeInterpreter();
 		then(this.tryService).should().doTry(any(), eq(form));
 		then(this.findChannelRepository).should().findByName(channelName);
 		then(this.findChannelCommandRepository).should().findByChannel(channel);
-		then(this.commandInterpreters).should().stream();
-		verifyNoMoreInteractions(this.tryService, this.findChannelRepository, this.eventPublisher, this.findChannelCommandRepository, this.updateChannelCommandRepository, this.commandInterpreters);
+		verifyNoMoreInteractions(this.tryService, this.findChannelRepository, this.eventPublisher, this.findChannelCommandRepository, this.updateChannelCommandRepository, this.commandInterpreter);
 	}
 
 	@ParameterizedTest
@@ -199,29 +203,24 @@ class DefaultChannelMessageEventServiceTests {
 		// Given
 		var channelName = "channelName";
 		var channel = Channel.builder().name(channelName).build();
-		var command = hasLastExecution ? Command.builder().lastExecution(OffsetDateTime.now().minusHours(1)).cooldown(60).build() : Command.builder().build();
+		var command = hasLastExecution ? Command.builder().type(CommandType.TEXT).lastExecution(OffsetDateTime.now().minusHours(1)).cooldown(60).build() : Command.builder().type(CommandType.TEXT).build();
 		var form = ChannelMessageEventForm.builder().channelName(channelName).message("!foo").build();
-		var formWitoutToken = ChannelMessageEventForm.builder().channelName(channelName).message("foo").build();
-
-		var interpreter = mock(CommandInterpreter.class);
+		var formWithoutToken = ChannelMessageEventForm.builder().channelName(channelName).message("foo").build();
 
 		given(this.findChannelRepository.findByName(channelName)).willReturn(Optional.of(channel));
 		given(this.findChannelCommandRepository.findByChannel(channel)).willReturn(Map.of("foo", command));
-		given(this.commandInterpreters.stream()).willReturn(Stream.of(interpreter));
-		given(interpreter.canInterpret(channel, command, formWitoutToken)).willReturn(true);
 
 		// When
 		this.channelMessageEventService.process(form);
 
 		// Then
+		then(this.commandInterpreter).should().getCommandTypeInterpreter();
 		then(this.tryService).should().doTry(any(), eq(form));
 		then(this.findChannelRepository).should().findByName(channelName);
 		then(this.findChannelCommandRepository).should().findByChannel(channel);
-		then(this.commandInterpreters).should().stream();
-		then(interpreter).should().canInterpret(channel, command, formWitoutToken);
-		then(interpreter).should().interpret(channel, command, formWitoutToken);
+		then(this.commandInterpreter).should().interpret(channel, command, formWithoutToken);
 		then(this.updateChannelCommandRepository).should().update(command.toBuilder().lastExecution(any()).build());
-		verifyNoMoreInteractions(this.tryService, this.findChannelRepository, this.eventPublisher, this.findChannelCommandRepository, this.updateChannelCommandRepository, this.commandInterpreters, interpreter);
+		verifyNoMoreInteractions(this.tryService, this.findChannelRepository, this.eventPublisher, this.findChannelCommandRepository, this.updateChannelCommandRepository, this.commandInterpreter);
 	}
 
 }

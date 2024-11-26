@@ -22,6 +22,7 @@ public class DefaultUpdateChannelCommandRepository implements UpdateChannelComma
 		log.info("Updating command {}", command.name());
 		this.dbChannelCommandRepository.findByChannelNameAndName(command.channelName(), command.name()).ifPresent((dbChannelCommand) -> {
 			dbChannelCommand.setEnabled(command.enabled());
+			dbChannelCommand.setType(command.type());
 			dbChannelCommand.setCooldown(command.cooldown());
 			dbChannelCommand.setLastExecution(command.lastExecution());
 			dbChannelCommand.getMessages().clear();
