@@ -2,8 +2,7 @@ package fr.damnardev.twitch.bot.secondary.adapter.command;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.function.Function;
+import java.util.Optional;
 
 import fr.damnardev.twitch.bot.database.entity.DbChannelCommand;
 import fr.damnardev.twitch.bot.database.repository.DbChannelCommandRepository;
@@ -33,8 +32,8 @@ public class DefaultFindChannelCommandRepository implements FindChannelCommandRe
 
 	@Override
 	@Transactional(readOnly = true)
-	public Map<String, Command> findByChannel(Channel channel) {
-		return this.dbChannelCommandRepository.findByChannelName(channel.name()).stream().map(this::toModel).collect(java.util.stream.Collectors.toMap(Command::name, Function.identity()));
+	public Optional<Command> findByChannelAndName(Channel channel, String name) {
+		return dbChannelCommandRepository.findByChannelNameAndName(channel.name(), name).map(this::toModel);
 	}
 
 	private Command toModel(DbChannelCommand dbChannelCommand) {
