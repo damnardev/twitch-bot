@@ -1,13 +1,13 @@
 package fr.damnardev.twitch.bot.primary.javafx.listener;
 
-import fr.damnardev.twitch.bot.domain.model.event.ChannelCreatedEvent;
-import fr.damnardev.twitch.bot.domain.model.event.ChannelDeletedEvent;
-import fr.damnardev.twitch.bot.domain.model.event.ChannelFetchedAllEvent;
-import fr.damnardev.twitch.bot.domain.model.event.ChannelUpdatedEvent;
-import fr.damnardev.twitch.bot.domain.model.event.ErrorEvent;
-import fr.damnardev.twitch.bot.domain.model.event.RaidConfigurationFetchedAllEvent;
-import fr.damnardev.twitch.bot.domain.model.event.RaidConfigurationFetchedEvent;
-import fr.damnardev.twitch.bot.domain.model.event.RaidConfigurationUpdatedEvent;
+import fr.damnardev.twitch.bot.model.event.ChannelCreatedEvent;
+import fr.damnardev.twitch.bot.model.event.ChannelDeletedEvent;
+import fr.damnardev.twitch.bot.model.event.ChannelFetchedAllEvent;
+import fr.damnardev.twitch.bot.model.event.ChannelUpdatedEvent;
+import fr.damnardev.twitch.bot.model.event.ErrorEvent;
+import fr.damnardev.twitch.bot.model.event.RaidConfigurationFetchedAllEvent;
+import fr.damnardev.twitch.bot.model.event.RaidConfigurationFetchedEvent;
+import fr.damnardev.twitch.bot.model.event.RaidConfigurationUpdatedEvent;
 import fr.damnardev.twitch.bot.primary.javafx.adapter.ApplicationStartedEventListener;
 import fr.damnardev.twitch.bot.primary.javafx.controller.ChannelManagementController;
 import fr.damnardev.twitch.bot.primary.javafx.controller.RaidConfigurationController;

@@ -1,7 +1,7 @@
 package fr.damnardev.twitch.bot.secondary.adapter;
 
 import com.github.twitch4j.chat.TwitchChat;
-import fr.damnardev.twitch.bot.domain.model.Message;
+import fr.damnardev.twitch.bot.model.Message;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;

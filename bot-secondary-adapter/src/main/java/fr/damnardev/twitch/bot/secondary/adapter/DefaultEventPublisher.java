@@ -1,7 +1,7 @@
 package fr.damnardev.twitch.bot.secondary.adapter;
 
-import fr.damnardev.twitch.bot.domain.model.event.Event;
-import fr.damnardev.twitch.bot.domain.port.secondary.EventPublisher;
+import fr.damnardev.twitch.bot.model.event.Event;
+import fr.damnardev.twitch.bot.port.secondary.EventPublisher;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 

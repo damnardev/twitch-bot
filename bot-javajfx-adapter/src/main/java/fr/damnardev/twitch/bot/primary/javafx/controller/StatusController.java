@@ -1,6 +1,6 @@
 package fr.damnardev.twitch.bot.primary.javafx.controller;
 
-import fr.damnardev.twitch.bot.domain.model.event.ErrorEvent;
+import fr.damnardev.twitch.bot.model.event.ErrorEvent;
 import fr.damnardev.twitch.bot.primary.javafx.adapter.ApplicationStartedEventListener;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;

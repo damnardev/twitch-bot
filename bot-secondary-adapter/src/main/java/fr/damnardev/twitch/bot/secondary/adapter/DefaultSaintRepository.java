@@ -7,8 +7,8 @@ import java.util.Optional;
 
 import fr.damnardev.twitch.bot.database.entity.DbSaint;
 import fr.damnardev.twitch.bot.database.repository.DbSaintRepository;
-import fr.damnardev.twitch.bot.domain.exception.FatalException;
-import fr.damnardev.twitch.bot.domain.port.secondary.SaintRepository;
+import fr.damnardev.twitch.bot.exception.FatalException;
+import fr.damnardev.twitch.bot.port.secondary.SaintRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 

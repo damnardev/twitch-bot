@@ -1,6 +1,6 @@
 package fr.damnardev.twitch.bot.primary.adapter;
 
-import fr.damnardev.twitch.bot.domain.port.primary.StartupService;
+import fr.damnardev.twitch.bot.port.primary.StartupService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 

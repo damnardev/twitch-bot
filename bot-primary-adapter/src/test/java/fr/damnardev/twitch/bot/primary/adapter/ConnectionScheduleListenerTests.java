@@ -1,6 +1,6 @@
 package fr.damnardev.twitch.bot.primary.adapter;
 
-import fr.damnardev.twitch.bot.domain.port.primary.AuthenticationService;
+import fr.damnardev.twitch.bot.port.primary.AuthenticationService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;

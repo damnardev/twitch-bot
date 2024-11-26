@@ -6,7 +6,7 @@ import java.util.Optional;
 
 import fr.damnardev.twitch.bot.database.entity.DbChannel;
 import fr.damnardev.twitch.bot.database.repository.DbChannelRepository;
-import fr.damnardev.twitch.bot.domain.model.Channel;
+import fr.damnardev.twitch.bot.model.Channel;
 import fr.damnardev.twitch.bot.secondary.mapper.ChannelMapper;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

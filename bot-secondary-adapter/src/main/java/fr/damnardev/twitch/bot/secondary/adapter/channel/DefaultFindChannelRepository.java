@@ -4,8 +4,8 @@ import java.util.List;
 import java.util.Optional;
 
 import fr.damnardev.twitch.bot.database.repository.DbChannelRepository;
-import fr.damnardev.twitch.bot.domain.model.Channel;
-import fr.damnardev.twitch.bot.domain.port.secondary.channel.FindChannelRepository;
+import fr.damnardev.twitch.bot.model.Channel;
+import fr.damnardev.twitch.bot.port.secondary.channel.FindChannelRepository;
 import fr.damnardev.twitch.bot.secondary.mapper.ChannelMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

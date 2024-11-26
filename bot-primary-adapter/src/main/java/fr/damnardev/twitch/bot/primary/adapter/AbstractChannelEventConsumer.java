@@ -2,7 +2,7 @@ package fr.damnardev.twitch.bot.primary.adapter;
 
 import com.github.philippheuer.events4j.simple.SimpleEventHandler;
 import com.github.twitch4j.TwitchClient;
-import fr.damnardev.twitch.bot.domain.port.primary.EventService;
+import fr.damnardev.twitch.bot.port.primary.EventService;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

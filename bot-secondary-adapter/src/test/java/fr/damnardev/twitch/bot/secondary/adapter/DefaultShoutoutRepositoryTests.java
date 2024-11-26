@@ -3,7 +3,7 @@ package fr.damnardev.twitch.bot.secondary.adapter;
 import com.github.philippheuer.credentialmanager.domain.OAuth2Credential;
 import com.github.twitch4j.helix.TwitchHelix;
 import com.netflix.hystrix.HystrixCommand;
-import fr.damnardev.twitch.bot.domain.model.Shoutout;
+import fr.damnardev.twitch.bot.model.Shoutout;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;

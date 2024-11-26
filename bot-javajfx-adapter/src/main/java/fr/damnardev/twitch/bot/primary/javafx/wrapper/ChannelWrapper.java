@@ -1,6 +1,6 @@
 package fr.damnardev.twitch.bot.primary.javafx.wrapper;
 
-import fr.damnardev.twitch.bot.domain.model.Channel;
+import fr.damnardev.twitch.bot.model.Channel;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleLongProperty;
 import javafx.beans.property.SimpleStringProperty;

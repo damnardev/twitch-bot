@@ -1,6 +1,6 @@
 package fr.damnardev.twitch.bot.secondary.adapter;
 
-import fr.damnardev.twitch.bot.domain.model.event.ApplicationStartedEvent;
+import fr.damnardev.twitch.bot.model.event.ApplicationStartedEvent;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;

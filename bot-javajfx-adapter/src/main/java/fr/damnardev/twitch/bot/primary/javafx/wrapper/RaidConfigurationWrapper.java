@@ -3,7 +3,7 @@ package fr.damnardev.twitch.bot.primary.javafx.wrapper;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import fr.damnardev.twitch.bot.domain.model.RaidConfiguration;
+import fr.damnardev.twitch.bot.model.RaidConfiguration;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleLongProperty;
 import javafx.beans.property.SimpleStringProperty;
