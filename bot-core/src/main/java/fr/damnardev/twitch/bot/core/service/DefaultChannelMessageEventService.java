@@ -54,7 +54,8 @@ public class DefaultChannelMessageEventService implements ChannelMessageEventSer
 		if (form.message().startsWith("!")) {
 			var split = form.message().substring(1).split(" ", 2);
 			var commandName = split[0];
-			form = form.toBuilder().message(split.length == 2 ? split[1] : "").build();
+			var parameter = (split.length == 2) ? split[1] : "";
+			form = form.toBuilder().message(parameter).build();
 			var optionalCommand = this.channelCommandRepository.findByChannelAndName(channel, commandName);
 			if (optionalCommand.isEmpty()) {
 				return;

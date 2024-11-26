@@ -33,7 +33,7 @@ public class DefaultFindChannelCommandRepository implements FindChannelCommandRe
 	@Override
 	@Transactional(readOnly = true)
 	public Optional<Command> findByChannelAndName(Channel channel, String name) {
-		return dbChannelCommandRepository.findByChannelNameAndName(channel.name(), name).map(this::toModel);
+		return this.dbChannelCommandRepository.findByChannelNameAndName(channel.name(), name).map(this::toModel);
 	}
 
 	private Command toModel(DbChannelCommand dbChannelCommand) {
