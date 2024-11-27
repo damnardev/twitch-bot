@@ -69,10 +69,11 @@ class SaintInterpreterTests {
 	void interpret_shouldSendMessage_whenSaintIsFound() {
 		// Given
 		var channel = Channel.builder().id(1L).name("channel_name").build();
-		var command = Command.builder().name("saints").build();
+		var command = Command.builder().name("saints").cooldown(60).build();
 		var form = ChannelMessageEventForm.builder().build();
 		var value = "saint_value";
-		var message = Message.builder().channelId(channel.id()).channelName(channel.name()).content(value).build();
+		var formatted = "saint_value [⏰ 60 s]";
+		var message = Message.builder().channelId(channel.id()).channelName(channel.name()).content(formatted).build();
 
 		given(this.saintRepository.find()).willReturn(Optional.of(value));
 

@@ -40,7 +40,7 @@ public class DefaultSaintRepository implements SaintRepository {
 		}
 	}
 
-	@SuppressWarnings("java:S11Z2")
+	@SuppressWarnings("java:S112")
 	private Optional<String> fetchAndSave(LocalDate date) throws Exception {
 		var url = URI.create(this.value).toURL();
 		var connection = (HttpURLConnection) url.openConnection();

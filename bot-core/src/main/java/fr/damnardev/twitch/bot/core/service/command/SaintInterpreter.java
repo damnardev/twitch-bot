@@ -23,7 +23,8 @@ public class SaintInterpreter implements CommandInterpreter {
 	public void interpret(Channel channel, Command command, ChannelMessageEventForm form) {
 		var value = this.saintRepository.find();
 		if (value.isPresent()) {
-			var message = Message.builder().channelId(channel.id()).channelName(channel.name()).content(value.get()).build();
+			var content = String.format("%s [⏰ %d s]", value.get(), command.cooldown());
+			var message = Message.builder().channelId(channel.id()).channelName(channel.name()).content(content).build();
 			this.messageRepository.sendMessage(message);
 		}
 	}
