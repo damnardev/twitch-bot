@@ -15,6 +15,7 @@ import fr.damnardev.twitch.bot.model.Command;
 import fr.damnardev.twitch.bot.model.CommandType;
 import fr.damnardev.twitch.bot.model.form.ChannelMessageEventForm;
 import fr.damnardev.twitch.bot.port.primary.ChannelMessageEventService;
+import fr.damnardev.twitch.bot.port.primary.DateService;
 import fr.damnardev.twitch.bot.port.secondary.channel.FindChannelRepository;
 import fr.damnardev.twitch.bot.port.secondary.command.FindChannelCommandRepository;
 import fr.damnardev.twitch.bot.port.secondary.command.UpdateChannelCommandRepository;
@@ -32,12 +33,15 @@ public class DefaultChannelMessageEventService implements ChannelMessageEventSer
 
 	private final Map<CommandType, CommandInterpreter> commandInterpreters;
 
-	public DefaultChannelMessageEventService(DefaultTryService tryService, FindChannelRepository findChannelRepository, FindChannelCommandRepository channelCommandRepository, UpdateChannelCommandRepository updateChannelCommandRepository, List<CommandInterpreter> commandInterpreters) {
+	private final DateService dateService;
+
+	public DefaultChannelMessageEventService(DefaultTryService tryService, FindChannelRepository findChannelRepository, FindChannelCommandRepository channelCommandRepository, UpdateChannelCommandRepository updateChannelCommandRepository, List<CommandInterpreter> commandInterpreters, DateService dateService) {
 		this.tryService = tryService;
 		this.findChannelRepository = findChannelRepository;
 		this.channelCommandRepository = channelCommandRepository;
 		this.updateChannelCommandRepository = updateChannelCommandRepository;
 		this.commandInterpreters = (commandInterpreters != null) ? commandInterpreters.stream().collect(Collectors.toMap(CommandInterpreter::getCommandTypeInterpreter, Function.identity())) : new HashMap<>();
+		this.dateService = dateService;
 	}
 
 	@Override
@@ -61,17 +65,18 @@ public class DefaultChannelMessageEventService implements ChannelMessageEventSer
 				return;
 			}
 			var command = optionalCommand.get();
-			if (command.lastExecution() != null && command.lastExecution().plusSeconds(command.cooldown()).isAfter(OffsetDateTime.now())) {
+			var now = this.dateService.now();
+			if (command.lastExecution() != null && command.lastExecution().plusSeconds(command.cooldown()).isAfter(now)) {
 				return;
 			}
-			this.process(channel, command, form);
+			this.process(channel, command, form, now);
 		}
 	}
 
-	private void process(Channel channel, Command command, ChannelMessageEventForm form) {
+	private void process(Channel channel, Command command, ChannelMessageEventForm form, OffsetDateTime now) {
 		var commandInterpreter = this.commandInterpreters.get(command.type());
 		if (commandInterpreter != null) {
-			var updatedCommand = command.toBuilder().lastExecution(OffsetDateTime.now()).build();
+			var updatedCommand = command.toBuilder().lastExecution(now).build();
 			commandInterpreter.interpret(channel, command, form);
 			this.updateChannelCommandRepository.update(updatedCommand);
 		}
