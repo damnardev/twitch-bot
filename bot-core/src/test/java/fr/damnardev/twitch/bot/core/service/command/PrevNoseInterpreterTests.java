@@ -39,7 +39,7 @@ class PrevNoseInterpreterTests {
 	private DateService dateService;
 
 	@Test
-	void getCommandTypeInterpreter_shouldReturnNextNose() {
+	void getCommandTypeInterpreter_shouldReturnPrevNose() {
 		// When
 		var commandType = this.prevNoseInterpreter.getCommandTypeInterpreter();
 

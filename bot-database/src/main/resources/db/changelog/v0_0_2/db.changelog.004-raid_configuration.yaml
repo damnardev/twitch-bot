@@ -1,0 +1,35 @@
+databaseChangeLog:
+  - changeSet:
+      id: 0-0-2-5
+      author: damnardev
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: t_suggest_game_pkey
+                  name: id
+                  type: BIGINT
+              - column:
+                  name: form_id
+                  type: VARCHAR(255)
+              - column:
+                  name: viewer_field_id
+                  type: VARCHAR(255)
+              - column:
+                  name: game_field_id
+                  type: VARCHAR(255)
+            tableName: t_suggest_game
+        - addForeignKeyConstraint:
+            baseColumnNames: id
+            baseTableName: t_suggest_game
+            constraintName: t_suggest_game_channel_fk
+            deferrable: false
+            initiallyDeferred: false
+            onDelete: NO ACTION
+            onUpdate: NO ACTION
+            referencedColumnNames: id
+            referencedTableName: t_channel
+            validate: true
