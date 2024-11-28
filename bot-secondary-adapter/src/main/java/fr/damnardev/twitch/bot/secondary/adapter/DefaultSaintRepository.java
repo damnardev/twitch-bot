@@ -46,7 +46,7 @@ public class DefaultSaintRepository implements SaintRepository {
 		var headers = new HttpHeaders();
 		headers.set("User-Agent", "Mozilla/5.0");
 		var entity = new HttpEntity<>(headers);
-		var response = restTemplate.exchange(value, HttpMethod.GET, entity, String.class).getBody();
+		var response = this.restTemplate.exchange(this.value, HttpMethod.GET, entity, String.class).getBody();
 		var dbSaint = DbSaint.builder().id(date).message(response).build();
 		this.dbSaintRepository.save(dbSaint);
 		return Optional.ofNullable(response);
