@@ -14,11 +14,13 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
 
+import org.springframework.web.client.RestTemplate;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
-import static org.mockito.Mockito.verifyNoMoreInteractions;
+import static org.mockito.BDDMockito.verifyNoMoreInteractions;
 
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.WARN)
@@ -29,6 +31,9 @@ class DefaultSaintRepositoryTests {
 
 	@Mock
 	private DbSaintRepository dbSaintRepository;
+
+	@Mock
+	private RestTemplate restTemplate;
 
 	@Test
 	void find_shouldReturnMessage_whenMessageIsPresent() {
@@ -41,7 +46,7 @@ class DefaultSaintRepositoryTests {
 
 		// Then
 		then(this.dbSaintRepository).should().findById(today);
-		verifyNoMoreInteractions(this.dbSaintRepository);
+		verifyNoMoreInteractions(this.dbSaintRepository, this.restTemplate);
 
 		assertThat(result).isPresent().hasValue("message");
 	}
@@ -57,7 +62,7 @@ class DefaultSaintRepositoryTests {
 
 		// Then
 		then(this.dbSaintRepository).should().findById(today);
-		verifyNoMoreInteractions(this.dbSaintRepository);
+		verifyNoMoreInteractions(this.dbSaintRepository, this.restTemplate);
 
 		result.isInstanceOf(FatalException.class);
 	}
