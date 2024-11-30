@@ -24,10 +24,10 @@ you have to define the following environment variables:
 - TWITCH_OAUTH_RETRY (default: 10)
 - TWITCH_OAUTH_TIMEOUT in seconds (default: 6)
 - SAINT_URL
+- TWITCH_SCHEDULED_CRON
 
-execute the following channelCommand:
+execute the following command:
 
 ```shell
-cd bot-runner
-mvn spring-boot:run
+mvn -pl bot-runners org.springframework.boot:spring-boot-maven-plugin:run
 ```
