@@ -41,8 +41,8 @@
 		<javafx-controls.version>22.0.2</javafx-controls.version>
 		<jacoco.version>0.8.12</jacoco.version>
 		<liquibase-maven-plugin.version>4.30.0</liquibase-maven-plugin.version>
-		<maven-checkstyle-plugin.version>3.1.1</maven-checkstyle-plugin.version>
-		<checkstyle.version>9.3</checkstyle.version>
+		<maven-checkstyle-plugin.version>3.6.0</maven-checkstyle-plugin.version>
+		<checkstyle.version>10.20.1</checkstyle.version>
 		<spring-javaformat-checkstyle.version>0.0.43</spring-javaformat-checkstyle.version>
 
 		<sonar.language>java</sonar.language>
