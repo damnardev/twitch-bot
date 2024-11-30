@@ -1,7 +1,5 @@
 package fr.damnardev.twitch.bot.secondary.adapter;
 
-import java.util.Optional;
-
 import fr.damnardev.twitch.bot.database.repository.DbSuggestGameRepository;
 import fr.damnardev.twitch.bot.model.Channel;
 import fr.damnardev.twitch.bot.model.SuggestGame;
@@ -29,12 +27,12 @@ public class DefaultSuggestGameRepository implements SuggestGameRepository {
 	private final RestTemplate restTemplate;
 
 	@Override
-	public Optional<String> suggest(Channel channel, SuggestGame suggestGame) {
+	public boolean suggest(Channel channel, SuggestGame suggestGame) {
 		log.info("Suggesting game {} for channel: {}", suggestGame, channel);
 		var optionalSuggestGame = this.dbSuggestGameRepository.findByChannelName(channel.name());
 		if (optionalSuggestGame.isEmpty()) {
 			log.error("No suggest game found for channel: {}", channel);
-			return Optional.empty();
+			return false;
 		}
 		var dbSuggestGame = optionalSuggestGame.get();
 		var url = String.format(GOOGLE_FORM_URL, dbSuggestGame.getFormId());
@@ -51,11 +49,10 @@ public class DefaultSuggestGameRepository implements SuggestGameRepository {
 		var entity = new HttpEntity<>(formData, headers);
 		var response = this.restTemplate.exchange(url, HttpMethod.POST, entity, String.class);
 		if (response.getStatusCode().is2xxSuccessful()) {
-			var message = String.format("@%s Merci pour ta suggestion de jeu", suggestGame.viewer());
-			return Optional.of(message);
+			return true;
 		}
-		log.info("Suggesting game failed for channel: {}", channel);
-		return Optional.empty();
+		log.info("Suggesting game failed for channel: {}%n{}%n{}", channel, suggestGame, response);
+		return false;
 	}
 
 }
