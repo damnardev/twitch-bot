@@ -7,7 +7,7 @@
 	<parent>
 		<groupId>fr.damnardev.twitch</groupId>
 		<artifactId>bot-parent</artifactId>
-		<version>0.0.2-SNAPSHOT</version>
+		<version>0.0.3-SNAPSHOT</version>
 	</parent>
 
 	<artifactId>bot-secondary-adapter</artifactId>
