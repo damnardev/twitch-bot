@@ -60,7 +60,7 @@ public class ApplicationStartedEventListener {
 		stage.setMinHeight(720);
 		stage.setAlwaysOnTop(false);
 		stage.getIcons().add(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/fr/damnardev/twitch/bot/primary/javafx/icon.png"))));
-		stage.setOnCloseRequest((_) -> this.springContext.close());
+		stage.setOnCloseRequest((x) -> this.springContext.close());
 		stage.show();
 	}
 

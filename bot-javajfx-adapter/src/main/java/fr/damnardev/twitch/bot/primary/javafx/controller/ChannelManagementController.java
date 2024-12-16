@@ -78,17 +78,17 @@ public class ChannelManagementController {
 
 	private void setupTableView() {
 		this.tableView.getSortOrder().add(this.columnId);
-		this.tableView.setRowFactory((_) -> new ChannelWrapperTableRow());
+		this.tableView.setRowFactory((x) -> new ChannelWrapperTableRow());
 	}
 
 	private void setupColumn() {
 		this.columnId.setCellValueFactory((cell) -> cell.getValue().idProperty());
 		this.columnName.setCellValueFactory((cell) -> cell.getValue().nameProperty());
 		this.columnEnabled.setCellValueFactory((cell) -> cell.getValue().enabledProperty());
-		this.columnEnabled.setCellFactory((_) -> new UnfocusableCheckBoxTableCell<>());
+		this.columnEnabled.setCellFactory((x) -> new UnfocusableCheckBoxTableCell<>());
 		this.columnOnline.setCellValueFactory((cell) -> cell.getValue().onlineProperty());
-		this.columnOnline.setCellFactory((_) -> new UnfocusableCheckBoxTableCell<>());
-		this.columnDeleted.setCellFactory((_) -> new UnfocusableButtonTableCell<>(this::onButtonDelete));
+		this.columnOnline.setCellFactory((x) -> new UnfocusableCheckBoxTableCell<>());
+		this.columnDeleted.setCellFactory((x) -> new UnfocusableButtonTableCell<>(this::onButtonDelete));
 	}
 
 	private void refresh() {
