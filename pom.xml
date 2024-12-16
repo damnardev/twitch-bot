@@ -46,6 +46,7 @@
 		<spring-javaformat-checkstyle.version>0.0.43</spring-javaformat-checkstyle.version>
 
 		<sonar.language>java</sonar.language>
+		<sonar.projectKey>twitch-bot</sonar.projectKey>
 		<sonar.projectName>Twitch Bot</sonar.projectName>
 		<aggregate.report.dir>bot-tests/target/site/jacoco-aggregate/jacoco.xml</aggregate.report.dir>
 	</properties>
