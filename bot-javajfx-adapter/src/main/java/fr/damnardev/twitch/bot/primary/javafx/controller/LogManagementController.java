@@ -63,7 +63,7 @@ public class LogManagementController {
 
 	private void setupTableView() {
 		this.logMessages = FXCollections.synchronizedObservableList(FXCollections.observableArrayList());
-		this.filteredData = new FilteredList<>(this.logMessages, (_) -> true);
+		this.filteredData = new FilteredList<>(this.logMessages, (x) -> true);
 		this.tableView.setItems(this.filteredData);
 	}
 

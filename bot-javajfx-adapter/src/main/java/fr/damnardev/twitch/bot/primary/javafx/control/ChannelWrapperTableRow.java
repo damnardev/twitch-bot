@@ -13,8 +13,8 @@ public class ChannelWrapperTableRow extends TableRow<ChannelWrapper> {
 	protected void updateItem(ChannelWrapper item, boolean empty) {
 		super.updateItem(item, empty);
 		if (item != null) {
-			item.enabledProperty().addListener((_, _, _) -> this.updateRowColor(this.getItem()));
-			item.onlineProperty().addListener((_, _, _) -> this.updateRowColor(this.getItem()));
+			item.enabledProperty().addListener((x, y, z) -> this.updateRowColor(this.getItem()));
+			item.onlineProperty().addListener((x, y, z) -> this.updateRowColor(this.getItem()));
 		}
 		updateRowColor(item);
 	}

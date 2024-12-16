@@ -105,13 +105,13 @@ public class RaidConfigurationController {
 		this.columnId.setCellValueFactory((cell) -> cell.getValue().idProperty());
 		this.columnName.setCellValueFactory((cell) -> cell.getValue().nameProperty());
 		this.columnTwitchShoutoutEnabled.setCellValueFactory((cell) -> cell.getValue().twitchShoutoutEnabledProperty());
-		this.columnTwitchShoutoutEnabled.setCellFactory((_) -> new UnfocusableCheckBoxTableCell<>());
+		this.columnTwitchShoutoutEnabled.setCellFactory((x) -> new UnfocusableCheckBoxTableCell<>());
 		this.columnWizebotShoutoutEnabled.setCellValueFactory((cell) -> cell.getValue().wizebotShoutoutEnabledProperty());
-		this.columnWizebotShoutoutEnabled.setCellFactory((_) -> new UnfocusableCheckBoxTableCell<>());
+		this.columnWizebotShoutoutEnabled.setCellFactory((x) -> new UnfocusableCheckBoxTableCell<>());
 		this.columnRaidMessageEnabled.setCellValueFactory((cell) -> cell.getValue().raidMessageEnabledProperty());
-		this.columnRaidMessageEnabled.setCellFactory((_) -> new UnfocusableCheckBoxTableCell<>());
+		this.columnRaidMessageEnabled.setCellFactory((x) -> new UnfocusableCheckBoxTableCell<>());
 		this.columnMessage.setCellValueFactory((cell) -> cell.getValue().messageProperty());
-		this.columnDeleted.setCellFactory((_) -> new UnfocusableButtonTableCell<>(this::onButtonDelete));
+		this.columnDeleted.setCellFactory((x) -> new UnfocusableButtonTableCell<>(this::onButtonDelete));
 	}
 
 	private void refresh() {

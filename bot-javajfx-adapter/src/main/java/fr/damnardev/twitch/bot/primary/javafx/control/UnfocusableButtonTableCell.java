@@ -24,7 +24,7 @@ public class UnfocusableButtonTableCell<S> extends TableCell<S, String> {
 		}
 		else {
 			var value = getTableView().getItems().get(getIndex());
-			this.button.setOnMouseClicked((_) -> this.consumer.accept(value));
+			this.button.setOnMouseClicked((x) -> this.consumer.accept(value));
 			this.button.setMaxWidth(Double.MAX_VALUE);
 			this.button.setMaxHeight(Double.MAX_VALUE);
 			this.button.setFocusTraversable(false);
