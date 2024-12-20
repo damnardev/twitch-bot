@@ -31,7 +31,7 @@ class DbChannelRepositoryCascadeTests {
 	@Transactional
 	void saveAndFlush_shouldInsertChannelAndRaidConfiguration() {
 		// When
-		var dbRaidConfiguration = DbRaidConfiguration.builder().id(2L).twitchShoutoutEnabled(true).wizebotShoutoutEnabled(true)
+		var dbRaidConfiguration = DbRaidConfiguration.builder().twitchShoutoutEnabled(true).wizebotShoutoutEnabled(true)
 				.raidMessageEnabled(true).messages(Collections.singletonList("message")).build();
 		var dbChannel = DbChannel.builder().id(2L).name("channel_02").enabled(true).online(true).raidConfiguration(dbRaidConfiguration).build();
 		dbRaidConfiguration.setChannel(dbChannel);
@@ -43,6 +43,7 @@ class DbChannelRepositoryCascadeTests {
 		assertThat(loaded).isPresent().get().usingRecursiveComparison()
 				.ignoringFields("commands", "raidConfiguration")
 				.isEqualTo(saved);
+		dbRaidConfiguration.setId(2L);
 		assertThat(loaded).isPresent().get().extracting(DbChannel::getRaidConfiguration)
 				.usingRecursiveComparison().ignoringFields("channel")
 				.isEqualTo(dbRaidConfiguration);
