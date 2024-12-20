@@ -36,7 +36,7 @@
 			**/property/*Properties.java,
 		</sonar.coverage.exclusions>
 
-		<spring-boot-dependencies.version>3.3.5</spring-boot-dependencies.version>
+		<spring-boot-dependencies.version>3.4.1</spring-boot-dependencies.version>
 		<twitch4j.version>1.23.0</twitch4j.version>
 		<javafx-controls.version>21.0.5</javafx-controls.version>
 		<jacoco.version>0.8.12</jacoco.version>
