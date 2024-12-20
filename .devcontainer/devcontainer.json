@@ -10,8 +10,8 @@
       "installMaven": true,
       "mavenVersion": "3.9.9"
     },
-    "ghcr.io/devcontainers/features/git:1": {
-    }
+    "ghcr.io/devcontainers/features/git:1": {},
+    "ghcr.io/devcontainers/features/github-cli:1": {}
   },
   postCreateCommand: "apt-get update && apt-get upgrade -y && apt-get install gnupg2 -y",
   "customizations": {
