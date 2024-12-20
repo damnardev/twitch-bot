@@ -1,0 +1,43 @@
+services:
+  app:
+    container_name: tb-app
+    image: ubuntu:24.04
+    environment:
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_USER: postgres
+      POSTGRES_DB: postgres
+      POSTGRES_HOSTNAME: db
+    deploy:
+      resources:
+        limits:
+          cpus: "4.0"
+          memory: 4096M
+        reservations:
+          cpus: "0.5"
+          memory: 4096M
+    command: sleep infinity
+    restart: unless-stopped
+
+  db:
+    container_name: tb-db
+    image: postgres:17.0
+    volumes:
+      - db:/var/lib/postgresql
+      - db_data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_USER: postgres
+      POSTGRES_DB: postgres
+    deploy:
+      resources:
+        limits:
+          cpus: "0.5"
+          memory: 100M
+        reservations:
+          cpus: "0.01"
+          memory: 50M
+    restart: unless-stopped
+
+volumes:
+  db:
+  db_data:
