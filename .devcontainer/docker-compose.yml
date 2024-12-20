@@ -1,0 +1,43 @@
+services:
+  app:
+    container_name: javadev
+    image: ubuntu:24.04
+    environment:
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_USER: postgres
+      POSTGRES_DB: postgres
+      POSTGRES_HOSTNAME: postgresdb
+    command: sleep infinity
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          cpus: "4.0"
+          memory: 4096M
+        reservations:
+          cpus: "0.5"
+          memory: 4096M
+
+  db:
+    container_name: postgresdb
+    image: postgres:17.0
+    restart: unless-stopped
+    volumes:
+      - db:/var/lib/postgresql
+      - db_data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_USER: postgres
+      POSTGRES_DB: postgres
+    deploy:
+      resources:
+        limits:
+          cpus: "0.5"
+          memory: 100M
+        reservations:
+          cpus: "0.01"
+          memory: 50M
+
+volumes:
+  db:
+  db_data:
