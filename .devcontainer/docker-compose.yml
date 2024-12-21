@@ -1,6 +1,6 @@
 services:
   app:
-    container_name: tb-app
+    container_name: devcontainer-twitchbot-app
     image: ubuntu:24.04
     environment:
       POSTGRES_PASSWORD: postgres
@@ -19,7 +19,7 @@ services:
     restart: unless-stopped
 
   db:
-    container_name: tb-db
+    container_name: devcontainer-twitchbot-db
     image: postgres:17.0
     volumes:
       - db:/var/lib/postgresql
