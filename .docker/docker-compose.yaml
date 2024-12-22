@@ -1,0 +1,55 @@
+name: twitchbot
+
+services:
+  app:
+    build:
+      context: ../
+      dockerfile: .docker/Dockerfile
+    container_name: twitchbot-app
+    environment:
+      CLIENT_ID: ${CLIENT_ID}
+      DATABASE_DRIVER: org.postgresql.Driver
+      DATABASE_PLATFORM: org.hibernate.dialect.PostgreSQLDialect
+      DATABASE_URL: jdbc:postgresql://db:5432/${POSTGRES_DB}
+      DATABASE_USERNAME: ${POSTGRES_USER}
+      DATABASE_PASSWORD: ${POSTGRES_PASSWORD}
+      TWITCH_SAINT_URL: ${TWITCH_SAINT_URL}
+      TWITCH_SCHEDULED_CRON: ${TWITCH_SCHEDULED_CRON}
+    depends_on:
+      - db
+    deploy:
+      resources:
+        limits:
+          cpus: "0.5"
+          memory: 500M
+        reservations:
+          cpus: "0.01"
+          memory: 500M
+
+    restart: unless-stopped
+
+  db:
+    image: postgres:17.0
+    container_name: twitchbot-db
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+    ports:
+      - "127.0.0.1:5432:5432"
+    volumes:
+      - twitchbot:/var/lib/postgresql
+      - twitchbot_data:/var/lib/postgresql/data
+    deploy:
+      resources:
+        limits:
+          cpus: "0.5"
+          memory: 100M
+        reservations:
+          cpus: "0.01"
+          memory: 50M
+    restart: unless-stopped
+
+volumes:
+  twitchbot:
+  twitchbot_data:
