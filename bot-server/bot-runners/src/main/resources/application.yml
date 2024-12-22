@@ -1,0 +1,35 @@
+spring:
+  main:
+    web-application-type: none
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    database-platform: ${DATABASE_PLATFORM:org.hibernate.dialect.PostgreSQLDialect}
+    show-sql: false
+  datasource:
+    driver-class-name: ${DATABASE_DRIVER:org.postgresql.Driver}
+    url: ${DATABASE_URL}
+    username: ${DATABASE_USERNAME}
+    password: ${DATABASE_PASSWORD}
+  liquibase:
+    enabled: true
+
+
+twitch:
+  saint:
+    url: ${TWITCH_SAINT_URL}
+  oauth:
+    client_id: ${CLIENT_ID}
+    scopes:
+      - chat:read
+      - chat:edit
+      - channel:read:subscriptions
+      - channel:moderate
+      - moderator:read:chatters
+      - moderator:manage:shoutouts
+      - moderator:read:followers
+    retry: ${TWITCH_OAUTH_RETRY:10}
+    timeout: ${TWITCH_OAUTH_TIMEOUT:6}
+    timeout-unit: SECONDS
+  scheduled:
+    cron: ${TWITCH_SCHEDULED_CRON}

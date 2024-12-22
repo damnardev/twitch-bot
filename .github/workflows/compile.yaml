@@ -25,4 +25,4 @@ jobs:
           maven-version: 3.9.9
 
       - name: Build with Maven
-        run: mvn --batch-mode --update-snapshots verify
+        run: mvn -P all --batch-mode --update-snapshots verify
