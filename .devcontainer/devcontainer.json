@@ -13,7 +13,7 @@
     "ghcr.io/devcontainers/features/git:1": {},
     "ghcr.io/devcontainers/features/github-cli:1": {}
   },
-  postCreateCommand: "apt-get update && apt-get upgrade -y && apt-get install gnupg2 -y",
+  "postCreateCommand": "apt-get update && apt-get upgrade -y && apt-get install gnupg2 -y",
   "customizations": {
     "jetbrains": {
       "backend": "IntelliJ"
