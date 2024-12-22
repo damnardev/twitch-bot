@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<configuration>
+
+	<property name="HOME_LOG" value="logs/client-app.log"/>
+	<property name="HOME_LOG_HISTORY" value="logs/client-app.%d{yyyy-MM-dd}.%i.log"/>
+	<property name="WARN_LOG" value="logs/client-warn.log"/>
+	<property name="WARN_LOG_HISTORY" value="logs/client-warn.%d{yyyy-MM-dd}.%i.log"/>
+
+	<appender class="ch.qos.logback.core.ConsoleAppender" name="CONSOLE">
+		<encoder>
+			<pattern>%d{ISO8601} | %-20thread{20} | %highlight(%-5level) | %-70logger{70} | %msg%n%throwable</pattern>
+		</encoder>
+	</appender>
+
+	<appender class="ch.qos.logback.core.rolling.RollingFileAppender" name="FILE">
+		<file>${HOME_LOG}</file>
+		<append>true</append>
+		<immediateFlush>true</immediateFlush>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<fileNamePattern>${HOME_LOG_HISTORY}</fileNamePattern>
+			<timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFileNamingAndTriggeringPolicy">
+				<maxFileSize>1MB</maxFileSize>
+			</timeBasedFileNamingAndTriggeringPolicy>
+			<maxHistory>30</maxHistory>
+		</rollingPolicy>
+		<encoder>
+			<pattern>%d{ISO8601} | %-20thread{20} | %-5level | %-70logger{70} | %msg%n%throwable</pattern>
+		</encoder>
+	</appender>
+
+	<appender class="ch.qos.logback.core.rolling.RollingFileAppender" name="FILE_WARN">
+		<file>${WARN_LOG}</file>
+		<append>true</append>
+		<immediateFlush>true</immediateFlush>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<fileNamePattern>${WARN_LOG_HISTORY}</fileNamePattern>
+			<timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFileNamingAndTriggeringPolicy">
+				<maxFileSize>1MB</maxFileSize>
+			</timeBasedFileNamingAndTriggeringPolicy>
+			<maxHistory>30</maxHistory>
+		</rollingPolicy>
+		<filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+			<level>WARN</level>
+		</filter>
+		<encoder>
+			<pattern>%d{ISO8601} | %-20thread{20} | %-5level | %-70logger{70} | %msg%n%throwable</pattern>
+		</encoder>
+	</appender>
+
+	<root level="info">
+		<appender-ref ref="CONSOLE"/>
+		<appender-ref ref="FILE"/>
+		<appender-ref ref="FILE_WARN" />
+	</root>
+
+</configuration>

@@ -4,10 +4,24 @@
 		 xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-	<groupId>fr.damnardev.twitch</groupId>
-	<artifactId>bot-parent</artifactId>
-	<version>0.0.3-SNAPSHOT</version>
+	<parent>
+		<groupId>fr.damnardev.twitch</groupId>
+		<artifactId>bot-parent</artifactId>
+		<version>0.0.3-SNAPSHOT</version>
+	</parent>
+
+	<artifactId>bot-server</artifactId>
 	<packaging>pom</packaging>
+
+	<modules>
+		<module>bot-model</module>
+		<module>bot-core</module>
+		<module>bot-secondary-adapter</module>
+		<module>bot-database</module>
+		<module>bot-primary-adapter</module>
+		<module>bot-runners</module>
+		<module>bot-tests</module>
+	</modules>
 
 	<properties>
 		<maven.compiler.source>21</maven.compiler.source>
@@ -164,15 +178,5 @@
 			</plugin>
 		</plugins>
 	</build>
-
-	<profiles>
-		<profile>
-			<id>all</id>
-			<modules>
-				<module>bot-client</module>
-				<module>bot-server</module>
-			</modules>
-		</profile>
-	</profiles>
 
 </project>

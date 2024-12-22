@@ -23,4 +23,4 @@ jobs:
           TOKEN: ${{ secrets.SONAR_TOKEN }}
           URI: ${{ vars.SONAR_URI }}
         run: |
-          mvn clean verify sonar:sonar -Dsonar.host.url=$URI -Dsonar.login=$TOKEN --batch-mode --update-snapshots
+          mvn -P all clean verify sonar:sonar -Dsonar.host.url=$URI -Dsonar.login=$TOKEN --batch-mode --update-snapshots
