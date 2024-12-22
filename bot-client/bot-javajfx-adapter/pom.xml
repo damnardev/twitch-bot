@@ -6,7 +6,7 @@
 
 	<parent>
 		<groupId>fr.damnardev.twitch</groupId>
-		<artifactId>bot-parent</artifactId>
+		<artifactId>bot-client</artifactId>
 		<version>0.0.3-SNAPSHOT</version>
 	</parent>
 
