@@ -41,7 +41,7 @@
 
 		<spring-boot-dependencies.version>3.4.1</spring-boot-dependencies.version>
 		<twitch4j.version>1.23.0</twitch4j.version>
-		<javafx-controls.version>21.0.5</javafx-controls.version>
+		<javafx-controls.version>24-ea+19</javafx-controls.version>
 		<jacoco.version>0.8.12</jacoco.version>
 		<liquibase-maven-plugin.version>4.30.0</liquibase-maven-plugin.version>
 		<maven-checkstyle-plugin.version>3.6.0</maven-checkstyle-plugin.version>
